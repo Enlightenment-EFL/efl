@@ -1,0 +1,2 @@
+// -> parallel, as in running as much as possible in different thread to take
+    advantage of modern multi core infrastructure.
