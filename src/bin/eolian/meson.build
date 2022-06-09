@@ -23,7 +23,7 @@ eolian_gen_path = eolian_gen_bin.full_path()
 
 if meson.is_cross_build()
   _eolian_gen_bin = find_program('eolian_gen', native : true)
-  eolian_gen_path = _eolian_gen_bin.path()
+  eolian_gen_path = _eolian_gen_bin.full_path()
 else
   _eolian_gen_bin = eolian_gen_bin
   eolian_gen_path = _eolian_gen_bin.full_path()
