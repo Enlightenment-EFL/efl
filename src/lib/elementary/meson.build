@@ -261,7 +261,7 @@ eolian_include_directories += ['-I', meson.current_source_dir()]
 embed_script = find_program('config_embed')
 
 embed_config = custom_target('create_embedded_default_config',
-  input: join_paths(meson.source_root(), 'data', 'elementary', 'config', 'standard', 'base.src.in'),
+  input: join_paths(meson.project_source_root(), 'data', 'elementary', 'config', 'standard', 'base.src.in'),
   output: 'elm_default_config.x',
   command: [embed_script, '@INPUT@', '@OUTPUT@']
 )
