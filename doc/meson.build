@@ -152,7 +152,7 @@ foreach widget_preview : widget_previews
 
   widget_executable = get_variable(binary)
 
-  screen_shot_dir =  join_paths(meson.build_root(), 'html', 'img', 'widget', directory)
+  screen_shot_dir =  join_paths(meson.current_build_dir(), 'html', 'img', 'widget', directory)
 
   create_preview = custom_target('widget_preview_'+('_'.join([directory, ss, x, y])),
     command: [shot_sh, screen_shot_dir, ss, widget_executable.full_path(), x, y],
@@ -181,7 +181,7 @@ doc_target += custom_target('doxygen',
 )
 
 compress_target = custom_target('package_doc_tar',
-  command: [tar, '-C', meson.build_root(), '--xz',  '-cf', 'efl-'+meson.project_version()+'-doc.tar.xz', 'html', 'man'],
+  command: [tar, '-C', meson.current_build_dir(), '--xz',  '-cf', 'efl-'+meson.project_version()+'-doc.tar.xz', 'html', 'man'],
   output: 'efl-'+meson.project_version()+'-doc.tar.xz',
   depends: [doc_target],
   build_by_default: false
@@ -195,7 +195,7 @@ run_target('doc',
 doxyfile_conf = configuration_data()
 doxyfile_conf.merge_from(config_h)
 doxyfile_conf.set('srcdir', meson.current_source_dir())
-doxyfile_conf.set('top_builddir', meson.build_root())
+doxyfile_conf.set('top_builddir', meson.current_build_dir())
 doxyfile_conf.set('top_srcdir', meson.source_root())
 
 configure_file(

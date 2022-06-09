@@ -39,7 +39,7 @@ efl_ui_behavior_suite = executable('efl_ui_spec_suite',
   '-DTESTS_BUILD_DIR="'+meson.current_build_dir()+'"',
   '-DTESTS_SRC_DIR="'+meson.current_source_dir()+'"',
   '-DELM_IMAGE_DATA_DIR="'+join_paths(meson.source_root(), 'data', 'elementary')+'"',
-  '-DELM_TEST_DATA_DIR="'+join_paths(meson.build_root(), 'data', 'elementary')+'"',
+  '-DELM_TEST_DATA_DIR="'+join_paths(meson.current_build_dir(), 'data', 'elementary')+'"',
   ]
 )
 
