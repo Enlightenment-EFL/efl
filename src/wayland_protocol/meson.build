@@ -22,13 +22,13 @@ wl_stable_protocol_sys = [
 
 foreach sys_protocol : wl_unstable_protocol_sys
 	wl_protocol_local += [
-		join_paths(_wayland_protocols.get_variable('pkgdatadir'), 'unstable',
+		join_paths(_wayland_protocols.get_pkgconfig_variable('pkgdatadir'), 'unstable',
 			sys_protocol)]
 endforeach
 
 foreach sys_protocol : wl_stable_protocol_sys
   wl_protocol_local += [
-    join_paths(_wayland_protocols.get_variable('pkgdatadir'), 'stable',
+    join_paths(_wayland_protocols.get_pkgconfig_variable('pkgdatadir'), 'stable',
       sys_protocol)]
 endforeach
 

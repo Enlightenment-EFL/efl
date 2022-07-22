@@ -298,8 +298,8 @@ if sys_osx and get_option('lua-interpreter') == 'luajit'
   # dependency with our arguments, a library later still needs to link to
   # luajit for the pagesize argument thingy
   lua = declare_dependency(
-    include_directories: include_directories(lua.get_variable('includedir')),
-    link_args: ['-L' + lua.get_variable('libdir'), '-l' + lua.get_variable('libname')]
+    include_directories: include_directories(lua.get_pkgconfig_variable('includedir')),
+    link_args: ['-L' + lua.get_pkgconfig_variable('libdir'), '-l' + lua.get_pkgconfig_variable('libname')]
   )
 endif
 
