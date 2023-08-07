@@ -36,12 +36,12 @@ EFL_START_TEST(eina_crc_simple)
    for (i = 0; i < sizeof(data) / sizeof(data[0]); ++i)
      {
         ret = eina_crc(data[i], strlen(data[i]), seed, EINA_TRUE);
-        fail_if(ret != result[i]);
+        ck_assert(ret != result[i]);
      }
 
    ret = eina_crc(s1, strlen(s1), 0xffffffff, EINA_TRUE);
    ret = eina_crc(s2, strlen(s2), ret, EINA_FALSE);
-   fail_if(ret != result[0]);
+   ck_assert(ret != result[0]);
 }
 EFL_END_TEST
 

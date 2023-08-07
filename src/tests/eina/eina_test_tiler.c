@@ -40,7 +40,7 @@ check_iterator(Eina_Iterator *it, struct test_rect *cur_test)
    struct Eina_Tile_Grid_Info *tile;
 
    EINA_ITERATOR_FOREACH(it, tile) {
-      fail_if(cur_test[i].col != tile->col ||
+      ck_assert(cur_test[i].col != tile->col ||
               cur_test[i].row != tile->row ||
               cur_test[i].x != tile->rect.x ||
               cur_test[i].y != tile->rect.y ||
@@ -50,7 +50,7 @@ check_iterator(Eina_Iterator *it, struct test_rect *cur_test)
       i++;
    }
 
-   fail_if(i == 0);
+   ck_assert(i == 0);
 }
 
 EFL_START_TEST(eina_test_tile_grid_slicer_iterator)
@@ -139,42 +139,42 @@ EFL_START_TEST(eina_test_tiler_all)
    tl = eina_tiler_new(1, 1);
 
    eina_tiler_area_size_get(tl, &width, &height);
-   fail_if(width != 1 && height != 1);
+   ck_assert(width != 1 && height != 1);
 
    width = 640;
    height = 480;
    eina_tiler_area_size_set(tl, width, height);
    eina_tiler_area_size_get(tl, &width, &height);
-   fail_if(width != 640 && height != 480);
+   ck_assert(width != 640 && height != 480);
 
    eina_tiler_tile_size_set(tl, 32, 32);
 
    EINA_RECTANGLE_SET(&r, 50, 50, 20, 20);
-   fail_if(!eina_tiler_rect_add(tl, &r));
+   ck_assert(!eina_tiler_rect_add(tl, &r));
 
    EINA_RECTANGLE_SET(&r, -10, -10, 5, 5);
-   fail_if(eina_tiler_rect_add(tl, &r));
+   ck_assert(eina_tiler_rect_add(tl, &r));
 
    EINA_RECTANGLE_SET(&r, 40, 40, 20, 20);
    eina_tiler_rect_del(tl, &r);
 
    it = eina_tiler_iterator_new(tl);
-   fail_if(!it);
+   ck_assert(!it);
 
    EINA_ITERATOR_FOREACH(it, rp)
    {
-      fail_if(rp->w <= 0);
-      fail_if(rp->h <= 0);
-      fail_if(rp->x < 0 || rp->x + rp->w > 640);
-      fail_if(rp->y < 0 || rp->y + rp->h > 480);
+      ck_assert(rp->w <= 0);
+      ck_assert(rp->h <= 0);
+      ck_assert(rp->x < 0 || rp->x + rp->w > 640);
+      ck_assert(rp->y < 0 || rp->y + rp->h > 480);
       ++i;
    }
 
-   fail_if(eina_iterator_container_get(it) != tl);
+   ck_assert(eina_iterator_container_get(it) != tl);
 
    eina_iterator_free(it);
 
-   fail_if(i == 0);
+   ck_assert(i == 0);
 
    eina_tiler_clear(tl);
 
@@ -193,36 +193,36 @@ EFL_START_TEST(eina_test_tiler_stable)
 
 
    tl = eina_tiler_new(640, 480);
-   fail_if(!tl);
+   ck_assert(!tl);
 
    eina_tiler_tile_size_set(tl, 1, 1);
 
    EINA_RECTANGLE_SET(&r, 50, 50, 20, 20);
-   fail_if(!eina_tiler_rect_add(tl, &r));
+   ck_assert(!eina_tiler_rect_add(tl, &r));
 
    EINA_RECTANGLE_SET(&r, 40, 40, 20, 20);
    eina_tiler_rect_del(tl, &r);
 
    EINA_RECTANGLE_SET(&r, 50, 50, 20, 20);
-   fail_if(!eina_tiler_rect_add(tl, &r));
+   ck_assert(!eina_tiler_rect_add(tl, &r));
 
    EINA_RECTANGLE_SET(&r, 40, 40, 20, 20);
    eina_tiler_rect_del(tl, &r);
 
    it = eina_tiler_iterator_new(tl);
-   fail_if(!it);
+   ck_assert(!it);
 
    EINA_ITERATOR_FOREACH(it, rp)
      {
         EINA_RECTANGLE_SET(&r, 40, 40, 20, 20);
-        fail_if(eina_rectangle_intersection(&r, rp));
+        ck_assert(eina_rectangle_intersection(&r, rp));
 
         EINA_RECTANGLE_SET(&r, 50, 50, 20, 20);
-        fail_if(!eina_rectangles_intersect(&r, rp));
+        ck_assert(!eina_rectangles_intersect(&r, rp));
         ++i;
      }
 
-   fail_if(i != 2);
+   ck_assert(i != 2);
 
    eina_iterator_free(it);
 
@@ -240,10 +240,10 @@ EFL_START_TEST(eina_test_tiler_calculation)
 
 
    t1 = eina_tiler_new(500, 500);
-   fail_if(!t1);
+   ck_assert(!t1);
 
    t2 = eina_tiler_new(500, 500);
-   fail_if(!t2);
+   ck_assert(!t2);
 
    eina_tiler_tile_size_set(t1, 1, 1);
    eina_tiler_tile_size_set(t2, 1, 1);
@@ -254,85 +254,85 @@ EFL_START_TEST(eina_test_tiler_calculation)
    EINA_RECTANGLE_SET(&r2, 100, 100, 300, 300);
    eina_tiler_rect_add(t2, &r2);
 
-   fail_if(!eina_tiler_union(t1, t2));
+   ck_assert(!eina_tiler_union(t1, t2));
 
    itr = eina_tiler_iterator_new(t1);
    EINA_ITERATOR_FOREACH(itr, rp)
      {
-        fail_if(rp->w != 500);
-        fail_if(rp->h != 500);
-        fail_if(rp->x != 0);
-        fail_if(rp->y != 0);
+        ck_assert(rp->w != 500);
+        ck_assert(rp->h != 500);
+        ck_assert(rp->x != 0);
+        ck_assert(rp->y != 0);
         ++i;
      }
 
    eina_iterator_free(itr);
    eina_tiler_clear(t1);
 
-   fail_if(i != 1);
+   ck_assert(i != 1);
 
    eina_tiler_rect_add(t1, &r1);
 
-   fail_if(!eina_tiler_subtract(t1, t2));
+   ck_assert(!eina_tiler_subtract(t1, t2));
 
    i = 0;
    itr = eina_tiler_iterator_new(t1);
    EINA_ITERATOR_FOREACH(itr, rp)
      {
-        fail_if(!eina_rectangles_intersect(&r1, rp));
-        fail_if(eina_rectangles_intersect(&r2, rp));
+        ck_assert(!eina_rectangles_intersect(&r1, rp));
+        ck_assert(eina_rectangles_intersect(&r2, rp));
 
-        fail_if(rp->w <= 0);
-        fail_if(rp->h <= 0);
-        fail_if(rp->x < 0 || rp->x + rp->w > 500);
-        fail_if(rp->y < 0 || rp->y + rp->h > 500);
+        ck_assert(rp->w <= 0);
+        ck_assert(rp->h <= 0);
+        ck_assert(rp->x < 0 || rp->x + rp->w > 500);
+        ck_assert(rp->y < 0 || rp->y + rp->h > 500);
         ++i;
      }
 
    eina_iterator_free(itr);
    eina_tiler_clear(t1);
 
-   fail_if(i != 4);
+   ck_assert(i != 4);
 
    EINA_RECTANGLE_SET(&r3, 0, 0, 50, 50);
    eina_tiler_rect_add(t1, &r3);
 
    t = eina_tiler_intersection(t1, t2);
-   fail_if(t);
+   ck_assert(t);
 
    eina_tiler_clear(t1);
 
    eina_tiler_rect_add(t1, &r1);
 
    t = eina_tiler_intersection(t1, t2);
-   fail_if(!t);
+   ck_assert(!t);
 
    i = 0;
    itr = eina_tiler_iterator_new(t);
    EINA_ITERATOR_FOREACH(itr, rp)
      {
-        fail_if(!eina_rectangles_intersect(&r1, rp));
-        fail_if(!eina_rectangles_intersect(&r2, rp));
+        ck_assert(!eina_rectangles_intersect(&r1, rp));
+        ck_assert(!eina_rectangles_intersect(&r2, rp));
 
-        fail_if(rp->w <= 0);
-        fail_if(rp->h <= 0);
-        fail_if(rp->x < 0 || rp->x + rp->w > 500);
-        fail_if(rp->y < 0 || rp->y + rp->h > 500);
+        ck_assert(rp->w <= 0);
+        ck_assert(rp->h <= 0);
+        ck_assert(rp->x < 0 || rp->x + rp->w > 500);
+        ck_assert(rp->y < 0 || rp->y + rp->h > 500);
         ++i;
      }
 
    eina_iterator_free(itr);
    eina_tiler_clear(t);
 
-   fail_if(i != 1);
+   ck_assert(i != 1);
 
    eina_tiler_rect_add(t, &r1);
 
-   fail_if(!eina_tiler_equal(t, t1));
-   fail_if(!eina_tiler_equal(t1, t));
+   ck_assert(!eina_tiler_equal(t, t1));
+   ck_assert(!eina_tiler_equal(t1, t));
    EINA_RECTANGLE_SET(&r1, 0, 0, 250, 250);
    eina_tiler_rect_del(t, &r1);
-   fail_if(eina_tiler_equal(t1, t));
+   ck_assert(eina_tiler_equal(t1, t));
 
    eina_tiler_free(t);
    eina_tiler_free(t1);
@@ -349,21 +349,21 @@ EFL_START_TEST(eina_test_tiler_size)
    Eina_Bool rects = EINA_FALSE;
 
    t = eina_tiler_new(131070, 131070);
-   fail_if(!t);
+   ck_assert(!t);
 
    eina_tiler_tile_size_set(t, 1, 1);
-   fail_if(!eina_tiler_rect_add(t, &(Eina_Rectangle){0, 0, 131070, 131070}));
+   ck_assert(!eina_tiler_rect_add(t, &(Eina_Rectangle){0, 0, 131070, 131070}));
    it = eina_tiler_iterator_new(t);
-   fail_if(!it);
+   ck_assert(!it);
    EINA_ITERATOR_FOREACH(it, r)
      {
         rects = EINA_TRUE;
-        fail_if(r->x);
-        fail_if(r->y);
-        fail_if(r->w != 131070);
-        fail_if(r->h != 131070);
+        ck_assert(r->x);
+        ck_assert(r->y);
+        ck_assert(r->w != 131070);
+        ck_assert(r->h != 131070);
      }
-   fail_if(!rects);
+   ck_assert(!rects);
    eina_iterator_free(it);
    eina_tiler_free(t);
 }

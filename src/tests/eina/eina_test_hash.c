@@ -64,7 +64,7 @@ eina_foreach_check(EINA_UNUSED const Eina_Hash *hash,
      return EINA_TRUE;
 
    i = atoi(key);
-   fail_if(i != *j);
+   ck_assert(i != *j);
 
    return EINA_TRUE;
 }
@@ -77,46 +77,46 @@ EFL_START_TEST(eina_test_hash_simple)
 
    /* As mempool is already initialized and it use hash, we should have 2 init. */
    hash = eina_hash_string_superfast_new(NULL);
-   fail_if(hash == NULL);
+   ck_assert(hash == NULL);
 
-   fail_if(eina_hash_add(hash, "1", &array[0]) != EINA_TRUE);
-   fail_if(eina_hash_add(hash, "42", &array[1]) != EINA_TRUE);
-   fail_if(eina_hash_direct_add(hash, "4", &array[2]) != EINA_TRUE);
-   fail_if(eina_hash_direct_add(hash, "5", &array[3]) != EINA_TRUE);
-   fail_if(eina_hash_add(hash, "", "") != EINA_TRUE);
+   ck_assert(eina_hash_add(hash, "1", &array[0]) != EINA_TRUE);
+   ck_assert(eina_hash_add(hash, "42", &array[1]) != EINA_TRUE);
+   ck_assert(eina_hash_direct_add(hash, "4", &array[2]) != EINA_TRUE);
+   ck_assert(eina_hash_direct_add(hash, "5", &array[3]) != EINA_TRUE);
+   ck_assert(eina_hash_add(hash, "", "") != EINA_TRUE);
 
    test = eina_hash_find(hash, "4");
-   fail_if(!test);
-   fail_if(*test != 4);
+   ck_assert(!test);
+   ck_assert(*test != 4);
 
    test = eina_hash_find(hash, "42");
-   fail_if(!test);
-   fail_if(*test != 42);
+   ck_assert(!test);
+   ck_assert(*test != 42);
 
    eina_hash_foreach(hash, eina_foreach_check, NULL);
 
    test = eina_hash_modify(hash, "5", &array[4]);
-   fail_if(!test);
-   fail_if(*test != 5);
+   ck_assert(!test);
+   ck_assert(*test != 5);
 
    test = eina_hash_find(hash, "5");
-   fail_if(!test);
-   fail_if(*test != 6);
+   ck_assert(!test);
+   ck_assert(*test != 6);
 
-   fail_if(eina_hash_population(hash) != 5);
+   ck_assert(eina_hash_population(hash) != 5);
 
-   fail_if(eina_hash_find(hash, "120") != NULL);
+   ck_assert(eina_hash_find(hash, "120") != NULL);
 
-   fail_if(eina_hash_del(hash, "5", NULL) != EINA_TRUE);
-   fail_if(eina_hash_find(hash, "5") != NULL);
+   ck_assert(eina_hash_del(hash, "5", NULL) != EINA_TRUE);
+   ck_assert(eina_hash_find(hash, "5") != NULL);
 
-   fail_if(eina_hash_del(hash, NULL, &array[2]) != EINA_TRUE);
-   fail_if(eina_hash_find(hash, "4") != NULL);
+   ck_assert(eina_hash_del(hash, NULL, &array[2]) != EINA_TRUE);
+   ck_assert(eina_hash_find(hash, "4") != NULL);
 
-   fail_if(eina_hash_del(hash, NULL, &array[2]) != EINA_FALSE);
+   ck_assert(eina_hash_del(hash, NULL, &array[2]) != EINA_FALSE);
 
-   fail_if(eina_hash_del(hash, "1", NULL) != EINA_TRUE);
-   fail_if(eina_hash_del(hash, "42", NULL) != EINA_TRUE);
+   ck_assert(eina_hash_del(hash, "1", NULL) != EINA_TRUE);
+   ck_assert(eina_hash_del(hash, "42", NULL) != EINA_TRUE);
 
    eina_hash_free(hash);
 }
@@ -133,46 +133,46 @@ EFL_START_TEST(eina_test_hash_crc)
                         EINA_KEY_HASH(eina_hash_crc),
                         NULL,
                         EINA_HASH_BUCKET_SIZE);
-   fail_if(hash == NULL);
+   ck_assert(hash == NULL);
 
-   fail_if(eina_hash_add(hash, "1", &array[0]) != EINA_TRUE);
-   fail_if(eina_hash_add(hash, "42", &array[1]) != EINA_TRUE);
-   fail_if(eina_hash_direct_add(hash, "4", &array[2]) != EINA_TRUE);
-   fail_if(eina_hash_direct_add(hash, "5", &array[3]) != EINA_TRUE);
-   fail_if(eina_hash_add(hash, "", "") != EINA_TRUE);
+   ck_assert(eina_hash_add(hash, "1", &array[0]) != EINA_TRUE);
+   ck_assert(eina_hash_add(hash, "42", &array[1]) != EINA_TRUE);
+   ck_assert(eina_hash_direct_add(hash, "4", &array[2]) != EINA_TRUE);
+   ck_assert(eina_hash_direct_add(hash, "5", &array[3]) != EINA_TRUE);
+   ck_assert(eina_hash_add(hash, "", "") != EINA_TRUE);
 
    test = eina_hash_find(hash, "4");
-   fail_if(!test);
-   fail_if(*test != 4);
+   ck_assert(!test);
+   ck_assert(*test != 4);
 
    test = eina_hash_find(hash, "42");
-   fail_if(!test);
-   fail_if(*test != 42);
+   ck_assert(!test);
+   ck_assert(*test != 42);
 
    eina_hash_foreach(hash, eina_foreach_check, NULL);
 
    test = eina_hash_modify(hash, "5", &array[4]);
-   fail_if(!test);
-   fail_if(*test != 5);
+   ck_assert(!test);
+   ck_assert(*test != 5);
 
    test = eina_hash_find(hash, "5");
-   fail_if(!test);
-   fail_if(*test != 6);
+   ck_assert(!test);
+   ck_assert(*test != 6);
 
-   fail_if(eina_hash_population(hash) != 5);
+   ck_assert(eina_hash_population(hash) != 5);
 
-   fail_if(eina_hash_find(hash, "120") != NULL);
+   ck_assert(eina_hash_find(hash, "120") != NULL);
 
-   fail_if(eina_hash_del(hash, "5", NULL) != EINA_TRUE);
-   fail_if(eina_hash_find(hash, "5") != NULL);
+   ck_assert(eina_hash_del(hash, "5", NULL) != EINA_TRUE);
+   ck_assert(eina_hash_find(hash, "5") != NULL);
 
-   fail_if(eina_hash_del(hash, NULL, &array[2]) != EINA_TRUE);
-   fail_if(eina_hash_find(hash, "4") != NULL);
+   ck_assert(eina_hash_del(hash, NULL, &array[2]) != EINA_TRUE);
+   ck_assert(eina_hash_find(hash, "4") != NULL);
 
-   fail_if(eina_hash_del(hash, NULL, &array[2]) != EINA_FALSE);
+   ck_assert(eina_hash_del(hash, NULL, &array[2]) != EINA_FALSE);
 
-   fail_if(eina_hash_del(hash, "1", NULL) != EINA_TRUE);
-   fail_if(eina_hash_del(hash, "42", NULL) != EINA_TRUE);
+   ck_assert(eina_hash_del(hash, "1", NULL) != EINA_TRUE);
+   ck_assert(eina_hash_del(hash, "42", NULL) != EINA_TRUE);
 
    eina_hash_free(hash);
 }
@@ -186,9 +186,9 @@ EFL_START_TEST(eina_test_hash_extended)
    char *array;
 
    hash = eina_hash_string_djb2_new(NULL);
-   fail_if(hash == NULL);
+   ck_assert(hash == NULL);
 
-   fail_if(eina_hash_direct_add(hash, "42", "42") != EINA_TRUE);
+   ck_assert(eina_hash_direct_add(hash, "42", "42") != EINA_TRUE);
 
    array = malloc(num_loops * 10);
    ck_assert_ptr_ne(array, NULL);
@@ -197,10 +197,10 @@ EFL_START_TEST(eina_test_hash_extended)
      {
         char *tmp = array + (i * 10);
         eina_convert_itoa(i + 42, tmp);
-        fail_if(eina_hash_direct_add(hash, tmp, tmp) != EINA_TRUE);
+        ck_assert(eina_hash_direct_add(hash, tmp, tmp) != EINA_TRUE);
      }
 
-   fail_if(eina_hash_find(hash, "42") == NULL);
+   ck_assert(eina_hash_find(hash, "42") == NULL);
 
    eina_hash_free(hash);
    free(array);
@@ -214,14 +214,14 @@ EFL_START_TEST(eina_test_hash_double_item)
    int *test;
 
    hash = eina_hash_string_superfast_new(NULL);
-   fail_if(hash == NULL);
+   ck_assert(hash == NULL);
 
-   fail_if(eina_hash_add(hash, "7", &i[0]) != EINA_TRUE);
-   fail_if(eina_hash_add(hash, "7", &i[1]) != EINA_TRUE);
+   ck_assert(eina_hash_add(hash, "7", &i[0]) != EINA_TRUE);
+   ck_assert(eina_hash_add(hash, "7", &i[1]) != EINA_TRUE);
 
-   fail_if(eina_hash_del(hash, "7", &i[1]) != EINA_TRUE);
+   ck_assert(eina_hash_del(hash, "7", &i[1]) != EINA_TRUE);
    test = eina_hash_find(hash, "7");
-   fail_if(test != &i[0]);
+   ck_assert(test != &i[0]);
 
    eina_hash_free(hash);
 }
@@ -237,29 +237,29 @@ EFL_START_TEST(eina_test_hash_all_int)
    int it;
 
    hash = eina_hash_int32_new(NULL);
-   fail_if(hash == NULL);
+   ck_assert(hash == NULL);
 
    for (it = 0; it < 4; ++it)
-     fail_if(eina_hash_add(hash, &i[it], &i[it]) != EINA_TRUE);
+     ck_assert(eina_hash_add(hash, &i[it], &i[it]) != EINA_TRUE);
 
-   fail_if(eina_hash_del(hash, &i[1], &i[1]) != EINA_TRUE);
+   ck_assert(eina_hash_del(hash, &i[1], &i[1]) != EINA_TRUE);
    test = eina_hash_find(hash, &i[2]);
-   fail_if(test != &i[2]);
+   ck_assert(test != &i[2]);
 
    test = eina_hash_find(hash, &i[3]);
-   fail_if(test != &i[3]);
+   ck_assert(test != &i[3]);
 
    eina_hash_free(hash);
 
    hash = eina_hash_int64_new(NULL);
-   fail_if(hash == NULL);
+   ck_assert(hash == NULL);
 
    for (it = 0; it < 4; ++it)
-     fail_if(eina_hash_add(hash, &j[it], &j[it]) != EINA_TRUE);
+     ck_assert(eina_hash_add(hash, &j[it], &j[it]) != EINA_TRUE);
 
-   fail_if(eina_hash_del(hash, &j[1], &j[1]) != EINA_TRUE);
+   ck_assert(eina_hash_del(hash, &j[1], &j[1]) != EINA_TRUE);
    test2 = eina_hash_find(hash, &j[0]);
-   fail_if(test2 != &j[0]);
+   ck_assert(test2 != &j[0]);
 
    eina_hash_free(hash);
 }
@@ -353,7 +353,7 @@ EFL_START_TEST(eina_test_hash_string_fuzze)
      {
         char *tmp = array + (i * 10);
         eina_convert_itoa(i, tmp);
-        fail_if(eina_hash_direct_add(hash, tmp, tmp) != EINA_TRUE);
+        ck_assert(eina_hash_direct_add(hash, tmp, tmp) != EINA_TRUE);
      }
 
    for (i = 0; i < num_loops; ++i)
@@ -373,7 +373,7 @@ EFL_END_TEST
 
 EFL_START_TEST(eina_test_hash_seed)
 {
-   fail_if(eina_seed == 0);
+   ck_assert(eina_seed == 0);
 }
 EFL_END_TEST
 
@@ -388,24 +388,24 @@ EFL_START_TEST(eina_test_hash_add_del_by_hash)
                         EINA_KEY_HASH(eina_hash_crc),
                         NULL,
                         EINA_HASH_BUCKET_SIZE);
-   fail_if(hash == NULL);
-   fail_if(eina_hash_add(hash, "1", &array[0]) != EINA_TRUE);
-   fail_if(eina_hash_add(hash, "42", &array[1]) != EINA_TRUE);
-   fail_if(eina_hash_add(hash, "5", &array[3]) != EINA_TRUE);
-   fail_if(eina_hash_add(hash, "6", &array[4]) != EINA_TRUE);
+   ck_assert(hash == NULL);
+   ck_assert(eina_hash_add(hash, "1", &array[0]) != EINA_TRUE);
+   ck_assert(eina_hash_add(hash, "42", &array[1]) != EINA_TRUE);
+   ck_assert(eina_hash_add(hash, "5", &array[3]) != EINA_TRUE);
+   ck_assert(eina_hash_add(hash, "6", &array[4]) != EINA_TRUE);
 
    key_len = _eina_string_key_length("4");
    key_hash = eina_hash_crc("4", key_len);
 
-   fail_if(eina_hash_add_by_hash(hash, "4", key_len, key_hash, &array[2]) != EINA_TRUE);
-   fail_if(eina_hash_del_by_hash(hash, "4", key_len, key_hash, &array[2]) != EINA_TRUE);
-   fail_if(eina_hash_del_by_hash(hash, "4", key_len, key_hash, &array[2]) != EINA_FALSE);
+   ck_assert(eina_hash_add_by_hash(hash, "4", key_len, key_hash, &array[2]) != EINA_TRUE);
+   ck_assert(eina_hash_del_by_hash(hash, "4", key_len, key_hash, &array[2]) != EINA_TRUE);
+   ck_assert(eina_hash_del_by_hash(hash, "4", key_len, key_hash, &array[2]) != EINA_FALSE);
 
    key_len = _eina_string_key_length("42");
    key_hash = eina_hash_crc("42", key_len);
-   fail_if(eina_hash_del_by_hash(hash, "42", key_len, key_hash, &array[1]) != EINA_TRUE);
+   ck_assert(eina_hash_del_by_hash(hash, "42", key_len, key_hash, &array[1]) != EINA_TRUE);
 
-   fail_if(eina_hash_population(hash) != 3);
+   ck_assert(eina_hash_population(hash) != 3);
    eina_hash_free(hash);
 }
 EFL_END_TEST

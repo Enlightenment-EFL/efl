@@ -76,11 +76,11 @@ EFL_START_TEST(eina_error_errno)
    setenv("EINA_ERROR_LEVEL", "1", 0);
 
    test = eina_error_msg_register(TEST_TEXT);
-   fail_if(!eina_error_msg_get(test));
-   fail_if(strcmp(eina_error_msg_get(test), TEST_TEXT) != 0);
+   ck_assert(!eina_error_msg_get(test));
+   ck_assert(strcmp(eina_error_msg_get(test), TEST_TEXT) != 0);
 
    eina_error_set(test);
-   fail_if(eina_error_get() != test);
+   ck_assert(eina_error_get() != test);
 
    eina_error_set(EBADF);
    ck_assert_int_eq(eina_error_get(), EBADF);
@@ -102,11 +102,11 @@ EFL_START_TEST(eina_error_test_find)
    ck_assert_int_ne(test, 0);
 
    str = eina_error_msg_get(test);
-   fail_unless(str != NULL);
+   ck_assert(str != NULL);
    ck_assert_str_eq(str, TEST_TEXT TEST_TEXT);
 
    eina_error_set(test);
-   fail_if(eina_error_get() != test);
+   ck_assert(eina_error_get() != test);
 
    r = eina_error_find(TEST_TEXT TEST_TEXT);
    ck_assert_int_eq(r, test);
@@ -123,13 +123,13 @@ EFL_START_TEST(eina_error_test_modify)
    ck_assert_int_ne(test, 0);
 
    str = eina_error_msg_get(test);
-   fail_unless(str != NULL);
+   ck_assert(str != NULL);
    ck_assert_str_eq(str, "Some Test Error");
 
    eina_error_set(test);
-   fail_if(eina_error_get() != test);
+   ck_assert(eina_error_get() != test);
 
-   fail_unless(eina_error_msg_modify(test, "ABCDE"));
+   ck_assert(eina_error_msg_modify(test, "ABCDE"));
 
    r = eina_error_find("ABCDE");
    ck_assert_int_eq(r, test);
@@ -138,10 +138,10 @@ EFL_START_TEST(eina_error_test_modify)
    ck_assert_int_ne(test, 0);
 
    str = eina_error_msg_get(test);
-   fail_unless(str != NULL);
-   fail_unless(str == smsg);
+   ck_assert(str != NULL);
+   ck_assert(str == smsg);
 
-   fail_unless(eina_error_msg_modify(test, "Change that!"));
+   ck_assert(eina_error_msg_modify(test, "Change that!"));
    r = eina_error_find("Change that!");
    ck_assert_int_eq(r, test);
 
@@ -190,12 +190,12 @@ EFL_START_TEST(eina_error_test_failures)
    TEST_MAGIC_SAFETY("eina_error_msg_register",
                      "safety check failed: msg == NULL");
    ck_assert_int_eq(eina_error_msg_register(NULL), 0);
-   fail_unless(ctx.did);
+   ck_assert(ctx.did);
 
    TEST_MAGIC_SAFETY("eina_error_msg_static_register",
                      "safety check failed: msg == NULL");
    ck_assert_int_eq(eina_error_msg_static_register(NULL), 0);
-   fail_unless(ctx.did);
+   ck_assert(ctx.did);
 
    TEST_MAGIC_SAFETY("eina_error_msg_modify",
                      "safety check failed: EINA_ERROR_REGISTERED_CHECK(error) is false");
@@ -209,7 +209,7 @@ EFL_START_TEST(eina_error_test_failures)
                      "safety check failed: msg == NULL");
    ck_assert_int_eq(eina_error_msg_modify(ENOMEM, NULL),
                     EINA_FALSE);
-   fail_unless(ctx.did);
+   ck_assert(ctx.did);
 
    local_error = eina_error_msg_static_register("Local error for test");
    ck_assert_int_ne(local_error, 0);
@@ -218,7 +218,7 @@ EFL_START_TEST(eina_error_test_failures)
                      "safety check failed: msg == NULL");
    ck_assert_int_eq(eina_error_msg_modify(local_error, NULL),
                     EINA_FALSE);
-   fail_unless(ctx.did);
+   ck_assert(ctx.did);
 
    ck_assert_str_eq(eina_error_msg_get(ENOMEM),
 #if defined(_WIN32) || defined(__sun)
@@ -230,12 +230,12 @@ EFL_START_TEST(eina_error_test_failures)
    TEST_MAGIC_SAFETY("eina_error_find",
                      "safety check failed: msg == NULL");
    ck_assert_int_eq(eina_error_find(NULL), 0);
-   fail_unless(ctx.did);
+   ck_assert(ctx.did);
 
    ck_assert_int_eq(eina_error_find("Non-existent Error..."), 0);
 
-   fail_if(eina_error_msg_get(0));
-   fail_if(eina_error_msg_get(4096));
+   ck_assert(eina_error_msg_get(0));
+   ck_assert(eina_error_msg_get(4096));
 
    eina_log_print_cb_set(eina_log_print_cb_stderr, NULL);
 

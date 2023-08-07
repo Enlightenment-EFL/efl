@@ -72,7 +72,7 @@ EFL_START_TEST(eina_counter_simple)
    int i;
 
    cnt = eina_counter_new("eina_test");
-   fail_if(!cnt);
+   ck_assert(!cnt);
 
    eina_counter_start(cnt);
 
@@ -95,7 +95,7 @@ EFL_START_TEST(eina_counter_simple)
    eina_counter_stop(cnt, i);
 
    dump = eina_counter_dump(cnt);
-   fail_if(!dump);
+   ck_assert(!dump);
 
    /* TODO: parse dump and check if it's right */
    fprintf(stderr, "%s", dump);
@@ -112,7 +112,7 @@ EFL_START_TEST(eina_counter_break)
    Eina_Counter *cnt;
 
    cnt = eina_counter_new("eina_test");
-   fail_if(!cnt);
+   ck_assert(!cnt);
 
    eina_counter_stop(cnt, 10);
 
@@ -136,8 +136,8 @@ EFL_START_TEST(eina_counter_break)
       TEST_MAGIC_SAFETY("eina_counter_new",
                         "safety check failed: name == NULL");
       cnt = eina_counter_new(NULL);
-      fail_if(cnt);
-      fail_unless(ctx.did);
+      ck_assert(cnt);
+      ck_assert(ctx.did);
 
 #ifdef SHOW_LOG
       fprintf(stderr, "you should have a safety check failure below:\n");
@@ -145,7 +145,7 @@ EFL_START_TEST(eina_counter_break)
       TEST_MAGIC_SAFETY("eina_counter_free",
                         "safety check failed: counter == NULL");
       eina_counter_free(NULL);
-      fail_unless(ctx.did);
+      ck_assert(ctx.did);
 
 #ifdef SHOW_LOG
       fprintf(stderr, "you should have a safety check failure below:\n");
@@ -153,7 +153,7 @@ EFL_START_TEST(eina_counter_break)
       TEST_MAGIC_SAFETY("eina_counter_start",
                         "safety check failed: counter == NULL");
       eina_counter_start(NULL);
-      fail_unless(ctx.did);
+      ck_assert(ctx.did);
 
 #ifdef SHOW_LOG
       fprintf(stderr, "you should have a safety check failure below:\n");
@@ -161,7 +161,7 @@ EFL_START_TEST(eina_counter_break)
       TEST_MAGIC_SAFETY("eina_counter_stop",
                         "safety check failed: counter == NULL");
       eina_counter_stop(NULL, 0);
-      fail_unless(ctx.did);
+      ck_assert(ctx.did);
 
 
 #ifdef SHOW_LOG
@@ -170,8 +170,8 @@ EFL_START_TEST(eina_counter_break)
       TEST_MAGIC_SAFETY("eina_counter_dump",
                         "safety check failed: counter == NULL");
       dump = eina_counter_dump(NULL);
-      fail_if(dump);
-      fail_unless(ctx.did);
+      ck_assert(dump);
+      ck_assert(ctx.did);
 
       eina_log_print_cb_set(eina_log_print_cb_stderr, NULL);
    }

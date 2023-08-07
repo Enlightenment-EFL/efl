@@ -51,80 +51,80 @@ EFL_START_TEST(eina_unicode_utf8)
    /* Valid utf-8 cases */
    /* First possible sequence of a certain length */
    ind = 0;
-   fail_if((eina_unicode_utf8_get_next("\x00", &ind) != 0x00) ||
+   ck_assert((eina_unicode_utf8_get_next("\x00", &ind) != 0x00) ||
            (ind != 0));
    ind = 0;
-   fail_if((eina_unicode_utf8_get_next("\x01", &ind) != 0x01) ||
+   ck_assert((eina_unicode_utf8_get_next("\x01", &ind) != 0x01) ||
            (ind != 1));
    ind = 0;
-   fail_if((eina_unicode_utf8_get_next("\xC2\x80", &ind) != 0x80) ||
+   ck_assert((eina_unicode_utf8_get_next("\xC2\x80", &ind) != 0x80) ||
            (ind != 2));
    ind = 0;
-   fail_if((eina_unicode_utf8_get_next("\xE0\xA0\x80", &ind) != 0x800) ||
+   ck_assert((eina_unicode_utf8_get_next("\xE0\xA0\x80", &ind) != 0x800) ||
            (ind != 3));
    ind = 0;
-   fail_if((eina_unicode_utf8_get_next("\xF0\x90\x80\x80", &ind) != 0x10000) ||
+   ck_assert((eina_unicode_utf8_get_next("\xF0\x90\x80\x80", &ind) != 0x10000) ||
            (ind != 4));
    ind = 0;
-   fail_if((eina_unicode_utf8_get_next("\xF8\x88\x80\x80\x80", &ind) != 0x200000) || (ind != 5));
+   ck_assert((eina_unicode_utf8_get_next("\xF8\x88\x80\x80\x80", &ind) != 0x200000) || (ind != 5));
    ind = 0;
-   fail_if((eina_unicode_utf8_get_next("\xFC\x84\x80\x80\x80\x80", &ind) != 0x4000000) || (ind != 6));
+   ck_assert((eina_unicode_utf8_get_next("\xFC\x84\x80\x80\x80\x80", &ind) != 0x4000000) || (ind != 6));
 
    /* Last possible sequence of a certain length */
    ind = 0;
-   fail_if((eina_unicode_utf8_get_next("\x7F", &ind) != 0x7F) ||
+   ck_assert((eina_unicode_utf8_get_next("\x7F", &ind) != 0x7F) ||
            (ind != 1));
    ind = 0;
-   fail_if((eina_unicode_utf8_get_next("\xDF\xBF", &ind) != 0x7FF) ||
+   ck_assert((eina_unicode_utf8_get_next("\xDF\xBF", &ind) != 0x7FF) ||
            (ind != 2));
    ind = 0;
-   fail_if((eina_unicode_utf8_get_next("\xEF\xBF\xBF", &ind) != 0xFFFF) ||
+   ck_assert((eina_unicode_utf8_get_next("\xEF\xBF\xBF", &ind) != 0xFFFF) ||
            (ind != 3));
    ind = 0;
-   fail_if((eina_unicode_utf8_get_next("\xF7\xBF\xBF\xBF", &ind) != 0x1FFFFF) ||
+   ck_assert((eina_unicode_utf8_get_next("\xF7\xBF\xBF\xBF", &ind) != 0x1FFFFF) ||
            (ind != 4));
    ind = 0;
-   fail_if((eina_unicode_utf8_get_next("\xFB\xBF\xBF\xBF\xBF", &ind) != 0x3FFFFFF) || (ind != 5));
+   ck_assert((eina_unicode_utf8_get_next("\xFB\xBF\xBF\xBF\xBF", &ind) != 0x3FFFFFF) || (ind != 5));
    ind = 0;
-   fail_if((eina_unicode_utf8_get_next("\xFD\xBF\xBF\xBF\xBF\xBF", &ind) != 0x7FFFFFFF) || (ind != 6));
+   ck_assert((eina_unicode_utf8_get_next("\xFD\xBF\xBF\xBF\xBF\xBF", &ind) != 0x7FFFFFFF) || (ind != 6));
 
    /* Other boundary conditions */
    ind = 0;
-   fail_if((eina_unicode_utf8_get_next("\xED\x9F\xBF", &ind) != 0xD7FF) ||
+   ck_assert((eina_unicode_utf8_get_next("\xED\x9F\xBF", &ind) != 0xD7FF) ||
            (ind != 3));
    ind = 0;
-   fail_if((eina_unicode_utf8_get_next("\xEE\x80\x80", &ind) != 0xE000) ||
+   ck_assert((eina_unicode_utf8_get_next("\xEE\x80\x80", &ind) != 0xE000) ||
            (ind != 3));
    ind = 0;
-   fail_if((eina_unicode_utf8_get_next("\xEF\xBF\xBD", &ind) != 0xFFFD) ||
+   ck_assert((eina_unicode_utf8_get_next("\xEF\xBF\xBD", &ind) != 0xFFFD) ||
            (ind != 3));
    ind = 0;
-   fail_if((eina_unicode_utf8_get_next("\xF4\x8F\xBF\xBF", &ind) != 0x10FFFF) ||
+   ck_assert((eina_unicode_utf8_get_next("\xF4\x8F\xBF\xBF", &ind) != 0x10FFFF) ||
            (ind != 4));
    ind = 0;
-   fail_if((eina_unicode_utf8_get_next("\xF4\x90\x80\x80", &ind) != 0x110000) ||
+   ck_assert((eina_unicode_utf8_get_next("\xF4\x90\x80\x80", &ind) != 0x110000) ||
            (ind != 4));
 
    /* Error cases */
    /* Standalone continuation bytes */
    ind = 0;
-   fail_if((eina_unicode_utf8_get_next("\x80", &ind) != 0xDC80) ||
+   ck_assert((eina_unicode_utf8_get_next("\x80", &ind) != 0xDC80) ||
            (ind != 1));
    ind = 0;
-   fail_if((eina_unicode_utf8_get_next("\xBF", &ind) != 0xDCBF) ||
+   ck_assert((eina_unicode_utf8_get_next("\xBF", &ind) != 0xDCBF) ||
            (ind != 1));
    ind = 0;
-   fail_if((eina_unicode_utf8_get_next("\x80\xBF", &ind) != 0xDC80) ||
+   ck_assert((eina_unicode_utf8_get_next("\x80\xBF", &ind) != 0xDC80) ||
            (ind != 1));
    ind = 0;
-   fail_if((eina_unicode_utf8_get_next("\xBF\x80", &ind) != 0xDCBF) ||
+   ck_assert((eina_unicode_utf8_get_next("\xBF\x80", &ind) != 0xDCBF) ||
            (ind != 1));
    /* All possible continuation bytes */
    for (ch = 0x80 ; ch <= 0xBF ; ch++)
      {
         char buf[] = {ch, 0};
         ind = 0;
-        fail_if((eina_unicode_utf8_get_next(buf, &ind) != (0xDC00 | ch)) ||
+        ck_assert((eina_unicode_utf8_get_next(buf, &ind) != (0xDC00 | ch)) ||
                 (ind != 1));
      }
 
@@ -142,9 +142,9 @@ EFL_START_TEST(eina_unicode_utf8)
         ind = 0; \
         for (i = 0, ch = start ; ch <= end ; ch++) \
           { \
-             fail_if((eina_unicode_utf8_get_next(buf, &ind) != (0xDC00 | ch)) || \
+             ck_assert((eina_unicode_utf8_get_next(buf, &ind) != (0xDC00 | ch)) || \
                      (ind != ++i)); \
-             fail_if((eina_unicode_utf8_get_next(buf, &ind) != 0x20) || \
+             ck_assert((eina_unicode_utf8_get_next(buf, &ind) != 0x20) || \
                      (ind != ++i)); \
           } \
      } \
@@ -178,13 +178,13 @@ EFL_START_TEST(eina_unicode_utf8)
                } \
              buf[j] = 0; \
              ind = 0; \
-             fail_if( \
+             ck_assert( \
                 (eina_unicode_utf8_get_next(buf, &ind) != (0xDC00 | first))); \
              while ((val = eina_unicode_utf8_get_next(buf, &ind))) \
                { \
-                  fail_if(val != (0xDC00 | conti)); \
+                  ck_assert(val != (0xDC00 | conti)); \
                } \
-             fail_if(ind != i); \
+             ck_assert(ind != i); \
           } \
      } \
    while (0)
@@ -203,44 +203,44 @@ EFL_START_TEST(eina_unicode_utf8)
 
    /* Impossible bytes */
    ind = 0;
-   fail_if((eina_unicode_utf8_get_next("\xFE", &ind) != 0xDCFE) ||
+   ck_assert((eina_unicode_utf8_get_next("\xFE", &ind) != 0xDCFE) ||
            (ind != 1));
    ind = 0;
-   fail_if((eina_unicode_utf8_get_next("\xFF", &ind) != 0xDCFF) ||
+   ck_assert((eina_unicode_utf8_get_next("\xFF", &ind) != 0xDCFF) ||
            (ind != 1));
 
    /* Overlong sequences */
    ind = 0;
-   fail_if((eina_unicode_utf8_get_next("\xC0\xAF", &ind) != 0xDCC0) ||
+   ck_assert((eina_unicode_utf8_get_next("\xC0\xAF", &ind) != 0xDCC0) ||
            (ind != 1));
    ind = 0;
-   fail_if((eina_unicode_utf8_get_next("\xE0\x80\xAF", &ind) != 0xDCE0) ||
+   ck_assert((eina_unicode_utf8_get_next("\xE0\x80\xAF", &ind) != 0xDCE0) ||
            (ind != 1));
    ind = 0;
-   fail_if((eina_unicode_utf8_get_next("\xF0\x80\x80\xAF", &ind) != 0xDCF0) ||
+   ck_assert((eina_unicode_utf8_get_next("\xF0\x80\x80\xAF", &ind) != 0xDCF0) ||
            (ind != 1));
    ind = 0;
-   fail_if((eina_unicode_utf8_get_next("\xF8\x80\x80\x80\xAF", &ind) != 0xDCF8) ||
+   ck_assert((eina_unicode_utf8_get_next("\xF8\x80\x80\x80\xAF", &ind) != 0xDCF8) ||
            (ind != 1));
    ind = 0;
-   fail_if((eina_unicode_utf8_get_next("\xFC\x80\x80\x80\x80\xAF", &ind) != 0xDCFC) ||
+   ck_assert((eina_unicode_utf8_get_next("\xFC\x80\x80\x80\x80\xAF", &ind) != 0xDCFC) ||
            (ind != 1));
 
    /* Maximum overlong sequences */
    ind = 0;
-   fail_if((eina_unicode_utf8_get_next("\xC1\xBF", &ind) != 0xDCC1) ||
+   ck_assert((eina_unicode_utf8_get_next("\xC1\xBF", &ind) != 0xDCC1) ||
            (ind != 1));
    ind = 0;
-   fail_if((eina_unicode_utf8_get_next("\xE0\x9F\xBF", &ind) != 0xDCE0) ||
+   ck_assert((eina_unicode_utf8_get_next("\xE0\x9F\xBF", &ind) != 0xDCE0) ||
            (ind != 1));
    ind = 0;
-   fail_if((eina_unicode_utf8_get_next("\xF0\x8F\xBF\xBF", &ind) != 0xDCF0) ||
+   ck_assert((eina_unicode_utf8_get_next("\xF0\x8F\xBF\xBF", &ind) != 0xDCF0) ||
            (ind != 1));
    ind = 0;
-   fail_if((eina_unicode_utf8_get_next("\xF8\x87\xBF\xBF\xBF", &ind) != 0xDCF8) ||
+   ck_assert((eina_unicode_utf8_get_next("\xF8\x87\xBF\xBF\xBF", &ind) != 0xDCF8) ||
            (ind != 1));
    ind = 0;
-   fail_if((eina_unicode_utf8_get_next("\xFC\x83\xBF\xBF\xBF\xBF", &ind) != 0xDCFC) ||
+   ck_assert((eina_unicode_utf8_get_next("\xFC\x83\xBF\xBF\xBF\xBF", &ind) != 0xDCFC) ||
            (ind != 1));
    /* Add some more error cases here */
 }
@@ -248,8 +248,8 @@ EFL_END_TEST
 
 EFL_START_TEST(eina_alignof)
 {
-   fail_if(eina_mempool_alignof(6) != 8);
-   fail_if((eina_mempool_alignof(10) & 0x7) != 0);
+   ck_assert(eina_mempool_alignof(6) != 8);
+   ck_assert((eina_mempool_alignof(10) & 0x7) != 0);
 }
 EFL_END_TEST
 

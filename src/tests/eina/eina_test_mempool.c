@@ -33,25 +33,25 @@ _eina_mempool_test(Eina_Mempool *mp,
    int *ptr;
    int i;
 
-   fail_if(!mp);
+   ck_assert(!mp);
 
    for (i = 0; i < 512; ++i)
      {
         tbl[i] = eina_mempool_malloc(mp, sizeof (int));
-        fail_if(!tbl[i]);
+        ck_assert(!tbl[i]);
         if (accurate_from)
-          fail_if(eina_mempool_from(mp, tbl[i]) != EINA_TRUE);
+          ck_assert(eina_mempool_from(mp, tbl[i]) != EINA_TRUE);
         *tbl[i] = i;
      }
 
    for (i = 0; i < 512; ++i)
-        fail_if(*tbl[i] != i);
+        ck_assert(*tbl[i] != i);
 
    for (i = 0; i < 256; ++i)
      {
         eina_mempool_free(mp, tbl[i]);
         if (accurate_from)
-          fail_if(eina_mempool_from(mp, tbl[i]) != EINA_FALSE);
+          ck_assert(eina_mempool_from(mp, tbl[i]) != EINA_FALSE);
      }
 
    it = eina_mempool_iterator_new(mp);
@@ -69,9 +69,9 @@ _eina_mempool_test(Eina_Mempool *mp,
      }
 
    if (with_realloc)
-      fail_if(eina_mempool_realloc(mp, tbl[500], 25) == NULL);
+      ck_assert(eina_mempool_realloc(mp, tbl[500], 25) == NULL);
    else
-      fail_if(eina_mempool_realloc(mp, tbl[500], 25) != NULL);
+      ck_assert(eina_mempool_realloc(mp, tbl[500], 25) != NULL);
 
    if (with_gc)
      {

@@ -48,22 +48,22 @@ EFL_START_TEST(eina_benchmark_simple)
    unsigned int i;
 
    eb = eina_benchmark_new("benchmark", "test");
-   fail_if(!eb);
+   ck_assert(!eb);
 
    eina_benchmark_register(eb, "specimens_check",
                            EINA_BENCHMARK(_eina_benchmark_specimens),
 			   1000, 1100, 100);
 
    ea = eina_benchmark_run(eb);
-   fail_if(!ea);
+   ck_assert(!ea);
 
    EINA_ARRAY_ITER_NEXT(ea, i, tmp, it)
      {
-        fail_if(!tmp);
-        fail_if(unlink(tmp));
+        ck_assert(!tmp);
+        ck_assert(unlink(tmp));
      }
 
-   fail_if(global_test != 499500);
+   ck_assert(global_test != 499500);
 
    eina_benchmark_free(eb);
 }

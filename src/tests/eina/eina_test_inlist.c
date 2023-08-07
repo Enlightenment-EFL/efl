@@ -78,7 +78,7 @@ _eina_test_inlist_build(int i)
    Eina_Test_Inlist *tmp;
 
    tmp = malloc(sizeof(Eina_Test_Inlist));
-   fail_if(!tmp);
+   ck_assert(!tmp);
    tmp->i = i;
 
    return tmp;
@@ -98,22 +98,22 @@ EFL_START_TEST(eina_inlist_simple)
 
    tmp = _eina_test_inlist_build(42);
    lst = eina_inlist_append(lst, EINA_INLIST_GET(tmp));
-   fail_if(!lst);
+   ck_assert(!lst);
 
    lst = eina_inlist_remove(lst, EINA_INLIST_GET(tmp));
    lst = eina_inlist_prepend(lst, EINA_INLIST_GET(tmp));
 
    tmp = _eina_test_inlist_build(1664);
    lst = eina_inlist_append_relative(lst, EINA_INLIST_GET(tmp), lst);
-   fail_if(!lst);
-   fail_if(EINA_INLIST_CONTAINER_GET(lst, Eina_Test_Inlist)->i != 42);
+   ck_assert(!lst);
+   ck_assert(EINA_INLIST_CONTAINER_GET(lst, Eina_Test_Inlist)->i != 42);
 
    prev = tmp;
    tmp = _eina_test_inlist_build(3227);
    lst = eina_inlist_prepend_relative(lst, EINA_INLIST_GET(
                                          tmp), EINA_INLIST_GET(prev));
-   fail_if(!lst);
-   fail_if(EINA_INLIST_CONTAINER_GET(lst, Eina_Test_Inlist)->i != 42);
+   ck_assert(!lst);
+   ck_assert(EINA_INLIST_CONTAINER_GET(lst, Eina_Test_Inlist)->i != 42);
 
    lst = eina_inlist_remove(lst, EINA_INLIST_GET(tmp));
 
@@ -132,15 +132,15 @@ EFL_START_TEST(eina_inlist_simple)
    {
       switch (i)
         {
-         case 0: fail_if(tmp->i != 27); break;
+         case 0: ck_assert(tmp->i != 27); break;
 
-         case 1: fail_if(tmp->i != 3227); break;
+         case 1: ck_assert(tmp->i != 3227); break;
 
-         case 2: fail_if(tmp->i != 42); break;
+         case 2: ck_assert(tmp->i != 42); break;
 
-         case 3: fail_if(tmp->i != 1664); break;
+         case 3: ck_assert(tmp->i != 1664); break;
 
-         case 4: fail_if(tmp->i != 81); break;
+         case 4: ck_assert(tmp->i != 81); break;
         }
 
       ++i;
@@ -165,8 +165,8 @@ EFL_START_TEST(eina_inlist_simple)
                         "safety check failed: list == NULL");
 
       tmp2 = eina_inlist_remove(NULL, EINA_INLIST_GET(tmp));
-      fail_if(tmp2 != NULL);
-      fail_unless(ctx.did);
+      ck_assert(tmp2 != NULL);
+      ck_assert(ctx.did);
    }
 
 #ifdef SHOW_LOG
@@ -175,7 +175,7 @@ EFL_START_TEST(eina_inlist_simple)
    TEST_MAGIC_SAFETY("eina_inlist_remove",
                      "safety check failed: item == NULL");
    lst = eina_inlist_remove(lst, NULL);
-   fail_unless(ctx.did);
+   ck_assert(ctx.did);
 
 #ifdef SHOW_LOG
    fprintf(stderr, "you should have a safety check failure below:\n");
@@ -183,7 +183,7 @@ EFL_START_TEST(eina_inlist_simple)
    TEST_MAGIC_SAFETY("eina_inlist_append",
                      "safety check failed: new_l == NULL");
    lst = eina_inlist_append(lst, NULL);
-   fail_unless(ctx.did);
+   ck_assert(ctx.did);
 
 #ifdef SHOW_LOG
    fprintf(stderr, "you should have a safety check failure below:\n");
@@ -191,7 +191,7 @@ EFL_START_TEST(eina_inlist_simple)
    TEST_MAGIC_SAFETY("eina_inlist_append_relative",
                      "safety check failed: new_l == NULL");
    lst = eina_inlist_append_relative(lst, NULL, NULL);
-   fail_unless(ctx.did);
+   ck_assert(ctx.did);
 
 #ifdef SHOW_LOG
    fprintf(stderr, "you should have a safety check failure below:\n");
@@ -199,7 +199,7 @@ EFL_START_TEST(eina_inlist_simple)
    TEST_MAGIC_SAFETY("eina_inlist_prepend",
                      "safety check failed: new_l == NULL");
    lst = eina_inlist_prepend(lst, NULL);
-   fail_unless(ctx.did);
+   ck_assert(ctx.did);
 
 #ifdef SHOW_LOG
    fprintf(stderr, "you should have a safety check failure below:\n");
@@ -207,7 +207,7 @@ EFL_START_TEST(eina_inlist_simple)
    TEST_MAGIC_SAFETY("eina_inlist_prepend_relative",
                      "safety check failed: new_l == NULL");
    lst = eina_inlist_prepend_relative(lst, NULL, NULL);
-   fail_unless(ctx.did);
+   ck_assert(ctx.did);
 
 #ifdef SHOW_LOG
    fprintf(stderr, "you should have a safety check failure below:\n");
@@ -215,7 +215,7 @@ EFL_START_TEST(eina_inlist_simple)
    TEST_MAGIC_SAFETY("eina_inlist_find",
                      "safety check failed: item == NULL");
    lst = eina_inlist_find(lst, NULL);
-   fail_unless(ctx.did);
+   ck_assert(ctx.did);
 
 #ifdef SHOW_LOG
    fprintf(stderr, "you should have a safety check failure below:\n");
@@ -223,7 +223,7 @@ EFL_START_TEST(eina_inlist_simple)
    TEST_MAGIC_SAFETY("eina_inlist_demote",
                      "safety check failed: list == NULL");
    lst = eina_inlist_demote(NULL, NULL);
-   fail_unless(ctx.did);
+   ck_assert(ctx.did);
 
 #ifdef SHOW_LOG
    fprintf(stderr, "you should have a safety check failure below:\n");
@@ -231,7 +231,7 @@ EFL_START_TEST(eina_inlist_simple)
    TEST_MAGIC_SAFETY("eina_inlist_demote",
                      "safety check failed: item == NULL");
    lst = eina_inlist_demote((void*)1L, NULL);
-   fail_unless(ctx.did);
+   ck_assert(ctx.did);
    lst = NULL;
 
 #ifdef SHOW_LOG
@@ -240,7 +240,7 @@ EFL_START_TEST(eina_inlist_simple)
    TEST_MAGIC_SAFETY("eina_inlist_promote",
                      "safety check failed: list == NULL");
    lst = eina_inlist_promote(NULL, NULL);
-   fail_unless(ctx.did);
+   ck_assert(ctx.did);
 
 #ifdef SHOW_LOG
    fprintf(stderr, "you should have a safety check failure below:\n");
@@ -248,7 +248,7 @@ EFL_START_TEST(eina_inlist_simple)
    TEST_MAGIC_SAFETY("eina_inlist_promote",
                      "safety check failed: item == NULL");
    lst = eina_inlist_promote((void*)1L, NULL);
-   fail_unless(ctx.did);
+   ck_assert(ctx.did);
    lst = NULL;
 
 #ifdef SHOW_LOG
@@ -257,7 +257,7 @@ EFL_START_TEST(eina_inlist_simple)
    TEST_MAGIC_SAFETY("eina_inlist_sorted_insert",
                      "safety check failed: item == NULL");
    lst = eina_inlist_sorted_insert(NULL, NULL, NULL);
-   fail_unless(ctx.did);
+   ck_assert(ctx.did);
 
 #ifdef SHOW_LOG
    fprintf(stderr, "you should have a safety check failure below:\n");
@@ -265,7 +265,7 @@ EFL_START_TEST(eina_inlist_simple)
    TEST_MAGIC_SAFETY("eina_inlist_sorted_insert",
                      "safety check failed: func == NULL");
    lst = eina_inlist_sorted_insert(NULL, (void*)1L, NULL);
-   fail_unless(ctx.did);
+   ck_assert(ctx.did);
    lst = NULL;
 
    eina_log_print_cb_set(eina_log_print_cb_stderr, NULL);
@@ -273,23 +273,23 @@ EFL_START_TEST(eina_inlist_simple)
 #endif
 
    tmpl = eina_inlist_last(lst);
-   fail_if(tmpl == lst);
+   ck_assert(tmpl == lst);
    tmpl = eina_inlist_first(tmpl);
-   fail_if(tmpl != lst);
+   ck_assert(tmpl != lst);
 
    tmp = EINA_INLIST_CONTAINER_GET(lst, Eina_Test_Inlist);
    lst = eina_inlist_demote(lst, lst);
-   fail_if(EINA_INLIST_CONTAINER_GET(lst, Eina_Test_Inlist) == tmp);
+   ck_assert(EINA_INLIST_CONTAINER_GET(lst, Eina_Test_Inlist) == tmp);
 
    lst = eina_inlist_promote(lst, EINA_INLIST_GET(tmp));
-   fail_if(lst != EINA_INLIST_GET(tmp));
+   ck_assert(lst != EINA_INLIST_GET(tmp));
 
    tmp = EINA_INLIST_CONTAINER_GET(eina_inlist_find(lst, EINA_INLIST_GET(
                                                        prev)), Eina_Test_Inlist);
    lst = eina_inlist_remove(lst, EINA_INLIST_GET(tmp));
    prev = (Eina_Test_Inlist *)eina_inlist_find(lst, EINA_INLIST_GET(tmp));
    tmp = prev ? EINA_INLIST_CONTAINER_GET(prev, Eina_Test_Inlist) : NULL;
-   fail_if(tmp != NULL);
+   ck_assert(tmp != NULL);
 
    while (lst)
       lst = eina_inlist_remove(lst, lst);
@@ -451,7 +451,7 @@ EFL_START_TEST(eina_inlist_sorted_state)
    unsigned int i;
 
    state = eina_inlist_sorted_state_new();
-   fail_if(!state);
+   ck_assert(!state);
 
    for (i = 0; i < EINA_C_ARRAY_LENGTH(values_unsorted); ++i)
      {
@@ -511,7 +511,7 @@ EFL_START_TEST(eina_inlist_sorted_state2)
    unsigned int i;
 
    state = eina_inlist_sorted_state_new();
-   fail_if(!state);
+   ck_assert(!state);
 
    for (i = 0; i < EINA_C_ARRAY_LENGTH(values_unsorted); ++i)
      {

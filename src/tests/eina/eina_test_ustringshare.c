@@ -41,16 +41,16 @@ EFL_START_TEST(eina_ustringshare_simple)
    t0 = eina_ustringshare_add(TEST0);
    t1 = eina_ustringshare_add(TEST1);
 
-   fail_if(t0 == NULL);
-   fail_if(t1 == NULL);
-   fail_if(eina_unicode_strcmp(t0, TEST0) != 0);
-   fail_if(eina_unicode_strcmp(t1, TEST1) != 0);
-   fail_if((int)eina_unicode_strlen(TEST0) != eina_ustringshare_strlen(t0));
-   fail_if((int)eina_unicode_strlen(TEST1) != eina_ustringshare_strlen(t1));
+   ck_assert(t0 == NULL);
+   ck_assert(t1 == NULL);
+   ck_assert(eina_unicode_strcmp(t0, TEST0) != 0);
+   ck_assert(eina_unicode_strcmp(t1, TEST1) != 0);
+   ck_assert((int)eina_unicode_strlen(TEST0) != eina_ustringshare_strlen(t0));
+   ck_assert((int)eina_unicode_strlen(TEST1) != eina_ustringshare_strlen(t1));
 
    t0 = eina_ustringshare_ref(t0);
-   fail_if(t0 == NULL);
-   fail_if((int)strlen((char*)TEST0) != eina_stringshare_strlen((const char*)t0));
+   ck_assert(t0 == NULL);
+   ck_assert((int)strlen((char*)TEST0) != eina_stringshare_strlen((const char*)t0));
 
    eina_ustringshare_del(t0);
    eina_ustringshare_del(t0);
@@ -69,13 +69,13 @@ EFL_START_TEST(eina_ustringshare_test_share)
    t0 = eina_ustringshare_add(TEST0);
    t1 = eina_ustringshare_add(TEST0);
 
-   fail_if(t0 == NULL);
-   fail_if(t1 == NULL);
-   fail_if(eina_unicode_strcmp(t0, TEST0) != 0);
-   fail_if(eina_unicode_strcmp(t1, TEST0) != 0);
-   fail_if(t0 != t1);
-   fail_if((int)eina_unicode_strlen(TEST0) != eina_ustringshare_strlen(t0));
-   fail_if((int)eina_unicode_strlen(TEST0) != eina_ustringshare_strlen(t1));
+   ck_assert(t0 == NULL);
+   ck_assert(t1 == NULL);
+   ck_assert(eina_unicode_strcmp(t0, TEST0) != 0);
+   ck_assert(eina_unicode_strcmp(t1, TEST0) != 0);
+   ck_assert(t0 != t1);
+   ck_assert((int)eina_unicode_strlen(TEST0) != eina_ustringshare_strlen(t0));
+   ck_assert((int)eina_unicode_strlen(TEST0) != eina_ustringshare_strlen(t1));
 
    eina_ustringshare_del(t0);
    eina_ustringshare_del(t1);
@@ -98,8 +98,8 @@ EFL_START_TEST(eina_ustringshare_putstuff)
         build[7] = i;
         build[8] = 0;
         tmp = eina_ustringshare_add(build);
-        fail_if(tmp != eina_ustringshare_add(build));
-        fail_if((int)eina_unicode_strlen(build) != eina_ustringshare_strlen(tmp));
+        ck_assert(tmp != eina_ustringshare_add(build));
+        ck_assert((int)eina_unicode_strlen(build) != eina_ustringshare_strlen(tmp));
      }
 
 }

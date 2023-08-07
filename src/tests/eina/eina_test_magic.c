@@ -122,7 +122,7 @@ EFL_START_TEST(eina_magic_simple)
    TEST_MAGIC_SAFETY("eina_magic_string_set",
                      "safety check failed: magic_name == NULL");
    eina_magic_string_set(EINA_MAGIC_TEST2, NULL);
-   fail_unless(ctx.did);
+   ck_assert(ctx.did);
 
 #ifdef SHOW_LOG
    fprintf(stderr, "you should have a safety check failure below:\n");
@@ -130,19 +130,19 @@ EFL_START_TEST(eina_magic_simple)
    TEST_MAGIC_SAFETY("eina_magic_string_set",
                      "safety check failed: magic_name == NULL");
    eina_magic_string_set(EINA_MAGIC_TEST2, NULL);
-   fail_unless(ctx.did);
+   ck_assert(ctx.did);
 #endif
 
    eina_magic_string_set(EINA_MAGIC_TEST2, EINA_MAGIC_STRING);
 
-   fail_if(eina_magic_string_get(EINA_MAGIC_TEST) == NULL);
-   fail_if(strcmp(eina_magic_string_get(
+   ck_assert(eina_magic_string_get(EINA_MAGIC_TEST) == NULL);
+   ck_assert(strcmp(eina_magic_string_get(
                      EINA_MAGIC_TEST), EINA_MAGIC_STRING) != 0);
 
    eina_log_print_cb_set(_eina_test_magic_print_cb, &ctx);
 
 #ifdef EINA_MAGIC_DEBUG
-   fail_if(EINA_MAGIC_CHECK(ems, EINA_MAGIC_TEST));
+   ck_assert(EINA_MAGIC_CHECK(ems, EINA_MAGIC_TEST));
 #ifdef SHOW_LOG
    fprintf(stderr, "you should see 'Input handle pointer is NULL' below\n");
 #endif
@@ -151,13 +151,13 @@ EFL_START_TEST(eina_magic_simple)
                      "    Input handle pointer is NULL.\n"
                      "\n");
    EINA_MAGIC_FAIL(ems, EINA_MAGIC_TEST);
-   fail_unless(ctx.did);
+   ck_assert(ctx.did);
 
    ems = malloc(sizeof (Eina_Magic_Struct));
-   fail_if(!ems);
+   ck_assert(!ems);
    EINA_MAGIC_SET(ems, EINA_MAGIC_TEST);
 
-   fail_if(!EINA_MAGIC_CHECK(ems, EINA_MAGIC_TEST));
+   ck_assert(!EINA_MAGIC_CHECK(ems, EINA_MAGIC_TEST));
 
    EINA_MAGIC_SET(ems, EINA_MAGIC_NONE);
 #ifdef SHOW_LOG
@@ -170,7 +170,7 @@ EFL_START_TEST(eina_magic_simple)
                      "\n");
    ctx.expected_level = EINA_LOG_LEVEL_CRITICAL;
    EINA_MAGIC_FAIL(ems, EINA_MAGIC_TEST);
-   fail_unless(ctx.did);
+   ck_assert(ctx.did);
 
    EINA_MAGIC_SET(ems, 42424242);
 #ifdef SHOW_LOG
@@ -184,7 +184,7 @@ EFL_START_TEST(eina_magic_simple)
                      "\n");
    ctx.expected_level = EINA_LOG_LEVEL_CRITICAL;
    EINA_MAGIC_FAIL(ems, EINA_MAGIC_TEST);
-   fail_unless(ctx.did);
+   ck_assert(ctx.did);
 #endif
 
    eina_log_print_cb_set(eina_log_print_cb_stderr, NULL);

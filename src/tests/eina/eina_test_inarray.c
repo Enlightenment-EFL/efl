@@ -41,43 +41,43 @@ EFL_START_TEST(eina_inarray_test_simple)
    };
 
    array = eina_inarray_new(sizeof(int), 2);
-   fail_unless(array != NULL);
+   ck_assert(array != NULL);
 
    for (i = 0; i < test_members; i++)
      {
         pos = eina_inarray_push(array, &i);
-        fail_unless(pos == i);
+        ck_assert(pos == i);
      }
-   fail_unless(eina_inarray_count(array) == (unsigned)test_members);
+   ck_assert(eina_inarray_count(array) == (unsigned)test_members);
 
    for (i = 0; i < test_members; i++)
      {
         member = eina_inarray_nth(array, i);
-        fail_unless(*member == i);
+        ck_assert(*member == i);
      }
 
    for (s = specs; s->pos >= 0; s++)
      {
-        fail_unless(eina_inarray_insert_at(array, s->pos, &s->value));
+        ck_assert(eina_inarray_insert_at(array, s->pos, &s->value));
 
         for (i = 0; i < s->pos; i++)
           {
              member = eina_inarray_nth(array, i);
-             fail_unless(*member == i);
+             ck_assert(*member == i);
           }
         member = eina_inarray_nth(array, s->pos);
-        fail_unless(*member == s->value);
+        ck_assert(*member == s->value);
         for (i = s->pos + 1; i < test_members + 1; i++)
           {
              member = eina_inarray_nth(array, i);
-             fail_unless(*member == i - 1);
+             ck_assert(*member == i - 1);
           }
 
-        fail_unless(eina_inarray_remove_at(array, s->pos));
+        ck_assert(eina_inarray_remove_at(array, s->pos));
         for (i = 0; i < test_members; i++)
           {
              member = eina_inarray_nth(array, i);
-             fail_unless(*member == i);
+             ck_assert(*member == i);
           }
      }
 
@@ -93,30 +93,30 @@ EFL_START_TEST(eina_inarray_test_alloc_at)
    int i;
 
    array = eina_inarray_new(sizeof(int), 2);
-   fail_unless(array != NULL);
+   ck_assert(array != NULL);
 
    member = eina_inarray_alloc_at(array, 0, 4);
-   fail_unless(member != NULL);
-   fail_unless(eina_inarray_count(array) == 4);
+   ck_assert(member != NULL);
+   ck_assert(eina_inarray_count(array) == 4);
 
    for (i = 0; i < 4; i++)
      member[i] = i + 2;
 
    member = eina_inarray_alloc_at(array, 0, 2);
-   fail_unless(member != NULL);
-   fail_unless(eina_inarray_count(array) == 6);
+   ck_assert(member != NULL);
+   ck_assert(eina_inarray_count(array) == 6);
    for (i = 0; i < 2; i++)
      member[i] = i;
 
    member = eina_inarray_alloc_at(array, 6, 2);
-   fail_unless(member != NULL);
-   fail_unless(eina_inarray_count(array) == 8);
+   ck_assert(member != NULL);
+   ck_assert(eina_inarray_count(array) == 8);
    for (i = 0; i < 2; i++)
      member[i] = i + 6;
 
    member = array->members;
    for (i = 0; i < 8; i++)
-     fail_unless(member[i] == i);
+     ck_assert(member[i] == i);
 
    eina_inarray_free(array);
 }
@@ -169,25 +169,25 @@ EFL_START_TEST(eina_inarray_test_insert_sort)
    int i, pos;
 
    array = eina_inarray_new(sizeof(short), 1);
-   fail_unless(array != NULL);
+   ck_assert(array != NULL);
 
    /* insert sorted and already sorted sequence */
    for (i = 0; i < numbers_count; i++)
      {
         short val = i;
         pos = eina_inarray_insert(array, &val, short_cmp);
-        fail_unless(pos == (int)val);
+        ck_assert(pos == (int)val);
      }
-   fail_unless(check_short_sorted(array));
+   ck_assert(check_short_sorted(array));
    eina_inarray_flush(array);
 
    for (i = 0; i < numbers_count; i++)
      {
         short val = i;
         pos = eina_inarray_insert_sorted(array, &val, short_cmp);
-        fail_unless(pos == (int)val);
+        ck_assert(pos == (int)val);
      }
-   fail_unless(check_short_sorted(array));
+   ck_assert(check_short_sorted(array));
    eina_inarray_flush(array);
 
    /* insert sorted the reverse sequence */
@@ -195,18 +195,18 @@ EFL_START_TEST(eina_inarray_test_insert_sort)
      {
         short val = numbers_count - i - 1;
         pos = eina_inarray_insert(array, &val, short_cmp);
-        fail_unless(pos == 0);
+        ck_assert(pos == 0);
      }
-   fail_unless(check_short_sorted(array));
+   ck_assert(check_short_sorted(array));
    eina_inarray_flush(array);
 
    for (i = 0; i < numbers_count; i++)
      {
         short val = numbers_count - i - 1;
         pos = eina_inarray_insert_sorted(array, &val, short_cmp);
-        fail_unless(pos == 0);
+        ck_assert(pos == 0);
      }
-   fail_unless(check_short_sorted(array));
+   ck_assert(check_short_sorted(array));
    eina_inarray_flush(array);
 
    /* insert sorted random numbers */
@@ -215,7 +215,7 @@ EFL_START_TEST(eina_inarray_test_insert_sort)
         short val = rand_numbers[i];
         eina_inarray_insert(array, &val, short_cmp);
      }
-   fail_unless(check_short_sorted(array));
+   ck_assert(check_short_sorted(array));
    eina_inarray_flush(array);
 
    for (i = 0; i < numbers_count; i++)
@@ -223,7 +223,7 @@ EFL_START_TEST(eina_inarray_test_insert_sort)
         short val = rand_numbers[i];
         eina_inarray_insert_sorted(array, &val, short_cmp);
      }
-   fail_unless(check_short_sorted(array));
+   ck_assert(check_short_sorted(array));
    eina_inarray_flush(array);
 
    eina_inarray_free(array);
@@ -236,7 +236,7 @@ EFL_START_TEST(eina_inarray_test_sort)
    int i;
 
    array = eina_inarray_new(sizeof(short), 1);
-   fail_unless(array != NULL);
+   ck_assert(array != NULL);
 
    for (i = 0; i < numbers_count; i++)
      {
@@ -244,7 +244,7 @@ EFL_START_TEST(eina_inarray_test_sort)
         eina_inarray_push(array, &val);
      }
    eina_inarray_sort(array, short_cmp);
-   fail_unless(check_short_sorted(array));
+   ck_assert(check_short_sorted(array));
    eina_inarray_free(array);
 }
 EFL_END_TEST
@@ -255,7 +255,7 @@ EFL_START_TEST(eina_inarray_test_reverse)
    int i;
 
    array = eina_inarray_new(sizeof(short), 1);
-   fail_unless(array != NULL);
+   ck_assert(array != NULL);
 
    for (i = 0; i < numbers_count; i++)
      {
@@ -267,7 +267,7 @@ EFL_START_TEST(eina_inarray_test_reverse)
    for (i = 0; i < numbers_count; i++)
      {
         short *member = eina_inarray_nth(array, i);
-        fail_unless(*member == (numbers_count - i - 1));
+        ck_assert(*member == (numbers_count - i - 1));
      }
 
    eina_inarray_free(array);
@@ -279,7 +279,7 @@ array_foreach(const void *array EINA_UNUSED, void *p, void *user_data EINA_UNUSE
 {
    short *member = p;
    int *i = user_data;
-   fail_unless(*i == *member);
+   ck_assert(*i == *member);
    (*i)++;
    return EINA_TRUE;
 }
@@ -289,7 +289,7 @@ array_foreach_stop_2nd(const void *array EINA_UNUSED, void *p, void *user_data E
 {
    short *member = p;
    int *i = user_data;
-   fail_unless(*i == *member);
+   ck_assert(*i == *member);
    if (*i == 1)
      return EINA_FALSE;
    (*i)++;
@@ -305,7 +305,7 @@ EFL_START_TEST(eina_inarray_test_itr)
    int i;
 
    array = eina_inarray_new(sizeof(short), 1);
-   fail_unless(array != NULL);
+   ck_assert(array != NULL);
 
    for (i = 0; i < numbers_count; i++)
      {
@@ -315,57 +315,57 @@ EFL_START_TEST(eina_inarray_test_itr)
    i = 0;
    EINA_INARRAY_FOREACH(array, member)
      {
-        fail_unless(*member == i);
+        ck_assert(*member == i);
         i++;
      }
-   fail_unless(i == numbers_count);
+   ck_assert(i == numbers_count);
 
    i--;
    EINA_INARRAY_REVERSE_FOREACH(array, member)
      {
-        fail_unless(*member == i);
+        ck_assert(*member == i);
         i--;
      }
-   fail_unless(i == -1);
+   ck_assert(i == -1);
 
    i = 0;
-   fail_unless(eina_inarray_foreach(array, array_foreach, &i));
-   fail_unless(i == numbers_count);
+   ck_assert(eina_inarray_foreach(array, array_foreach, &i));
+   ck_assert(i == numbers_count);
 
    i = 0;
-   fail_if(eina_inarray_foreach(array, array_foreach_stop_2nd, &i));
-   fail_unless(i == 1);
+   ck_assert(eina_inarray_foreach(array, array_foreach_stop_2nd, &i));
+   ck_assert(i == 1);
 
    it = eina_inarray_iterator_new(array);
-   fail_unless(it != NULL);
+   ck_assert(it != NULL);
    i = 0;
    EINA_ITERATOR_FOREACH(it, member)
      {
-        fail_unless(*member == i);
+        ck_assert(*member == i);
         i++;
      }
-   fail_unless(i == numbers_count);
+   ck_assert(i == numbers_count);
    eina_iterator_free(it);
 
    it = eina_inarray_iterator_reversed_new(array);
-   fail_unless(it != NULL);
+   ck_assert(it != NULL);
    i--;
    EINA_ITERATOR_FOREACH(it, member)
      {
-        fail_unless(*member == i);
+        ck_assert(*member == i);
         i--;
      }
-   fail_unless(i == -1);
+   ck_assert(i == -1);
    eina_iterator_free(it);
 
    ac = eina_inarray_accessor_new(array);
-   fail_unless(ac != NULL);
+   ck_assert(ac != NULL);
    for (i = 0; i < numbers_count; i++)
      {
-        fail_unless(eina_accessor_data_get(ac, i, (void **)&member));
-        fail_unless(*member == i);
+        ck_assert(eina_accessor_data_get(ac, i, (void **)&member));
+        ck_assert(*member == i);
      }
-   fail_unless(i == numbers_count);
+   ck_assert(i == numbers_count);
    eina_accessor_free(ac);
 
    eina_inarray_free(array);
@@ -409,59 +409,59 @@ EFL_START_TEST(eina_inarray_test_search)
 
    //search in empty array
    ret = eina_inarray_search(iarr, &temp, cmp);
-   fail_if(ret != -1);
+   ck_assert(ret != -1);
 
    //search in single element array
    temp = 91;
    eina_inarray_push(iarr, &arr[0]);
    ret = eina_inarray_search(iarr, &temp, cmp);
-   fail_if(ret != 0);
+   ck_assert(ret != 0);
 
    temp = 92;
    ret = eina_inarray_search(iarr, &temp, cmp);
-   fail_if(ret != -1);
+   ck_assert(ret != -1);
 
    for (i = 1; i < arr_size; ++i)
      {
         ret = eina_inarray_push(iarr, &arr[i]);
-        fail_unless(ret == i);
+        ck_assert(ret == i);
      }
    temp = 92;
    ret = eina_inarray_search(iarr, &temp, cmp);
-   fail_if(ret != 4);
+   ck_assert(ret != 4);
 
    temp = 100;
    ret = eina_inarray_search(iarr, &temp, cmp);
-   fail_if(ret != -1);
+   ck_assert(ret != -1);
 
    rval = eina_inarray_replace_at(iarr, 3, &temp);
-   fail_if(rval != EINA_TRUE);
+   ck_assert(rval != EINA_TRUE);
    ret = eina_inarray_search(iarr, &temp, cmp);
-   fail_if(ret != 3);
+   ck_assert(ret != 3);
 
    EXPECT_ERROR_START;
    rval = eina_inarray_replace_at(iarr, arr_size+1, &temp);
-   fail_if(rval != EINA_FALSE);
+   ck_assert(rval != EINA_FALSE);
    EXPECT_ERROR_END;
 
    ret = eina_inarray_remove(iarr, &temp);
-   fail_if(ret != 3);
+   ck_assert(ret != 3);
 
    temp = 101;
    ret = eina_inarray_remove(iarr, &temp);
-   fail_if(ret != -1);
+   ck_assert(ret != -1);
 
    eina_inarray_sort(iarr, compare);
 
    temp = 92;
    ret = eina_inarray_search(iarr, &temp, cmp);
    ret1 = eina_inarray_search_sorted(iarr, &temp, cmp);
-   fail_if(ret != ret1);
+   ck_assert(ret != ret1);
 
    temp = 100;
    ret = eina_inarray_search(iarr, &temp, cmp);
    ret1 = eina_inarray_search_sorted(iarr, &temp, cmp);
-   fail_if(ret != ret1);
+   ck_assert(ret != ret1);
 
    temp = 105;
    ret = eina_inarray_push(iarr, &temp);
@@ -469,7 +469,7 @@ EFL_START_TEST(eina_inarray_test_search)
    ret = eina_inarray_push(iarr, &temp);
    curr_len = iarr->len;
    rval = eina_inarray_foreach_remove(iarr, match_cb, &temp);
-   fail_if(iarr->len != curr_len-3);
+   ck_assert(iarr->len != curr_len-3);
 
    eina_inarray_free(iarr);
 }

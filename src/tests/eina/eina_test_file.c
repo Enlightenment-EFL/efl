@@ -107,8 +107,8 @@ EFL_START_TEST(eina_file_split_simple)
 
    TEST_MAGIC_SAFETY("eina_file_split", "safety check failed: path == NULL");
    ea = eina_file_split(NULL);
-   fail_if(ea);
-   fail_unless(ctx.did);
+   ck_assert(ea);
+   ck_assert(ctx.did);
 
    eina_log_print_cb_set(eina_log_print_cb_stderr, NULL);
 #undef TEST_MAGIC_SAFETY
@@ -120,13 +120,13 @@ EFL_START_TEST(eina_file_split_simple)
    ea = eina_file_split(strdup("/this/is/a/small/test"));
 #endif
 
-   fail_if(!ea);
-   fail_if(eina_array_count(ea) != 5);
-   fail_if(strcmp(eina_array_data_get(ea, 0), "this"));
-   fail_if(strcmp(eina_array_data_get(ea, 1), "is"));
-   fail_if(strcmp(eina_array_data_get(ea, 2), "a"));
-   fail_if(strcmp(eina_array_data_get(ea, 3), "small"));
-   fail_if(strcmp(eina_array_data_get(ea, 4), "test"));
+   ck_assert(!ea);
+   ck_assert(eina_array_count(ea) != 5);
+   ck_assert(strcmp(eina_array_data_get(ea, 0), "this"));
+   ck_assert(strcmp(eina_array_data_get(ea, 1), "is"));
+   ck_assert(strcmp(eina_array_data_get(ea, 2), "a"));
+   ck_assert(strcmp(eina_array_data_get(ea, 3), "small"));
+   ck_assert(strcmp(eina_array_data_get(ea, 4), "test"));
 
    eina_array_free(ea);
 
@@ -138,14 +138,14 @@ EFL_START_TEST(eina_file_split_simple)
    ea = eina_file_split(strdup("this//is///a /more/complex///case///"));
 #endif
 
-   fail_if(!ea);
-   fail_if(eina_array_count(ea) != 6);
-   fail_if(strcmp(eina_array_data_get(ea, 0), "this"));
-   fail_if(strcmp(eina_array_data_get(ea, 1), "is"));
-   fail_if(strcmp(eina_array_data_get(ea, 2), "a "));
-   fail_if(strcmp(eina_array_data_get(ea, 3), "more"));
-   fail_if(strcmp(eina_array_data_get(ea, 4), "complex"));
-   fail_if(strcmp(eina_array_data_get(ea, 5), "case"));
+   ck_assert(!ea);
+   ck_assert(eina_array_count(ea) != 6);
+   ck_assert(strcmp(eina_array_data_get(ea, 0), "this"));
+   ck_assert(strcmp(eina_array_data_get(ea, 1), "is"));
+   ck_assert(strcmp(eina_array_data_get(ea, 2), "a "));
+   ck_assert(strcmp(eina_array_data_get(ea, 3), "more"));
+   ck_assert(strcmp(eina_array_data_get(ea, 4), "complex"));
+   ck_assert(strcmp(eina_array_data_get(ea, 5), "case"));
 
    eina_array_free(ea);
 
@@ -202,20 +202,20 @@ EFL_START_TEST(eina_file_direct_ls_simple)
      };
    const int good_dirs_count = sizeof(good_dirs) / sizeof(const char *);
    Eina_Tmpstr *test_dirname = get_eina_test_file_tmp_dir();
-   fail_if(test_dirname == NULL);
+   ck_assert(test_dirname == NULL);
 
    for (int i = 0; i != good_dirs_count; ++i)
      {
         Eina_Tmpstr *dirname = get_full_path(test_dirname, good_dirs[i]);
         // clean old test directories
         rmdir(dirname);
-        fail_if(mkdir(dirname, default_dir_rights) != 0);
+        ck_assert(mkdir(dirname, default_dir_rights) != 0);
 
         Eina_File_Direct_Info *dir_info;
         Eina_Iterator *it = eina_file_direct_ls(test_dirname);
         Eina_Bool found_dir = EINA_FALSE;
 
-        fail_if(!eina_iterator_container_get(it));
+        ck_assert(!eina_iterator_container_get(it));
         EINA_ITERATOR_FOREACH(it, dir_info)
           {
              if (!strcmp(dir_info->path, dirname))
@@ -226,12 +226,12 @@ EFL_START_TEST(eina_file_direct_ls_simple)
 
         eina_iterator_free(it);
 
-        fail_if(!found_dir);
-        fail_if(rmdir(dirname) != 0);
+        ck_assert(!found_dir);
+        ck_assert(rmdir(dirname) != 0);
 
         eina_tmpstr_del(dirname);
      }
-   fail_if(rmdir(test_dirname) != 0);
+   ck_assert(rmdir(test_dirname) != 0);
    eina_tmpstr_del(test_dirname);
 }
 EFL_END_TEST
@@ -261,20 +261,20 @@ EFL_START_TEST(eina_file_ls_simple)
      };
    const int good_dirs_count = sizeof(good_dirs) / sizeof(const char *);
    Eina_Tmpstr *test_dirname = get_eina_test_file_tmp_dir();
-   fail_if(test_dirname == NULL);
+   ck_assert(test_dirname == NULL);
 
    for (int i = 0; i != good_dirs_count; ++i)
      {
         Eina_Tmpstr *dirname = get_full_path(test_dirname, good_dirs[i]);
         // clean old test directories
         rmdir(dirname);
-        fail_if(mkdir(dirname, default_dir_rights) != 0);
+        ck_assert(mkdir(dirname, default_dir_rights) != 0);
 
         char *filename;
         Eina_Iterator *it = eina_file_ls(test_dirname);
         Eina_Bool found_dir = EINA_FALSE;
 
-        fail_if(!eina_iterator_container_get(it));
+        ck_assert(!eina_iterator_container_get(it));
         EINA_ITERATOR_FOREACH(it, filename)
           {
              if (!strcmp(filename, dirname))
@@ -285,12 +285,12 @@ EFL_START_TEST(eina_file_ls_simple)
 
         eina_iterator_free(it);
 
-        fail_if(!found_dir);
-        fail_if(rmdir(dirname) != 0);
+        ck_assert(!found_dir);
+        ck_assert(rmdir(dirname) != 0);
 
         eina_tmpstr_del(dirname);
      }
-   fail_if(rmdir(test_dirname) != 0);
+   ck_assert(rmdir(test_dirname) != 0);
    eina_tmpstr_del(test_dirname);
 }
 EFL_END_TEST
@@ -320,7 +320,7 @@ EFL_START_TEST(eina_file_map_new_test)
    size_t size;
 
    Eina_Tmpstr *test_dirname = get_eina_test_file_tmp_dir();
-   fail_if(test_dirname == NULL);
+   ck_assert(test_dirname == NULL);
    test_dirname_size = strlen((char *)test_dirname);
 
    // memory allocation
@@ -347,7 +347,7 @@ EFL_START_TEST(eina_file_map_new_test)
    // set last element of big_buffer in '\0' - end of string
    big_buffer[big_buffer_size - file_min_offset] = '\0';
    // check big_buffer valid length
-   fail_if((int)strlen(big_buffer) != (big_buffer_size - file_min_offset));
+   ck_assert((int)strlen(big_buffer) != (big_buffer_size - file_min_offset));
 
    // generating file 1 full name
    strcpy(test_file_path, (char *)test_dirname);
@@ -357,59 +357,59 @@ EFL_START_TEST(eina_file_map_new_test)
    strcat(test_file2_path, test_file2_name_part);
 
    fd = open(test_file_path, O_WRONLY | O_BINARY | O_CREAT | O_TRUNC, S_IWUSR | S_IRUSR);
-   fail_if(fd <= 0);
-   fail_if(write(fd, eina_map_test_string, strlen(eina_map_test_string)) != (ssize_t) strlen(eina_map_test_string));
+   ck_assert(fd <= 0);
+   ck_assert(write(fd, eina_map_test_string, strlen(eina_map_test_string)) != (ssize_t) strlen(eina_map_test_string));
    close(fd);
 
    fd = open(test_file2_path, O_WRONLY | O_BINARY | O_CREAT | O_TRUNC, S_IWUSR | S_IRUSR);
-   fail_if(fd <= 0);
-   fail_if(write(fd, big_buffer, big_buffer_size - file_min_offset) != big_buffer_size - file_min_offset);
+   ck_assert(fd <= 0);
+   ck_assert(write(fd, big_buffer, big_buffer_size - file_min_offset) != big_buffer_size - file_min_offset);
    close(fd);
 
    e_file = eina_file_open(test_file_path, EINA_FALSE);
-   fail_if(!e_file);
+   ck_assert(!e_file);
    file_length = eina_file_size_get(e_file);
    correct_file_open_check = file_length - test_string_length;
    // check size of eina_map_test_string == size of file
-   fail_if(correct_file_open_check != 0);
+   ck_assert(correct_file_open_check != 0);
 
-   fail_if(eina_file_refresh(e_file));
+   ck_assert(eina_file_refresh(e_file));
 
    e_file2 = eina_file_open(test_file2_path, EINA_FALSE);
-   fail_if(!e_file2);
+   ck_assert(!e_file2);
    file2_length = eina_file_size_get(e_file2);
    correct_file_open_check = file2_length - (big_buffer_size - file_min_offset);
    // check size of big_buffer == size of file
-   fail_if(correct_file_open_check != 0);
+   ck_assert(correct_file_open_check != 0);
 
    // test : offset > file -> length  => return NULL
    map_offset = test_string_length + file_min_offset;
    map_length = file_min_offset;
    file_map = eina_file_map_new(e_file, EINA_FILE_WILLNEED, map_offset, map_length);
-   fail_if(file_map);
+   ck_assert(file_map);
 
    // test : offset + length > file -> length => return NULL
    map_offset = file_min_offset;
    map_length = test_string_length;
    file_map = eina_file_map_new(e_file, EINA_FILE_WILLNEED, map_offset, map_length);
-   fail_if(file_map);
-   fail_if(eina_file_map_faulted(e_file, file_map));
+   ck_assert(file_map);
+   ck_assert(eina_file_map_faulted(e_file, file_map));
 
    // test : offset = 0 AND length = file->length - use eina_file_map_all
    map_offset = 0;
    map_length = test_string_length;
    file_map = eina_file_map_new(e_file, EINA_FILE_WILLNEED, map_offset, map_length);
-   fail_if(!file_map);
+   ck_assert(!file_map);
    correct_map_check= strcmp((char*) file_map, eina_map_test_string);
-   fail_if(correct_map_check != 0);
+   ck_assert(correct_map_check != 0);
 
    // test : offset = memory_page_size AND length = file->length - memory_page_size => correct partly map
    map_offset = memory_page_size;
    map_length = big_buffer_size - memory_page_size - file_min_offset;
    file2_map = eina_file_map_new(e_file2, EINA_FILE_WILLNEED, map_offset, map_length);
-   fail_if(!file2_map);
+   ck_assert(!file2_map);
    correct_map_check = strcmp((char*)file2_map, big_buffer + memory_page_size);
-   fail_if(correct_map_check != 0);
+   ck_assert(correct_map_check != 0);
 
    // test no crash with eina_file_map_populate()
    eina_file_map_populate(e_file, EINA_FILE_POPULATE, file_map, 0, 0);
@@ -426,7 +426,7 @@ EFL_START_TEST(eina_file_map_new_test)
 
    unlink(test_file_path);
    unlink(test_file2_path);
-   fail_if(rmdir(test_dirname) != 0);
+   ck_assert(rmdir(test_dirname) != 0);
 
    free(test_file_path);
    free(test_file2_path);
@@ -453,33 +453,33 @@ EFL_START_TEST(eina_test_file_virtualize)
    unsigned int i = 0;
 
    f = eina_file_virtualize("gloubi", virtual_file_data, strlen(virtual_file_data), EINA_FALSE);
-   fail_if(!f);
+   ck_assert(!f);
 
-   fail_if(!eina_file_virtual(f));
+   ck_assert(!eina_file_virtual(f));
 
    tmp = eina_file_dup(f);
-   fail_if(!tmp);
+   ck_assert(!tmp);
    eina_file_close(tmp);
 
-   fail_if(strcmp("gloubi", eina_file_filename_get(f)));
+   ck_assert(strcmp("gloubi", eina_file_filename_get(f)));
 
    map = eina_file_map_new(f, EINA_FILE_WILLNEED, 7, 7);
-   fail_if(map != (virtual_file_data + 7));
+   ck_assert(map != (virtual_file_data + 7));
    eina_file_map_free(f, map);
 
    it = eina_file_map_lines(f);
    EINA_ITERATOR_FOREACH(it, ln)
      {
         i++;
-        fail_if(ln->index != i);
+        ck_assert(ln->index != i);
 
         if (i == 4 || i == 5)
-          fail_if(ln->length != 0);
+          ck_assert(ln->length != 0);
      }
-   fail_if(eina_iterator_container_get(it) != f);
+   ck_assert(eina_iterator_container_get(it) != f);
    eina_iterator_free(it);
 
-   fail_if(i != 7);
+   ck_assert(i != 7);
 
    eina_file_close(f);
 
@@ -494,7 +494,7 @@ _eina_test_file_thread(void *data EINA_UNUSED, Eina_Thread t EINA_UNUSED)
    size_t len;
    const char test_file[] = "cmd.exe";
 
-   fail_if(!GetSystemDirectoryA(filename, MAX_PATH));
+   ck_assert(!GetSystemDirectoryA(filename, MAX_PATH));
 
    len = strlen(filename);
 
@@ -503,7 +503,7 @@ _eina_test_file_thread(void *data EINA_UNUSED, Eina_Thread t EINA_UNUSED)
     * The system path length + path separator + length of the test_file + null terminator
     * Must fit in MAX_PATH.
     */
-   fail_if(MAX_PATH < len + 1 + sizeof(test_file));
+   ck_assert(MAX_PATH < len + 1 + sizeof(test_file));
 
    // append trailing directory separator if there isn't one
    if (filename[len - 1] != '\\' && filename[len - 1] != '/')
@@ -522,7 +522,7 @@ _eina_test_file_thread(void *data EINA_UNUSED, Eina_Thread t EINA_UNUSED)
    for (i = 0; i < 100; ++i)
      {
         f = eina_file_open(filename, EINA_FALSE);
-        fail_if(!f);
+        ck_assert(!f);
         eina_file_close(f);
      }
 
@@ -535,10 +535,10 @@ EFL_START_TEST(eina_test_file_thread)
    unsigned int i;
 
    for (i = 0; i < 4; i++)
-     fail_if(!(eina_thread_create(&th[i], EINA_THREAD_NORMAL, -1, _eina_test_file_thread, NULL)));
+     ck_assert(!(eina_thread_create(&th[i], EINA_THREAD_NORMAL, -1, _eina_test_file_thread, NULL)));
 
    for (i = 0; i < 4; i++)
-     fail_if(eina_thread_join(th[i]) != NULL);
+     ck_assert(eina_thread_join(th[i]) != NULL);
 
 }
 EFL_END_TEST
@@ -597,17 +597,17 @@ EFL_START_TEST(eina_test_file_xattr)
    test_file_path = get_full_path(XATTR_TEST_DIR, filename);
 
    fd = open(test_file_path, O_RDONLY | O_BINARY | O_CREAT | O_TRUNC, S_IRWXU | S_IRWXG | S_IRWXO);
-   fail_if(fd == 0);
+   ck_assert(fd == 0);
    close(fd);
 
    for (i = 0; i < sizeof(attribute) / sizeof(attribute[0]); ++i)
      {
         ret = eina_xattr_set(test_file_path, attribute[i], data[i], strlen(data[i]), EINA_XATTR_INSERT);
-        fail_if(ret != EINA_TRUE);
+        ck_assert(ret != EINA_TRUE);
      }
 
    ef = eina_file_open(test_file_path, EINA_FALSE);
-   fail_if(!ef);
+   ck_assert(!ef);
 
    it = eina_file_xattr_get(ef);
    EINA_ITERATOR_FOREACH(it, ret_str)
@@ -619,7 +619,7 @@ EFL_START_TEST(eina_test_file_xattr)
                break;
             }
      }
-   fail_if(count != sizeof (attribute) / sizeof (attribute[0]));
+   ck_assert(count != sizeof (attribute) / sizeof (attribute[0]));
    eina_iterator_free(it);
 
    count = 0;
@@ -634,7 +634,7 @@ EFL_START_TEST(eina_test_file_xattr)
                break;
             }
      }
-   fail_if(count != sizeof (data) / sizeof (data[0]));
+   ck_assert(count != sizeof (data) / sizeof (data[0]));
    eina_iterator_free(it);
 
    unlink(test_file_path);
@@ -657,43 +657,43 @@ EFL_START_TEST(eina_test_file_copy)
    void *content1, *content2;
 
    fd1 = eina_file_mkstemp(test_file1_name, &test_file1_path);
-   fail_if(fd1 <= 0);
+   ck_assert(fd1 <= 0);
 
    fd2 = eina_file_mkstemp(test_file2_name, &test_file2_path);
-   fail_if(fd2 <= 0);
+   ck_assert(fd2 <= 0);
 
-   fail_if(write(fd1, data, strlen(data)) != (ssize_t) strlen(data));
+   ck_assert(write(fd1, data, strlen(data)) != (ssize_t) strlen(data));
 
    close(fd1);
    close(fd2);
 
    //Copy file data
    ret = eina_file_copy(test_file1_path, test_file2_path, EINA_FILE_COPY_DATA, NULL, NULL);
-   fail_if(ret != EINA_TRUE);
+   ck_assert(ret != EINA_TRUE);
 
    e_file1 = eina_file_open(test_file1_path, EINA_FALSE);
-   fail_if(!e_file1);
+   ck_assert(!e_file1);
    file1_len = eina_file_size_get(e_file1);
 
    e_file2 = eina_file_open(test_file2_path, EINA_FALSE);
-   fail_if(!e_file2);
+   ck_assert(!e_file2);
    file2_len = eina_file_size_get(e_file2);
 
    //Check if both the files are same
-   fail_if(e_file1 == e_file2);
+   ck_assert(e_file1 == e_file2);
 
-   fail_if(file1_len != strlen(data));
-   fail_if(file1_len != file2_len);
+   ck_assert(file1_len != strlen(data));
+   ck_assert(file1_len != file2_len);
 
    //Check the contents of both the file
    content1 = eina_file_map_all(e_file1, EINA_FILE_POPULATE);
-   fail_if(content1 == NULL);
+   ck_assert(content1 == NULL);
 
    content2 = eina_file_map_all(e_file2, EINA_FILE_POPULATE);
-   fail_if(content2 == NULL);
+   ck_assert(content2 == NULL);
 
    rval = memcmp(content1, content2, strlen(data));
-   fail_if(rval != 0);
+   ck_assert(rval != 0);
 
    eina_file_map_free(e_file1, content1);
    eina_file_map_free(e_file2, content2);
@@ -718,19 +718,19 @@ EFL_START_TEST(eina_test_file_statat)
    int fd, ret;
 
    Eina_Tmpstr *test_dirname = get_eina_test_file_tmp_dir();
-   fail_if(test_dirname == NULL);
+   ck_assert(test_dirname == NULL);
 
    test_file1_path = get_full_path(test_dirname, "example1.txt");
    test_file2_path = get_full_path(test_dirname, "example2.txt");
 
    fd = open(test_file1_path, O_WRONLY | O_BINARY | O_CREAT | O_TRUNC, S_IWUSR | S_IRUSR);
-   fail_if(fd == 0);
-   fail_if(write(fd, template, template_size) != template_size);
+   ck_assert(fd == 0);
+   ck_assert(write(fd, template, template_size) != template_size);
    close(fd);
 
    fd = open(test_file2_path, O_WRONLY | O_BINARY | O_CREAT | O_TRUNC, S_IWUSR | S_IRUSR);
-   fail_if(fd == 0);
-   fail_if(write(fd, template, template_size) != template_size);
+   ck_assert(fd == 0);
+   ck_assert(write(fd, template, template_size) != template_size);
    close(fd);
 
    it = eina_file_stat_ls(test_dirname);
@@ -739,13 +739,13 @@ EFL_START_TEST(eina_test_file_statat)
      {
         ret = eina_file_statat(eina_iterator_container_get(it), info, &st);
         fprintf(stderr, "ret=%d\n", ret);
-        fail_if(ret != 0);
-        fail_if(st.size != (unsigned int)template_size);
+        ck_assert(ret != 0);
+        ck_assert(st.size != (unsigned int)template_size);
      }
 
    unlink(test_file1_path);
    unlink(test_file2_path);
-   fail_if(rmdir(test_dirname) != 0);
+   ck_assert(rmdir(test_dirname) != 0);
    eina_tmpstr_del(test_file1_path);
    eina_tmpstr_del(test_file2_path);
    eina_tmpstr_del(test_dirname);
@@ -776,10 +776,10 @@ EFL_START_TEST(eina_test_file_mktemp)
    /* test NULL */
    EXPECT_ERROR_START;
    fd = eina_file_mkstemp(NULL, NULL);
-   fail_if(fd >= 0);
+   ck_assert(fd >= 0);
    EXPECT_ERROR_END;
    fd = eina_file_mkstemp(patterns[0], NULL);
-   fail_if(fd < 0);
+   ck_assert(fd < 0);
 
    /* here's an attempt at removing the file, without knowing its path */
 #ifdef F_GETPATH
@@ -797,9 +797,9 @@ EFL_START_TEST(eina_test_file_mktemp)
       DWORD l;
 
       h = (HANDLE)_get_osfhandle(fd);
-      fail_if(h == INVALID_HANDLE_VALUE);
+      ck_assert(h == INVALID_HANDLE_VALUE);
       l = GetFinalPathNameByHandle(h, buf, sizeof(buf), 0);
-      fail_if(l == 0);
+      ck_assert(l == 0);
       /* GetFinalPathNameByHandle() preprends path with \\?\ */
       unlink(buf + 4);
    }
@@ -813,7 +813,7 @@ EFL_START_TEST(eina_test_file_mktemp)
         ck_assert(fd >= 0);
         ck_assert(!!tmpfile);
         file = eina_file_open(tmpfile, EINA_FALSE);
-        fail_if(!file);
+        ck_assert(!file);
         eina_file_close(file);
         unlink(tmpfile);
         eina_tmpstr_del(tmpfile);
@@ -821,10 +821,10 @@ EFL_START_TEST(eina_test_file_mktemp)
      }
 
    /* temp directory */
-   fail_if(!eina_file_mkdtemp("eina_file_test_XXXXXX", &tmpdir) || !tmpdir);
+   ck_assert(!eina_file_mkdtemp("eina_file_test_XXXXXX", &tmpdir) || !tmpdir);
 
    it = eina_file_direct_ls(tmpdir);
-   fail_if(!it);
+   ck_assert(!it);
 
    /* should be empty! */
    EINA_ITERATOR_FOREACH(it, info)
@@ -836,20 +836,20 @@ EFL_START_TEST(eina_test_file_mktemp)
    eina_file_path_join(buf, sizeof(buf), tmpdir, "eina_file_test_XXXXXX.txt");
 
    fd = eina_file_mkstemp(buf, &tmpfile);
-   fail_if((fd < 0) || !tmpfile);
-   fail_if(close(fd));
+   ck_assert((fd < 0) || !tmpfile);
+   ck_assert(close(fd));
 
    it = eina_file_direct_ls(tmpdir);
-   fail_if(!it);
+   ck_assert(!it);
 
    /* should be empty! */
    EINA_ITERATOR_FOREACH(it, info)
-     fail_if(strcmp(info->path, tmpfile));
+     ck_assert(strcmp(info->path, tmpfile));
 
    eina_iterator_free(it);
 
-   fail_if(unlink(tmpfile));
-   fail_if(rmdir(tmpdir));
+   ck_assert(unlink(tmpfile));
+   ck_assert(rmdir(tmpdir));
    eina_tmpstr_del(tmpdir);
 }
 EFL_END_TEST
@@ -860,14 +860,14 @@ int  create_file_not_empty(const char *file_name, Eina_Tmpstr **test_file_path, 
    int data_size = strlen(data);
    int wr_size;
    int fd = eina_file_mkstemp(file_name, test_file_path);
-   fail_if(fd <= 0);
+   ck_assert(fd <= 0);
    wr_size = write(fd, data, data_size);
    if(close_file == EINA_TRUE)
    {
       close(fd);
       fd = 0;
    }
-   fail_if(wr_size != data_size);
+   ck_assert(wr_size != data_size);
    return fd;
 }
 
@@ -880,16 +880,16 @@ EFL_START_TEST(eina_test_file_unlink)
 
    /*If file was not opened as 'eina'*/
    fd = create_file_not_empty(tmpfile, &test_file_path, EINA_TRUE);
-   fail_if(fd != 0);
-   fail_if(!eina_file_unlink(test_file_path));
+   ck_assert(fd != 0);
+   ck_assert(!eina_file_unlink(test_file_path));
 
    /*If file was opened as 'eina'*/
    fd = create_file_not_empty(tmpfile, &test_file_path, EINA_TRUE);
-   fail_if(fd != 0);
+   ck_assert(fd != 0);
 
    test_file = eina_file_open(test_file_path, EINA_FALSE);
-   fail_if(!test_file);
-   fail_if(!eina_file_unlink(test_file_path));
+   ck_assert(!test_file);
+   ck_assert(!eina_file_unlink(test_file_path));
 
    eina_file_close(test_file);
 

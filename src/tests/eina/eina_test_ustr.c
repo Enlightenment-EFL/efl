@@ -76,25 +76,25 @@ EFL_START_TEST(eina_unicode_strcmp_test)
 {
 
    /* 1 & 2 */
-   fail_if(eina_unicode_strcmp(STR1,STR2) == 0);
-   fail_if(eina_unicode_strcmp(STR1,STR2) < 1);
+   ck_assert(eina_unicode_strcmp(STR1,STR2) == 0);
+   ck_assert(eina_unicode_strcmp(STR1,STR2) < 1);
 
    /* 1 & 3 */
-   fail_if(eina_unicode_strcmp(STR1, STR3) != 0);
+   ck_assert(eina_unicode_strcmp(STR1, STR3) != 0);
 
    /* 1 & 4 */
-   fail_if(eina_unicode_strcmp(STR1, STR4) == 0);
-   fail_if(eina_unicode_strcmp(STR1, STR4) > 1);
+   ck_assert(eina_unicode_strcmp(STR1, STR4) == 0);
+   ck_assert(eina_unicode_strcmp(STR1, STR4) > 1);
 
    /* 1 & empty */
-   fail_if(eina_unicode_strcmp(STR1, EMPTYSTR) < 1);
+   ck_assert(eina_unicode_strcmp(STR1, EMPTYSTR) < 1);
 
    /* Self tests */
-   fail_if(eina_unicode_strcmp(STR1, STR1) != 0);
-   fail_if(eina_unicode_strcmp(STR2, STR2) != 0);
-   fail_if(eina_unicode_strcmp(STR3, STR3) != 0);
-   fail_if(eina_unicode_strcmp(STR4, STR4) != 0);
-   fail_if(eina_unicode_strcmp(EMPTYSTR, EMPTYSTR) != 0);
+   ck_assert(eina_unicode_strcmp(STR1, STR1) != 0);
+   ck_assert(eina_unicode_strcmp(STR2, STR2) != 0);
+   ck_assert(eina_unicode_strcmp(STR3, STR3) != 0);
+   ck_assert(eina_unicode_strcmp(STR4, STR4) != 0);
+   ck_assert(eina_unicode_strcmp(EMPTYSTR, EMPTYSTR) != 0);
 
 }
 EFL_END_TEST
@@ -106,29 +106,29 @@ EFL_START_TEST(eina_unicode_strcpy_test)
 
 
    rv = eina_unicode_strcpy(buf,STR1);
-   fail_if(rv != buf);
-   fail_if(eina_unicode_strcmp(buf,STR1) != 0);
+   ck_assert(rv != buf);
+   ck_assert(eina_unicode_strcmp(buf,STR1) != 0);
 
    rv = eina_unicode_strcpy(buf,STR2);
-   fail_if(rv != buf);
-   fail_if(eina_unicode_strcmp(buf,STR2) != 0);
+   ck_assert(rv != buf);
+   ck_assert(eina_unicode_strcmp(buf,STR2) != 0);
 
    /* Now a shorter string */
    rv = eina_unicode_strcpy(buf,STR2);
-   fail_if(rv != buf);
-   fail_if(eina_unicode_strcmp(buf,STR2) != 0);
+   ck_assert(rv != buf);
+   ck_assert(eina_unicode_strcmp(buf,STR2) != 0);
 
    /* Really short string */
    rv = eina_unicode_strcpy(buf,STR4);
-   fail_if(rv != buf);
-   fail_if(eina_unicode_strcmp(buf,STR4) != 0);
-   fail_if(buf[2] != 'n'); /* check old buf is there */
+   ck_assert(rv != buf);
+   ck_assert(eina_unicode_strcmp(buf,STR4) != 0);
+   ck_assert(buf[2] != 'n'); /* check old buf is there */
 
    buf[1] = '7';
    rv = eina_unicode_strcpy(buf,EMPTYSTR);
-   fail_if(rv != buf);
-   fail_if(buf[0] != 0);
-   fail_if(buf[1] != '7');
+   ck_assert(rv != buf);
+   ck_assert(buf[0] != 0);
+   ck_assert(buf[1] != '7');
 
 }
 EFL_END_TEST
@@ -140,24 +140,24 @@ EFL_START_TEST(eina_unicode_strncpy_test)
 
 
    rv = eina_unicode_strncpy(buf,STR1,9);
-   fail_if(rv != buf);
-   fail_if(eina_unicode_strcmp(buf,STR1) != 0);
+   ck_assert(rv != buf);
+   ck_assert(eina_unicode_strcmp(buf,STR1) != 0);
 
    buf[1] = '7';
    rv = eina_unicode_strncpy(buf,STR1,1);
-   fail_if(rv != buf);
-   fail_if(buf[1] != '7');
-   fail_if(buf[0] != STR1[0]);
+   ck_assert(rv != buf);
+   ck_assert(buf[1] != '7');
+   ck_assert(buf[0] != STR1[0]);
 
    buf[9] = '7';
    rv = eina_unicode_strncpy(buf, STR4, 10);
-   fail_if(rv != buf);
-   fail_if(eina_unicode_strcmp(buf,STR4) != 0);
-   fail_if(buf[9] != 0);
+   ck_assert(rv != buf);
+   ck_assert(eina_unicode_strcmp(buf,STR4) != 0);
+   ck_assert(buf[9] != 0);
 
    buf[0] = '7';
    eina_unicode_strncpy(buf, STR1, 0);
-   fail_if(buf[0] != '7');
+   ck_assert(buf[0] != '7');
 
 #ifdef EINA_SAFETY_CHECKS
    {
@@ -178,8 +178,8 @@ EFL_START_TEST(eina_unicode_strncpy_test)
       TEST_MAGIC_SAFETY("eina_unicode_strncpy",
                         "safety check failed: source == NULL");
       rv = eina_unicode_strncpy(buf, NULL, 0);
-      fail_if(buf[0] != '7');
-      fail_unless(ctx.did);
+      ck_assert(buf[0] != '7');
+      ck_assert(ctx.did);
 
       /* Hopefully won't segfault */
 #ifdef SHOW_LOG
@@ -188,8 +188,8 @@ EFL_START_TEST(eina_unicode_strncpy_test)
       TEST_MAGIC_SAFETY("eina_unicode_strncpy",
                         "safety check failed: dest == NULL");
       rv = eina_unicode_strncpy(NULL, STR1, 0);
-      fail_if(rv != NULL);
-      fail_unless(ctx.did);
+      ck_assert(rv != NULL);
+      ck_assert(ctx.did);
 
       eina_log_print_cb_set(eina_log_print_cb_stderr, NULL);
 #undef TEST_MAGIC_SAFETY
@@ -205,11 +205,11 @@ EFL_START_TEST(eina_ustr_strlen_test)
 {
 
 
-   fail_if(eina_unicode_strlen(STR1) != 8);
-   fail_if(eina_unicode_strlen(STR2) != 9);
-   fail_if(eina_unicode_strlen(STR3) != 8);
-   fail_if(eina_unicode_strlen(STR4) != 1);
-   fail_if(eina_unicode_strlen(EMPTYSTR) != 0);
+   ck_assert(eina_unicode_strlen(STR1) != 8);
+   ck_assert(eina_unicode_strlen(STR2) != 9);
+   ck_assert(eina_unicode_strlen(STR3) != 8);
+   ck_assert(eina_unicode_strlen(STR4) != 1);
+   ck_assert(eina_unicode_strlen(EMPTYSTR) != 0);
 
 #ifdef EINA_SAFETY_CHECKS
    {
@@ -227,8 +227,8 @@ EFL_START_TEST(eina_ustr_strlen_test)
 #endif
       TEST_MAGIC_SAFETY("eina_unicode_strlen",
                         "safety check failed: ustr == NULL");
-      fail_if(eina_unicode_strlen(NULL));
-      fail_unless(ctx.did);
+      ck_assert(eina_unicode_strlen(NULL));
+      ck_assert(ctx.did);
 
       eina_log_print_cb_set(eina_log_print_cb_stderr, NULL);
 #undef TEST_MAGIC_SAFETY
@@ -242,17 +242,17 @@ EFL_START_TEST(eina_unicode_strnlen_test)
 {
 
    /* Strlen style tests*/
-   fail_if(eina_unicode_strnlen(STR1,10) != 8);
-   fail_if(eina_unicode_strnlen(STR2,10) != 9);
-   fail_if(eina_unicode_strnlen(STR3,10) != 8);
-   fail_if(eina_unicode_strnlen(STR4,10) != 1);
-   fail_if(eina_unicode_strnlen(EMPTYSTR,10) != 0);
+   ck_assert(eina_unicode_strnlen(STR1,10) != 8);
+   ck_assert(eina_unicode_strnlen(STR2,10) != 9);
+   ck_assert(eina_unicode_strnlen(STR3,10) != 8);
+   ck_assert(eina_unicode_strnlen(STR4,10) != 1);
+   ck_assert(eina_unicode_strnlen(EMPTYSTR,10) != 0);
 
    /* Too short tests */
-   fail_if(eina_unicode_strnlen(STR1,3) != 3);
-   fail_if(eina_unicode_strnlen(STR2,3) != 3);
-   fail_if(eina_unicode_strnlen(STR3,3) != 3);
-   fail_if(eina_unicode_strnlen(EMPTYSTR,1) != 0);
+   ck_assert(eina_unicode_strnlen(STR1,3) != 3);
+   ck_assert(eina_unicode_strnlen(STR2,3) != 3);
+   ck_assert(eina_unicode_strnlen(STR3,3) != 3);
+   ck_assert(eina_unicode_strnlen(EMPTYSTR,1) != 0);
 
 #ifdef EINA_SAFETY_CHECKS
    {
@@ -270,8 +270,8 @@ EFL_START_TEST(eina_unicode_strnlen_test)
 #endif
       TEST_MAGIC_SAFETY("eina_unicode_strnlen",
                         "safety check failed: ustr == NULL");
-      fail_if(eina_unicode_strnlen(NULL,0) != 0);
-      fail_unless(ctx.did);
+      ck_assert(eina_unicode_strnlen(NULL,0) != 0);
+      ck_assert(ctx.did);
 
       eina_log_print_cb_set(eina_log_print_cb_stderr, NULL);
 #undef TEST_MAGIC_SAFETY
@@ -287,14 +287,14 @@ EFL_START_TEST(eina_unicode_strdup_test)
 
 
    buf = eina_unicode_strdup(STR1);
-   fail_if(!buf);
-   fail_if(eina_unicode_strlen(buf) != eina_unicode_strlen(STR1));
-   fail_if(eina_unicode_strcmp(buf, STR1));
+   ck_assert(!buf);
+   ck_assert(eina_unicode_strlen(buf) != eina_unicode_strlen(STR1));
+   ck_assert(eina_unicode_strcmp(buf, STR1));
    free(buf);
 
    buf = eina_unicode_strdup(EMPTYSTR);
-   fail_if(!buf);
-   fail_if(buf[0] != 0);
+   ck_assert(!buf);
+   ck_assert(buf[0] != 0);
    free(buf);
 }
 EFL_END_TEST
@@ -306,19 +306,19 @@ EFL_START_TEST(eina_unicode_strstr_test)
 
 
    buf = eina_unicode_strstr(STR1,on);
-   fail_if(!buf);
-   fail_if(buf != STR1 + 6);
-   fail_if(eina_unicode_strcmp(buf,on) != 0);
+   ck_assert(!buf);
+   ck_assert(buf != STR1 + 6);
+   ck_assert(eina_unicode_strcmp(buf,on) != 0);
 
    buf = eina_unicode_strstr(STR2,on);
-   fail_if(buf);
+   ck_assert(buf);
 
    buf = eina_unicode_strstr(EMPTYSTR, on);
-   fail_if(buf);
+   ck_assert(buf);
 
    buf = eina_unicode_strstr(STR1, EMPTYSTR);
-   fail_if(!buf);
-   fail_if(buf != STR1);
+   ck_assert(!buf);
+   ck_assert(buf != STR1);
 
 }
 EFL_END_TEST
@@ -338,9 +338,9 @@ EFL_START_TEST(eina_unicode_escape_test)
    for (i = 0; i < sizeof(str)/sizeof(str[0]); ++i)
      {
         buf = eina_unicode_escape(str[i]);
-        fail_if(!buf);
-        fail_if(eina_unicode_strlen(buf) != eina_unicode_strlen(result_str[i]));
-        fail_if(eina_unicode_strcmp(buf, result_str[i]) != 0);
+        ck_assert(!buf);
+        ck_assert(eina_unicode_strlen(buf) != eina_unicode_strlen(result_str[i]));
+        ck_assert(eina_unicode_strcmp(buf, result_str[i]) != 0);
         free(buf);
      }
 
@@ -355,80 +355,80 @@ EFL_START_TEST(eina_unicode_utf8)
    /* Valid utf-8 cases */
    /* First possible sequence of a certain length */
    ind = 0;
-   fail_if((eina_unicode_utf8_next_get("\x00", &ind) != 0x00) ||
+   ck_assert((eina_unicode_utf8_next_get("\x00", &ind) != 0x00) ||
            (ind != 0));
    ind = 0;
-   fail_if((eina_unicode_utf8_next_get("\x01", &ind) != 0x01) ||
+   ck_assert((eina_unicode_utf8_next_get("\x01", &ind) != 0x01) ||
            (ind != 1));
    ind = 0;
-   fail_if((eina_unicode_utf8_next_get("\xC2\x80", &ind) != 0x80) ||
+   ck_assert((eina_unicode_utf8_next_get("\xC2\x80", &ind) != 0x80) ||
            (ind != 2));
    ind = 0;
-   fail_if((eina_unicode_utf8_next_get("\xE0\xA0\x80", &ind) != 0x800) ||
+   ck_assert((eina_unicode_utf8_next_get("\xE0\xA0\x80", &ind) != 0x800) ||
            (ind != 3));
    ind = 0;
-   fail_if((eina_unicode_utf8_next_get("\xF0\x90\x80\x80", &ind) != 0x10000) ||
+   ck_assert((eina_unicode_utf8_next_get("\xF0\x90\x80\x80", &ind) != 0x10000) ||
            (ind != 4));
    ind = 0;
-   fail_if((eina_unicode_utf8_next_get("\xF8\x88\x80\x80\x80", &ind) != 0x200000) || (ind != 5));
+   ck_assert((eina_unicode_utf8_next_get("\xF8\x88\x80\x80\x80", &ind) != 0x200000) || (ind != 5));
    ind = 0;
-   fail_if((eina_unicode_utf8_next_get("\xFC\x84\x80\x80\x80\x80", &ind) != 0x4000000) || (ind != 6));
+   ck_assert((eina_unicode_utf8_next_get("\xFC\x84\x80\x80\x80\x80", &ind) != 0x4000000) || (ind != 6));
 
    /* Last possible sequence of a certain length */
    ind = 0;
-   fail_if((eina_unicode_utf8_next_get("\x7F", &ind) != 0x7F) ||
+   ck_assert((eina_unicode_utf8_next_get("\x7F", &ind) != 0x7F) ||
            (ind != 1));
    ind = 0;
-   fail_if((eina_unicode_utf8_next_get("\xDF\xBF", &ind) != 0x7FF) ||
+   ck_assert((eina_unicode_utf8_next_get("\xDF\xBF", &ind) != 0x7FF) ||
            (ind != 2));
    ind = 0;
-   fail_if((eina_unicode_utf8_next_get("\xEF\xBF\xBF", &ind) != 0xFFFF) ||
+   ck_assert((eina_unicode_utf8_next_get("\xEF\xBF\xBF", &ind) != 0xFFFF) ||
            (ind != 3));
    ind = 0;
-   fail_if((eina_unicode_utf8_next_get("\xF7\xBF\xBF\xBF", &ind) != 0x1FFFFF) ||
+   ck_assert((eina_unicode_utf8_next_get("\xF7\xBF\xBF\xBF", &ind) != 0x1FFFFF) ||
            (ind != 4));
    ind = 0;
-   fail_if((eina_unicode_utf8_next_get("\xFB\xBF\xBF\xBF\xBF", &ind) != 0x3FFFFFF) || (ind != 5));
+   ck_assert((eina_unicode_utf8_next_get("\xFB\xBF\xBF\xBF\xBF", &ind) != 0x3FFFFFF) || (ind != 5));
    ind = 0;
-   fail_if((eina_unicode_utf8_next_get("\xFD\xBF\xBF\xBF\xBF\xBF", &ind) != 0x7FFFFFFF) || (ind != 6));
+   ck_assert((eina_unicode_utf8_next_get("\xFD\xBF\xBF\xBF\xBF\xBF", &ind) != 0x7FFFFFFF) || (ind != 6));
 
    /* Other boundary conditions */
    ind = 0;
-   fail_if((eina_unicode_utf8_next_get("\xED\x9F\xBF", &ind) != 0xD7FF) ||
+   ck_assert((eina_unicode_utf8_next_get("\xED\x9F\xBF", &ind) != 0xD7FF) ||
            (ind != 3));
    ind = 0;
-   fail_if((eina_unicode_utf8_next_get("\xEE\x80\x80", &ind) != 0xE000) ||
+   ck_assert((eina_unicode_utf8_next_get("\xEE\x80\x80", &ind) != 0xE000) ||
            (ind != 3));
    ind = 0;
-   fail_if((eina_unicode_utf8_next_get("\xEF\xBF\xBD", &ind) != 0xFFFD) ||
+   ck_assert((eina_unicode_utf8_next_get("\xEF\xBF\xBD", &ind) != 0xFFFD) ||
            (ind != 3));
    ind = 0;
-   fail_if((eina_unicode_utf8_next_get("\xF4\x8F\xBF\xBF", &ind) != 0x10FFFF) ||
+   ck_assert((eina_unicode_utf8_next_get("\xF4\x8F\xBF\xBF", &ind) != 0x10FFFF) ||
            (ind != 4));
    ind = 0;
-   fail_if((eina_unicode_utf8_next_get("\xF4\x90\x80\x80", &ind) != 0x110000) ||
+   ck_assert((eina_unicode_utf8_next_get("\xF4\x90\x80\x80", &ind) != 0x110000) ||
            (ind != 4));
 
    /* Error cases */
    /* Standalone continuation bytes */
    ind = 0;
-   fail_if((eina_unicode_utf8_next_get("\x80", &ind) != 0xDC80) ||
+   ck_assert((eina_unicode_utf8_next_get("\x80", &ind) != 0xDC80) ||
            (ind != 1));
    ind = 0;
-   fail_if((eina_unicode_utf8_next_get("\xBF", &ind) != 0xDCBF) ||
+   ck_assert((eina_unicode_utf8_next_get("\xBF", &ind) != 0xDCBF) ||
            (ind != 1));
    ind = 0;
-   fail_if((eina_unicode_utf8_next_get("\x80\xBF", &ind) != 0xDC80) ||
+   ck_assert((eina_unicode_utf8_next_get("\x80\xBF", &ind) != 0xDC80) ||
            (ind != 1));
    ind = 0;
-   fail_if((eina_unicode_utf8_next_get("\xBF\x80", &ind) != 0xDCBF) ||
+   ck_assert((eina_unicode_utf8_next_get("\xBF\x80", &ind) != 0xDCBF) ||
            (ind != 1));
    /* All possible continuation bytes */
    for (ch = 0x80 ; ch <= 0xBF ; ch++)
      {
         char buf[] = {ch, 0};
         ind = 0;
-        fail_if((eina_unicode_utf8_next_get(buf, &ind) != (0xDC00 | ch)) ||
+        ck_assert((eina_unicode_utf8_next_get(buf, &ind) != (0xDC00 | ch)) ||
                 (ind != 1));
      }
 
@@ -446,9 +446,9 @@ EFL_START_TEST(eina_unicode_utf8)
         ind = 0; \
         for (i = 0, ch = start ; ch <= end ; ch++) \
           { \
-             fail_if((eina_unicode_utf8_next_get(buf, &ind) != (0xDC00 | ch)) || \
+             ck_assert((eina_unicode_utf8_next_get(buf, &ind) != (0xDC00 | ch)) || \
                      (ind != ++i)); \
-             fail_if((eina_unicode_utf8_next_get(buf, &ind) != 0x20) || \
+             ck_assert((eina_unicode_utf8_next_get(buf, &ind) != 0x20) || \
                      (ind != ++i)); \
           } \
      } \
@@ -482,13 +482,13 @@ EFL_START_TEST(eina_unicode_utf8)
                } \
              buf[j] = 0; \
              ind = 0; \
-             fail_if( \
+             ck_assert( \
                 (eina_unicode_utf8_next_get(buf, &ind) != (0xDC00 | first))); \
              while ((val = eina_unicode_utf8_next_get(buf, &ind))) \
                { \
-                  fail_if(val != (0xDC00 | conti)); \
+                  ck_assert(val != (0xDC00 | conti)); \
                } \
-             fail_if(ind != i); \
+             ck_assert(ind != i); \
           } \
      } \
    while (0)
@@ -507,54 +507,54 @@ EFL_START_TEST(eina_unicode_utf8)
 
    /* Impossible bytes */
    ind = 0;
-   fail_if((eina_unicode_utf8_next_get("\xFE", &ind) != 0xDCFE) ||
+   ck_assert((eina_unicode_utf8_next_get("\xFE", &ind) != 0xDCFE) ||
            (ind != 1));
    ind = 0;
-   fail_if((eina_unicode_utf8_next_get("\xFF", &ind) != 0xDCFF) ||
+   ck_assert((eina_unicode_utf8_next_get("\xFF", &ind) != 0xDCFF) ||
            (ind != 1));
 
    /* Overlong sequences */
    ind = 0;
-   fail_if((eina_unicode_utf8_next_get("\xC0\xAF", &ind) != 0xDCC0) ||
+   ck_assert((eina_unicode_utf8_next_get("\xC0\xAF", &ind) != 0xDCC0) ||
            (ind != 1));
    ind = 0;
-   fail_if((eina_unicode_utf8_next_get("\xE0\x80\xAF", &ind) != 0xDCE0) ||
+   ck_assert((eina_unicode_utf8_next_get("\xE0\x80\xAF", &ind) != 0xDCE0) ||
            (ind != 1));
    ind = 0;
-   fail_if((eina_unicode_utf8_next_get("\xF0\x80\x80\xAF", &ind) != 0xDCF0) ||
+   ck_assert((eina_unicode_utf8_next_get("\xF0\x80\x80\xAF", &ind) != 0xDCF0) ||
            (ind != 1));
    ind = 0;
-   fail_if((eina_unicode_utf8_next_get("\xF8\x80\x80\x80\xAF", &ind) != 0xDCF8) ||
+   ck_assert((eina_unicode_utf8_next_get("\xF8\x80\x80\x80\xAF", &ind) != 0xDCF8) ||
            (ind != 1));
    ind = 0;
-   fail_if((eina_unicode_utf8_next_get("\xFC\x80\x80\x80\x80\xAF", &ind) != 0xDCFC) ||
+   ck_assert((eina_unicode_utf8_next_get("\xFC\x80\x80\x80\x80\xAF", &ind) != 0xDCFC) ||
            (ind != 1));
 
    /* Maximum overlong sequences */
    ind = 0;
-   fail_if((eina_unicode_utf8_next_get("\xC1\xBF", &ind) != 0xDCC1) ||
+   ck_assert((eina_unicode_utf8_next_get("\xC1\xBF", &ind) != 0xDCC1) ||
            (ind != 1));
    ind = 0;
-   fail_if((eina_unicode_utf8_next_get("\xE0\x9F\xBF", &ind) != 0xDCE0) ||
+   ck_assert((eina_unicode_utf8_next_get("\xE0\x9F\xBF", &ind) != 0xDCE0) ||
            (ind != 1));
    ind = 0;
-   fail_if((eina_unicode_utf8_next_get("\xF0\x8F\xBF\xBF", &ind) != 0xDCF0) ||
+   ck_assert((eina_unicode_utf8_next_get("\xF0\x8F\xBF\xBF", &ind) != 0xDCF0) ||
            (ind != 1));
    ind = 0;
-   fail_if((eina_unicode_utf8_next_get("\xF8\x87\xBF\xBF\xBF", &ind) != 0xDCF8) ||
+   ck_assert((eina_unicode_utf8_next_get("\xF8\x87\xBF\xBF\xBF", &ind) != 0xDCF8) ||
            (ind != 1));
    ind = 0;
-   fail_if((eina_unicode_utf8_next_get("\xFC\x83\xBF\xBF\xBF\xBF", &ind) != 0xDCFC) ||
+   ck_assert((eina_unicode_utf8_next_get("\xFC\x83\xBF\xBF\xBF\xBF", &ind) != 0xDCFC) ||
            (ind != 1));
    /* Add some more error cases here */
 
    /* Just to cover prev/len. General utf-8 parsing was covered above */
-   fail_if(eina_unicode_utf8_get_len("\xF4\x90\x80\x80\xF4\x8F\xBF\xBF") != 2);
+   ck_assert(eina_unicode_utf8_get_len("\xF4\x90\x80\x80\xF4\x8F\xBF\xBF") != 2);
    ind = 0;
-   fail_if((eina_unicode_utf8_get_prev("\xED\x9F\xBF", &ind) != 0xD7FF) ||
+   ck_assert((eina_unicode_utf8_get_prev("\xED\x9F\xBF", &ind) != 0xD7FF) ||
            (ind != 0));
    ind = 3;
-   fail_if((eina_unicode_utf8_get_prev("\xED\x9F\xBF", &ind) != 0x00) ||
+   ck_assert((eina_unicode_utf8_get_prev("\xED\x9F\xBF", &ind) != 0x00) ||
            (ind != 0));
 
 }
@@ -576,11 +576,11 @@ EFL_START_TEST(eina_unicode_utf8_conversion)
 
 
    uni_out = eina_unicode_utf8_to_unicode(c_in, &len);
-   fail_if((len != 9) || eina_unicode_strcmp(uni_in, uni_out));
+   ck_assert((len != 9) || eina_unicode_strcmp(uni_in, uni_out));
    free(uni_out);
 
    c_out = eina_unicode_unicode_to_utf8(uni_in, &len);
-   fail_if((len != 24) || strcmp(c_in, c_out));
+   ck_assert((len != 24) || strcmp(c_in, c_out));
    free(c_out);
 
    /* Range conversion */
