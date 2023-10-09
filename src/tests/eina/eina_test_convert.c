@@ -36,33 +36,33 @@ EFL_START_TEST(eina_convert_simple)
    char tmp[128];
    char ref[128];
 
-   ck_assert(eina_convert_itoa(0, tmp) != 1);
-   ck_assert(strcmp(tmp, "0") != 0);
+   fail_if(eina_convert_itoa(0, tmp) != 1);
+   fail_if(strcmp(tmp, "0") != 0);
 
-   ck_assert(eina_convert_itoa(-1, tmp) != 2);
-   ck_assert(strcmp(tmp, "-1") != 0);
+   fail_if(eina_convert_itoa(-1, tmp) != 2);
+   fail_if(strcmp(tmp, "-1") != 0);
 
-   ck_assert(eina_convert_itoa(100, tmp) != 3);
-   ck_assert(strcmp(tmp, "100") != 0);
+   fail_if(eina_convert_itoa(100, tmp) != 3);
+   fail_if(strcmp(tmp, "100") != 0);
 
-   ck_assert(eina_convert_itoa(-100, tmp) != 4);
-   ck_assert(strcmp(tmp, "-100") != 0);
+   fail_if(eina_convert_itoa(-100, tmp) != 4);
+   fail_if(strcmp(tmp, "-100") != 0);
 
-   ck_assert(eina_convert_itoa(10000000, tmp) != 8);
-   ck_assert(strcmp(tmp, "10000000") != 0);
+   fail_if(eina_convert_itoa(10000000, tmp) != 8);
+   fail_if(strcmp(tmp, "10000000") != 0);
 
    snprintf(ref, sizeof (ref), "%d", INT_MIN);
-   ck_assert(eina_convert_itoa(INT_MIN, tmp) != (int) strlen(ref));
-   ck_assert(strcmp(tmp, ref) != 0);
+   fail_if(eina_convert_itoa(INT_MIN, tmp) != (int) strlen(ref));
+   fail_if(strcmp(tmp, ref) != 0);
 
-   ck_assert(eina_convert_xtoa(0, tmp) != 1);
-   ck_assert(strcmp(tmp, "0") != 0);
+   fail_if(eina_convert_xtoa(0, tmp) != 1);
+   fail_if(strcmp(tmp, "0") != 0);
 
-   ck_assert(eina_convert_xtoa(0xA1, tmp) != 2);
-   ck_assert(strcmp(tmp, "a1") != 0);
+   fail_if(eina_convert_xtoa(0xA1, tmp) != 2);
+   fail_if(strcmp(tmp, "a1") != 0);
 
-   ck_assert(eina_convert_xtoa(0xFF00EF0E, tmp) != 8);
-   ck_assert(strcmp(tmp, "ff00ef0e") != 0);
+   fail_if(eina_convert_xtoa(0xFF00EF0E, tmp) != 8);
+   fail_if(strcmp(tmp, "ff00ef0e") != 0);
 }
 EFL_END_TEST
 
@@ -80,10 +80,10 @@ _eina_convert_check(double test, int length)
    long e = 0;
    double r;
 
-   ck_assert(eina_convert_dtoa(test, tmp) != length);
-   ck_assert(eina_convert_atod(tmp, 128, &m, &e) != EINA_TRUE);
+   fail_if(eina_convert_dtoa(test, tmp) != length);
+   fail_if(eina_convert_atod(tmp, 128, &m, &e) != EINA_TRUE);
    r = ldexp((double)m, e);
-   ck_assert(fabs(r - test) > DBL_MIN);
+   fail_if(fabs(r - test) > DBL_MIN);
 }
 
    EFL_START_TEST(eina_convert_double)
@@ -98,9 +98,9 @@ _eina_convert_check(double test, int length)
    _eina_convert_check(EET_TEST_DOUBLE3,  21);
    _eina_convert_check(EET_TEST_DOUBLE4,  21);
 
-   ck_assert(eina_convert_atod("ah ah ah", 8, &m, &e) != EINA_FALSE);
-   ck_assert(eina_convert_atod("0xjo", 8, &m, &e) != EINA_FALSE);
-   ck_assert(eina_convert_atod("0xp", 8, &m, &e) != EINA_FALSE);
+   fail_if(eina_convert_atod("ah ah ah", 8, &m, &e) != EINA_FALSE);
+   fail_if(eina_convert_atod("0xjo", 8, &m, &e) != EINA_FALSE);
+   fail_if(eina_convert_atod("0xp", 8, &m, &e) != EINA_FALSE);
 
 }
 EFL_END_TEST
@@ -118,36 +118,36 @@ _eina_convert_fp_check(double d, Eina_F32p32 fp, int length)
    l1 = eina_convert_dtoa(d, tmp1);
    l2 = eina_convert_fptoa(fp, tmp2);
 /*    fprintf(stderr, "[%s](%i) vs [%s](%i)\n", tmp1, l1, tmp2, l2); */
-   ck_assert(l1 != l2);
-   ck_assert(length != l1);
-   ck_assert(strcmp(tmp1, tmp2) != 0);
+   fail_if(l1 != l2);
+   fail_if(length != l1);
+   fail_if(strcmp(tmp1, tmp2) != 0);
 
-   ck_assert(!eina_convert_atofp(tmp2, l2, &fpc));
+   fail_if(!eina_convert_atofp(tmp2, l2, &fpc));
 /*    fprintf(stderr, "%016x vs %016x\n", fpc, fp); */
-   ck_assert(fpc != fp);
+   fail_if(fpc != fp);
 
-   ck_assert(!eina_convert_atofp(tmp1, l1, &fpc));
+   fail_if(!eina_convert_atofp(tmp1, l1, &fpc));
    fpd = eina_f32p32_double_to(fpc);
 /*    fprintf(stderr, "%0.16f vs %0.16f\n", fpd, d); */
-   ck_assert(fabs(fpd - d) > DBL_MIN);
+   fail_if(fabs(fpd - d) > DBL_MIN);
 
    d = -d;
    fp = -fp;
 
    l1 = eina_convert_dtoa(d, tmp1);
    l2 = eina_convert_fptoa(fp, tmp2);
-   ck_assert(l1 != l2);
-   ck_assert(length + 1 != l1);
-   ck_assert(strcmp(tmp1, tmp2) != 0);
+   fail_if(l1 != l2);
+   fail_if(length + 1 != l1);
+   fail_if(strcmp(tmp1, tmp2) != 0);
 
-   ck_assert(!eina_convert_atofp(tmp2, l2, &fpc));
+   fail_if(!eina_convert_atofp(tmp2, l2, &fpc));
 /*    fprintf(stderr, "%016x vs %016x\n", fpc, fp); */
-   ck_assert(fpc != fp);
+   fail_if(fpc != fp);
 
-   ck_assert(!eina_convert_atofp(tmp1, l1, &fpc));
+   fail_if(!eina_convert_atofp(tmp1, l1, &fpc));
    fpd = eina_f32p32_double_to(fpc);
 /*    fprintf(stderr, "%0.16f vs %0.16f\n", fpd, d); */
-   ck_assert(fabs(fpd - d) > DBL_MIN);
+   fail_if(fabs(fpd - d) > DBL_MIN);
 }
 
    EFL_START_TEST(eina_convert_fp)
@@ -178,13 +178,13 @@ _eina_convert_strtod_c_check(const char *str)
    switch(fpclassify(d2))
      {
      case FP_NAN:
-       ck_assert(fpclassify(d1) != FP_NAN);
+       fail_if(fpclassify(d1) != FP_NAN);
        break;
      case FP_INFINITE:
-       ck_assert(fpclassify(d1) != FP_INFINITE);
+       fail_if(fpclassify(d1) != FP_INFINITE);
        break;
      default:
-       ck_assert((fpclassify(d1) != FP_ZERO) &&
+       fail_if((fpclassify(d1) != FP_ZERO) &&
                (fpclassify(d1) != FP_SUBNORMAL) &&
                (fpclassify(d1) != FP_NORMAL));
        if (!EINA_DBL_EQ(d1,d2) || (e1 != e2))
@@ -197,7 +197,7 @@ _eina_convert_strtod_c_check(const char *str)
             if (e1 != e2) printf("different end position\n");
          }
 
-       ck_assert(!EINA_DBL_EQ(d1,d2) || (e1 != e2));
+       fail_if(!EINA_DBL_EQ(d1,d2) || (e1 != e2));
        break;
      }
 

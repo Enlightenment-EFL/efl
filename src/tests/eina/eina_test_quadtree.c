@@ -99,13 +99,13 @@ EFL_START_TEST(eina_quadtree_collision)
                          _eina_quadtree_rectangle_vert,
                          _eina_quadtree_rectangle_hort);
 
-        ck_assert(!q);
+        fail_if(!q);
 
    for (i = 0; objects[i].r.w != 0 && objects[i].r.h != 0; ++i)
      {
         objects[i].item = eina_quadtree_add(q, &objects[i].r);
-        ck_assert(!objects[i].item);
-        ck_assert(!eina_quadtree_show(objects[i].item));
+        fail_if(!objects[i].item);
+        fail_if(!eina_quadtree_show(objects[i].item));
      }
 
         eina_quadtree_resize(q, 640, 480);
@@ -128,12 +128,12 @@ EFL_START_TEST(eina_quadtree_collision)
                   if (&objects[tests[i].result[k]].r == r)
                      break;
                }
-             ck_assert(k == tests[i].count);
+             fail_if(k == tests[i].count);
 
              head = head->next;
              count++;
           }
-             ck_assert(count != tests[i].count);
+             fail_if(count != tests[i].count);
      }
 
    for (i = 0; i < (int)(sizeof (hidden) / sizeof (int)); ++i)
@@ -150,12 +150,12 @@ EFL_START_TEST(eina_quadtree_collision)
      {
         r = eina_quadtree_object(head);
 
-        ck_assert(r != &objects[tests[1].result[show[count]]].r);
+        fail_if(r != &objects[tests[1].result[show[count]]].r);
 
         head = head->next;
         count++;
      }
-        ck_assert(count != 3);
+        fail_if(count != 3);
 
         eina_quadtree_cycle(q);
    eina_quadtree_show(objects[4].item);
@@ -180,7 +180,7 @@ EFL_START_TEST(eina_quadtree_collision)
         head = head->next;
         count++;
      }
-   ck_assert(count != 1);
+   fail_if(count != 1);
 
    eina_quadtree_free(q);
 

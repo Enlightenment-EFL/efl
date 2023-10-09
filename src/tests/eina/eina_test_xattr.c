@@ -53,40 +53,40 @@ EFL_START_TEST(eina_test_xattr_set)
 
    test_file_path = get_file_path(XATTR_TEST_DIR, filename);
    fd = open(test_file_path, O_WRONLY | O_CREAT | O_TRUNC, S_IRWXU | S_IRWXG | S_IRWXO);
-   ck_assert(fd == 0);
+   fail_if(fd == 0);
 
    ret = eina_xattr_set(test_file_path, attribute1, data1, strlen(data1), EINA_XATTR_INSERT);
-   ck_assert(ret != EINA_TRUE);
+   fail_if(ret != EINA_TRUE);
    ret_str = eina_xattr_get(test_file_path, attribute1, &len);
-   ck_assert(ret_str == NULL);
-   ck_assert(len == 0);
-   ck_assert(strcmp(ret_str, data1) != 0);
+   fail_if(ret_str == NULL);
+   fail_if(len == 0);
+   fail_if(strcmp(ret_str, data1) != 0);
    free(ret_str);
 
    ret = eina_xattr_set(test_file_path, attribute1, data1, strlen(data1), EINA_XATTR_CREATED);
-   ck_assert(ret != EINA_FALSE);
+   fail_if(ret != EINA_FALSE);
 
    ret = eina_xattr_set(test_file_path, attribute1, data2, strlen(data2), EINA_XATTR_REPLACE);
-   ck_assert(ret != EINA_TRUE);
+   fail_if(ret != EINA_TRUE);
    ret_str = eina_xattr_get(test_file_path, attribute1, &len);
-   ck_assert(ret_str == NULL);
-   ck_assert(len == 0);
-   ck_assert(strcmp(ret_str, data2) != 0);
+   fail_if(ret_str == NULL);
+   fail_if(len == 0);
+   fail_if(strcmp(ret_str, data2) != 0);
    free(ret_str);
 
    ret = eina_xattr_del(test_file_path, attribute1);
-   ck_assert(ret != EINA_TRUE);
+   fail_if(ret != EINA_TRUE);
 
    ret = eina_xattr_fd_set(fd, attribute1, data1, strlen(data1), EINA_XATTR_CREATED);
-   ck_assert(ret != EINA_TRUE);
+   fail_if(ret != EINA_TRUE);
    ret_str = eina_xattr_fd_get(fd, attribute1, &len);
-   ck_assert(ret_str == NULL);
-   ck_assert(len == 0);
-   ck_assert(strcmp(ret_str, data1) != 0);
+   fail_if(ret_str == NULL);
+   fail_if(len == 0);
+   fail_if(strcmp(ret_str, data1) != 0);
    free(ret_str);
 
    ret = eina_xattr_fd_del(fd, attribute1);
-   ck_assert(ret != EINA_TRUE);
+   fail_if(ret != EINA_TRUE);
 
    close(fd);
    unlink(test_file_path);
@@ -124,14 +124,14 @@ EFL_START_TEST(eina_test_xattr_list)
    cp_file_path = get_file_path(XATTR_TEST_DIR, filename_cp);
 
    fd = open(test_file_path, O_WRONLY | O_CREAT | O_TRUNC, S_IRWXU | S_IRWXG | S_IRWXO);
-   ck_assert(fd == 0);
+   fail_if(fd == 0);
    fd1 = open(cp_file_path, O_WRONLY | O_CREAT | O_TRUNC, S_IRWXU | S_IRWXG | S_IRWXO);
-   ck_assert(fd1 == 0);
+   fail_if(fd1 == 0);
 
    for (i = 0; i < sizeof(attribute) / sizeof(attribute[0]); ++i)
      {
         ret = eina_xattr_set(test_file_path, attribute[i], data[i], strlen(data[i]), EINA_XATTR_INSERT);
-        ck_assert(ret != EINA_TRUE);
+        fail_if(ret != EINA_TRUE);
      }
 
    it = eina_xattr_ls(test_file_path);
@@ -144,7 +144,7 @@ EFL_START_TEST(eina_test_xattr_list)
                break ;
             }
      }
-   ck_assert(count != sizeof (attribute) / sizeof (attribute[0]));
+   fail_if(count != sizeof (attribute) / sizeof (attribute[0]));
    eina_iterator_free(it);
 
    count = 0;
@@ -159,7 +159,7 @@ EFL_START_TEST(eina_test_xattr_list)
                break ;
             }
      }
-   ck_assert(count != sizeof (data) / sizeof (data[0]));
+   fail_if(count != sizeof (data) / sizeof (data[0]));
    eina_iterator_free(it);
 
    count = 0;
@@ -173,7 +173,7 @@ EFL_START_TEST(eina_test_xattr_list)
                break ;
             }
      }
-   ck_assert(count != sizeof (attribute) / sizeof (attribute[0]));
+   fail_if(count != sizeof (attribute) / sizeof (attribute[0]));
    eina_iterator_free(it);
 
    count = 0;
@@ -188,12 +188,12 @@ EFL_START_TEST(eina_test_xattr_list)
                break ;
             }
      }
-   ck_assert(count != sizeof (data) / sizeof (data[0]));
+   fail_if(count != sizeof (data) / sizeof (data[0]));
    eina_iterator_free(it);
 
    /* Test case for eina_xattr_copy and eina_xattr_fd_copy */
    ret = eina_xattr_copy(test_file_path, cp_file_path);
-   ck_assert(ret != EINA_TRUE);
+   fail_if(ret != EINA_TRUE);
 
    count = 0;
    it = eina_xattr_value_ls(cp_file_path);
@@ -207,17 +207,17 @@ EFL_START_TEST(eina_test_xattr_list)
                break ;
             }
      }
-   ck_assert(count != sizeof (data) / sizeof (data[0]));
+   fail_if(count != sizeof (data) / sizeof (data[0]));
    eina_iterator_free(it);
 
    for (i = 0; i < sizeof(attribute) / sizeof(attribute[0]); ++i)
      {
         ret = eina_xattr_del(cp_file_path, attribute[i]);
-        ck_assert(ret != EINA_TRUE);
+        fail_if(ret != EINA_TRUE);
      }
 
    ret = eina_xattr_fd_copy(fd, fd1);
-   ck_assert(ret != EINA_TRUE);
+   fail_if(ret != EINA_TRUE);
 
    count = 0;
    it = eina_xattr_value_fd_ls(fd1);
@@ -231,7 +231,7 @@ EFL_START_TEST(eina_test_xattr_list)
                break ;
             }
      }
-   ck_assert(count != sizeof (data) / sizeof (data[0]));
+   fail_if(count != sizeof (data) / sizeof (data[0]));
    eina_iterator_free(it);
 
    close(fd);
@@ -259,26 +259,26 @@ EFL_START_TEST(eina_test_xattr_types)
 
    test_file_path = get_file_path(XATTR_TEST_DIR, filename);
    fd = open(test_file_path, O_WRONLY | O_CREAT | O_TRUNC, S_IRWXU | S_IRWXG | S_IRWXO);
-   ck_assert(fd == 0);
+   fail_if(fd == 0);
 
    ret = eina_xattr_string_set(test_file_path, str_attr, str_data, EINA_XATTR_INSERT);
-   ck_assert(ret != EINA_TRUE);
+   fail_if(ret != EINA_TRUE);
    ret_str = eina_xattr_string_get(test_file_path, str_attr);
-   ck_assert(ret_str == NULL);
-   ck_assert(strcmp(ret_str, str_data) != 0);
+   fail_if(ret_str == NULL);
+   fail_if(strcmp(ret_str, str_data) != 0);
    free(ret_str);
 
    ret = eina_xattr_int_set(test_file_path, int_attr, int_data, EINA_XATTR_INSERT);
-   ck_assert(ret != EINA_TRUE);
+   fail_if(ret != EINA_TRUE);
    ret = eina_xattr_int_get(test_file_path, int_attr, &int_ret);
-   ck_assert(ret != EINA_TRUE);
-   ck_assert(int_data != int_ret);
+   fail_if(ret != EINA_TRUE);
+   fail_if(int_data != int_ret);
 
    ret = eina_xattr_double_set(test_file_path, double_attr, double_data, EINA_XATTR_INSERT);
-   ck_assert(ret != EINA_TRUE);
+   fail_if(ret != EINA_TRUE);
    ret = eina_xattr_double_get(test_file_path, double_attr, &double_ret);
-   ck_assert(ret != EINA_TRUE);
-   ck_assert(!EINA_DBL_EQ(double_data, double_ret));
+   fail_if(ret != EINA_TRUE);
+   fail_if(!EINA_DBL_EQ(double_data, double_ret));
 
    close(fd);
    unlink(test_file_path);

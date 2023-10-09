@@ -87,14 +87,14 @@ _eina_test_lock_thread(void *data, Eina_Thread t)
 {
    unsigned int i;
 
-   ck_assert(!eina_thread_equal(t, thread));
-   ck_assert(strcmp("test", data));
+   fail_if(!eina_thread_equal(t, thread));
+   fail_if(strcmp("test", data));
 
    for (i = 0; i < 150; i++)
      {
-        ck_assert(eina_spinlock_take(&spin) != EINA_LOCK_SUCCEED);
+        fail_if(eina_spinlock_take(&spin) != EINA_LOCK_SUCCEED);
         counter++;
-        ck_assert(eina_spinlock_release(&spin) != EINA_LOCK_SUCCEED);
+        fail_if(eina_spinlock_release(&spin) != EINA_LOCK_SUCCEED);
      }
 
    return data;
@@ -106,23 +106,23 @@ EFL_START_TEST(eina_test_spinlock)
 
 
    counter = 0;
-   ck_assert(!eina_spinlock_new(&spin));
+   fail_if(!eina_spinlock_new(&spin));
 
-   ck_assert(!eina_thread_create(&thread, EINA_THREAD_NORMAL, -1, _eina_test_lock_thread, "test"));
+   fail_if(!eina_thread_create(&thread, EINA_THREAD_NORMAL, -1, _eina_test_lock_thread, "test"));
 
    for (i = 0; i < 150; i++)
      {
-        ck_assert(eina_spinlock_take(&spin) != EINA_LOCK_SUCCEED);
+        fail_if(eina_spinlock_take(&spin) != EINA_LOCK_SUCCEED);
         counter++;
-        ck_assert(eina_spinlock_release(&spin) != EINA_LOCK_SUCCEED);
+        fail_if(eina_spinlock_release(&spin) != EINA_LOCK_SUCCEED);
      }
 
-   ck_assert(strcmp("test", eina_thread_join(thread)));
+   fail_if(strcmp("test", eina_thread_join(thread)));
 
-   ck_assert(counter != 300);
+   fail_if(counter != 300);
 
-   ck_assert(eina_spinlock_take_try(&spin) != EINA_LOCK_SUCCEED);
-   ck_assert(eina_spinlock_release(&spin) != EINA_LOCK_SUCCEED);
+   fail_if(eina_spinlock_take_try(&spin) != EINA_LOCK_SUCCEED);
+   fail_if(eina_spinlock_release(&spin) != EINA_LOCK_SUCCEED);
 
    eina_spinlock_free(&spin);
 
@@ -154,13 +154,13 @@ _eina_test_tls_thread(void *data EINA_UNUSED, Eina_Thread t EINA_UNUSED)
    int *ptr;
 
    ptr = eina_tls_get(key);
-   ck_assert(ptr != NULL);
+   fail_if(ptr != NULL);
 
-   ck_assert(!eina_tls_set(key, _eina_test_tls_alloc(24)));
+   fail_if(!eina_tls_set(key, _eina_test_tls_alloc(24)));
 
    ptr = eina_tls_get(key);
-   ck_assert(ptr == NULL);
-   ck_assert(*ptr != 24);
+   fail_if(ptr == NULL);
+   fail_if(*ptr != 24);
 
    return NULL;
 }
@@ -168,18 +168,18 @@ _eina_test_tls_thread(void *data EINA_UNUSED, Eina_Thread t EINA_UNUSED)
 EFL_START_TEST(eina_test_tls)
 {
 
-   ck_assert(!eina_tls_cb_new(&key, _eina_test_tls_free));
+   fail_if(!eina_tls_cb_new(&key, _eina_test_tls_free));
 
-   ck_assert(!eina_tls_set(key, _eina_test_tls_alloc(42)));
+   fail_if(!eina_tls_set(key, _eina_test_tls_alloc(42)));
 
-   ck_assert(!eina_thread_create(&thread, EINA_THREAD_NORMAL, -1, _eina_test_tls_thread, NULL));
+   fail_if(!eina_thread_create(&thread, EINA_THREAD_NORMAL, -1, _eina_test_tls_thread, NULL));
 
    eina_thread_join(thread);
-   ck_assert(_eina_tls_free_count != 1);
+   fail_if(_eina_tls_free_count != 1);
 
    int *ptr = eina_tls_get(key);
-   ck_assert(eina_tls_get(key) == NULL);
-   ck_assert(*ptr != 42);
+   fail_if(eina_tls_get(key) == NULL);
+   fail_if(*ptr != 42);
 
    eina_tls_free(key);
 
@@ -194,20 +194,20 @@ static Eina_RWLock mutex;
 static void *
 _eina_test_rwlock_thread(void *data EINA_UNUSED, Eina_Thread t EINA_UNUSED)
 {
-   ck_assert(!eina_barrier_wait(&barrier));
-   ck_assert(eina_lock_take(&mtcond) != EINA_LOCK_SUCCEED);
-   ck_assert(!eina_condition_broadcast(&cond));
-   ck_assert(eina_lock_release(&mtcond) != EINA_LOCK_SUCCEED);
+   fail_if(!eina_barrier_wait(&barrier));
+   fail_if(eina_lock_take(&mtcond) != EINA_LOCK_SUCCEED);
+   fail_if(!eina_condition_broadcast(&cond));
+   fail_if(eina_lock_release(&mtcond) != EINA_LOCK_SUCCEED);
 
-   ck_assert(eina_rwlock_take_write(&mutex) != EINA_LOCK_SUCCEED);
+   fail_if(eina_rwlock_take_write(&mutex) != EINA_LOCK_SUCCEED);
    counter = 7200;
-   ck_assert(eina_rwlock_release(&mutex) != EINA_LOCK_SUCCEED);
+   fail_if(eina_rwlock_release(&mutex) != EINA_LOCK_SUCCEED);
 
-   ck_assert(!eina_barrier_wait(&barrier));
+   fail_if(!eina_barrier_wait(&barrier));
 
-   ck_assert(eina_lock_take(&mtcond) != EINA_LOCK_SUCCEED);
-   ck_assert(!eina_condition_broadcast(&cond));
-   ck_assert(eina_lock_release(&mtcond) != EINA_LOCK_SUCCEED);
+   fail_if(eina_lock_take(&mtcond) != EINA_LOCK_SUCCEED);
+   fail_if(!eina_condition_broadcast(&cond));
+   fail_if(eina_lock_release(&mtcond) != EINA_LOCK_SUCCEED);
 
    return NULL;
 }
@@ -218,46 +218,46 @@ EFL_START_TEST(eina_test_rwlock)
    long delay;
 
 
-   ck_assert(!eina_rwlock_new(&mutex));
-   ck_assert(!eina_lock_new(&mtcond));
-   ck_assert(!eina_condition_new(&cond, &mtcond));
-   ck_assert(!eina_barrier_new(&barrier, 2));
+   fail_if(!eina_rwlock_new(&mutex));
+   fail_if(!eina_lock_new(&mtcond));
+   fail_if(!eina_condition_new(&cond, &mtcond));
+   fail_if(!eina_barrier_new(&barrier, 2));
 
    counter = 42;
 
    eina_lock_debug(&mtcond);
 
-   ck_assert(eina_rwlock_take_read(&mutex) != EINA_LOCK_SUCCEED);
-   ck_assert(eina_lock_take(&mtcond) != EINA_LOCK_SUCCEED);
+   fail_if(eina_rwlock_take_read(&mutex) != EINA_LOCK_SUCCEED);
+   fail_if(eina_lock_take(&mtcond) != EINA_LOCK_SUCCEED);
 
-   ck_assert(!eina_thread_create(&thread, EINA_THREAD_NORMAL, -1, _eina_test_rwlock_thread, NULL));
+   fail_if(!eina_thread_create(&thread, EINA_THREAD_NORMAL, -1, _eina_test_rwlock_thread, NULL));
 
-   ck_assert(!eina_barrier_wait(&barrier));
-   ck_assert(!eina_condition_wait(&cond));
-   ck_assert(eina_lock_release(&mtcond) != EINA_LOCK_SUCCEED);
+   fail_if(!eina_barrier_wait(&barrier));
+   fail_if(!eina_condition_wait(&cond));
+   fail_if(eina_lock_release(&mtcond) != EINA_LOCK_SUCCEED);
 
-   ck_assert(counter != 42);
-   ck_assert(eina_rwlock_release(&mutex) != EINA_LOCK_SUCCEED);
+   fail_if(counter != 42);
+   fail_if(eina_rwlock_release(&mutex) != EINA_LOCK_SUCCEED);
 
-   ck_assert(eina_lock_take(&mtcond) != EINA_LOCK_SUCCEED);
-   ck_assert(!eina_barrier_wait(&barrier));
+   fail_if(eina_lock_take(&mtcond) != EINA_LOCK_SUCCEED);
+   fail_if(!eina_barrier_wait(&barrier));
 
-   ck_assert(!eina_condition_wait(&cond));
-   ck_assert(eina_lock_release(&mtcond) != EINA_LOCK_SUCCEED);
+   fail_if(!eina_condition_wait(&cond));
+   fail_if(eina_lock_release(&mtcond) != EINA_LOCK_SUCCEED);
 
-   ck_assert(eina_rwlock_take_read(&mutex) != EINA_LOCK_SUCCEED);
-   ck_assert(counter != 7200);
-   ck_assert(eina_rwlock_release(&mutex) != EINA_LOCK_SUCCEED);
+   fail_if(eina_rwlock_take_read(&mutex) != EINA_LOCK_SUCCEED);
+   fail_if(counter != 7200);
+   fail_if(eina_rwlock_release(&mutex) != EINA_LOCK_SUCCEED);
 
-   ck_assert(eina_lock_take(&mtcond) != EINA_LOCK_SUCCEED);
+   fail_if(eina_lock_take(&mtcond) != EINA_LOCK_SUCCEED);
    clock_gettime(CLOCK_REALTIME, &ts);
    eina_condition_timedwait(&cond, 0.050);
    clock_gettime(CLOCK_REALTIME, &ts2);
    delay = (ts2.tv_sec - ts.tv_sec) * 1000L + (ts2.tv_nsec - ts.tv_nsec) / 1000000L;
-   ck_assert(delay < 50);
-   ck_assert(delay > 200);
-   ck_assert(eina_error_get() != ETIMEDOUT);
-   ck_assert(eina_lock_release(&mtcond) != EINA_LOCK_SUCCEED);
+   fail_if(delay < 50);
+   fail_if(delay > 200);
+   fail_if(eina_error_get() != ETIMEDOUT);
+   fail_if(eina_lock_release(&mtcond) != EINA_LOCK_SUCCEED);
 
    eina_thread_join(thread);
 

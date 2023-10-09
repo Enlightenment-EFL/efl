@@ -12,17 +12,17 @@ EFL_START_TEST(freeq_simple)
    int *p;
 
    fq = eina_freeq_main_get();
-   ck_assert(fq == NULL);
-   ck_assert(eina_freeq_type_get(fq) != EINA_FREEQ_DEFAULT);
+   fail_if(fq == NULL);
+   fail_if(eina_freeq_type_get(fq) != EINA_FREEQ_DEFAULT);
 
    p = malloc(sizeof(int));
    *p = 42;
    eina_freeq_ptr_main_add(p, NULL, sizeof(int));
    eina_freeq_clear(fq);
-   ck_assert(eina_freeq_ptr_pending(eina_freeq_main_get()));
+   fail_if(eina_freeq_ptr_pending(eina_freeq_main_get()));
 
    fq = eina_freeq_new(EINA_FREEQ_DEFAULT);
-   ck_assert(!fq);
+   fail_if(!fq);
 
    eina_freeq_free(fq);
 
@@ -42,10 +42,10 @@ EFL_START_TEST(freeq_tune)
    void *p;
 
    eina_freeq_count_max_set(eina_freeq_main_get(), 3);
-   ck_assert(eina_freeq_count_max_get(eina_freeq_main_get()) != 3);
+   fail_if(eina_freeq_count_max_get(eina_freeq_main_get()) != 3);
 
    eina_freeq_mem_max_set(eina_freeq_main_get(), 20);
-   ck_assert(eina_freeq_mem_max_get(eina_freeq_main_get()) != 20);
+   fail_if(eina_freeq_mem_max_get(eina_freeq_main_get()) != 20);
 
    _n++;
    p = malloc(9);
@@ -57,15 +57,15 @@ EFL_START_TEST(freeq_tune)
    p = malloc(9);
    eina_freeq_ptr_main_add(p, freefn, 9);
    eina_freeq_ptr_main_add(NULL, freefn, 9);
-   ck_assert(_n > 2);
+   fail_if(_n > 2);
 
    eina_freeq_count_max_set(eina_freeq_main_get(), 1);
-   ck_assert(_n > 1);
+   fail_if(_n > 1);
 
    eina_freeq_clear(eina_freeq_main_get());
-   ck_assert(_n > 0);
+   fail_if(_n > 0);
 
-   ck_assert(eina_freeq_ptr_pending(eina_freeq_main_get()) == EINA_TRUE);
+   fail_if(eina_freeq_ptr_pending(eina_freeq_main_get()) == EINA_TRUE);
 
 }
 EFL_END_TEST
@@ -86,8 +86,8 @@ EFL_START_TEST(freeq_reduce)
 
    while (eina_freeq_ptr_pending(eina_freeq_main_get()))
      eina_freeq_reduce(eina_freeq_main_get(), 1);
-   ck_assert(_n > 0);
-   ck_assert(eina_freeq_ptr_pending(eina_freeq_main_get()) == EINA_TRUE);
+   fail_if(_n > 0);
+   fail_if(eina_freeq_ptr_pending(eina_freeq_main_get()) == EINA_TRUE);
 
    _n++;
    p = malloc(9);
@@ -101,8 +101,8 @@ EFL_START_TEST(freeq_reduce)
 
    while (eina_freeq_ptr_pending(eina_freeq_main_get()))
      eina_freeq_reduce(eina_freeq_main_get(), 5);
-   ck_assert(_n > 0);
-   ck_assert(eina_freeq_ptr_pending(eina_freeq_main_get()) == EINA_TRUE);
+   fail_if(_n > 0);
+   fail_if(eina_freeq_ptr_pending(eina_freeq_main_get()) == EINA_TRUE);
 
 }
 EFL_END_TEST
@@ -137,8 +137,8 @@ EFL_START_TEST(freeq_postponed)
 
    fq = eina_freeq_new(EINA_FREEQ_POSTPONED);
 
-   ck_assert(!fq);
-   ck_assert(eina_freeq_type_get(fq) != EINA_FREEQ_POSTPONED);
+   fail_if(!fq);
+   fail_if(eina_freeq_type_get(fq) != EINA_FREEQ_POSTPONED);
 
    // by default: no limit
    ck_assert_int_eq(eina_freeq_count_max_get(fq), -1);
@@ -152,10 +152,10 @@ EFL_START_TEST(freeq_postponed)
      }
    ck_assert_int_eq(_n, EINA_C_ARRAY_LENGTH(values));
 
-   ck_assert(!eina_freeq_ptr_pending(fq));
+   fail_if(!eina_freeq_ptr_pending(fq));
    while (eina_freeq_ptr_pending(fq))
      eina_freeq_reduce(fq, 1);
-   ck_assert(eina_freeq_ptr_pending(fq));
+   fail_if(eina_freeq_ptr_pending(fq));
    ck_assert_int_eq(_n, 0);
 
    for (k = 0; k < EINA_C_ARRAY_LENGTH(values); k++)
@@ -169,9 +169,9 @@ EFL_START_TEST(freeq_postponed)
      }
    ck_assert_int_eq(_n, EINA_C_ARRAY_LENGTH(values));
 
-   ck_assert(!eina_freeq_ptr_pending(fq));
+   fail_if(!eina_freeq_ptr_pending(fq));
    eina_freeq_clear(fq);
-   ck_assert(eina_freeq_ptr_pending(fq));
+   fail_if(eina_freeq_ptr_pending(fq));
    ck_assert_int_eq(_n, 0);
 
    for (k = 0; k < EINA_C_ARRAY_LENGTH(values); k++)

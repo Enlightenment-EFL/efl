@@ -37,34 +37,34 @@ EFL_START_TEST(eina_rectangle_pool)
 
 
    pool = eina_rectangle_pool_new(256, 256);
-   ck_assert(pool == NULL);
+   fail_if(pool == NULL);
 
    eina_rectangle_pool_data_set(pool, rects);
-   ck_assert(eina_rectangle_pool_data_get(pool) != rects);
+   fail_if(eina_rectangle_pool_data_get(pool) != rects);
 
-   ck_assert(eina_rectangle_pool_request(pool, 1024, 1024) != NULL);
+   fail_if(eina_rectangle_pool_request(pool, 1024, 1024) != NULL);
 
    for (x = 0; x < 8; x++)
       for (y = 0; y < 8; y++)
         {
            rects[x][y] = eina_rectangle_pool_request(pool, 32, 32);
-           ck_assert(rects[x][y] == NULL);
+           fail_if(rects[x][y] == NULL);
         }
 
-   ck_assert(eina_rectangle_pool_count(pool) != 64);
+   fail_if(eina_rectangle_pool_count(pool) != 64);
 
-   ck_assert(eina_rectangle_pool_get(rects[0][0]) != pool);
+   fail_if(eina_rectangle_pool_get(rects[0][0]) != pool);
 
-   ck_assert(eina_rectangle_pool_geometry_get(pool, &w, &h) != EINA_TRUE);
-   ck_assert(w != 256 || h != 256);
+   fail_if(eina_rectangle_pool_geometry_get(pool, &w, &h) != EINA_TRUE);
+   fail_if(w != 256 || h != 256);
 
-   ck_assert(eina_rectangle_pool_request(pool, 32, 32) != NULL);
-   ck_assert(eina_rectangle_pool_request(pool, 1024, 1024) != NULL);
+   fail_if(eina_rectangle_pool_request(pool, 32, 32) != NULL);
+   fail_if(eina_rectangle_pool_request(pool, 1024, 1024) != NULL);
 
    for (x = 0; x < 8; x++)
      eina_rectangle_pool_release(rects[0][x]);
 
-   ck_assert(eina_rectangle_pool_request(pool, 16, 16) == NULL);
+   fail_if(eina_rectangle_pool_request(pool, 16, 16) == NULL);
 
    eina_rectangle_pool_free(pool);
 
@@ -82,31 +82,31 @@ EFL_START_TEST(eina_rectangle_pool_skyline)
 
 
    pool = eina_rectangle_pool_new(256, 256);
-   ck_assert(pool == NULL);
+   fail_if(pool == NULL);
 
    eina_rectangle_pool_packing_set(pool, Eina_Packing_Bottom_Left_Skyline_Improved);
 
    eina_rectangle_pool_data_set(pool, rects);
-   ck_assert(eina_rectangle_pool_data_get(pool) != rects);
+   fail_if(eina_rectangle_pool_data_get(pool) != rects);
 
-   ck_assert(eina_rectangle_pool_request(pool, 1024, 1024) != NULL);
+   fail_if(eina_rectangle_pool_request(pool, 1024, 1024) != NULL);
 
    for (x = 0; x < 8; x++)
       for (y = 0; y < 8; y++)
         {
            rects[x][y] = eina_rectangle_pool_request(pool, 32, 32);
-           ck_assert(rects[x][y] == NULL);
+           fail_if(rects[x][y] == NULL);
         }
 
-   ck_assert(eina_rectangle_pool_count(pool) != 64);
+   fail_if(eina_rectangle_pool_count(pool) != 64);
 
-   ck_assert(eina_rectangle_pool_get(rects[0][0]) != pool);
+   fail_if(eina_rectangle_pool_get(rects[0][0]) != pool);
 
-   ck_assert(eina_rectangle_pool_geometry_get(pool, &w, &h) != EINA_TRUE);
-   ck_assert(w != 256 || h != 256);
+   fail_if(eina_rectangle_pool_geometry_get(pool, &w, &h) != EINA_TRUE);
+   fail_if(w != 256 || h != 256);
 
-   ck_assert(eina_rectangle_pool_request(pool, 32, 32) != NULL);
-   ck_assert(eina_rectangle_pool_request(pool, 1024, 1024) != NULL);
+   fail_if(eina_rectangle_pool_request(pool, 32, 32) != NULL);
+   fail_if(eina_rectangle_pool_request(pool, 1024, 1024) != NULL);
 
    for (x = 0; x < 8; x++)
      eina_rectangle_pool_release(rects[0][x]);
@@ -133,56 +133,56 @@ EFL_START_TEST(eina_rectangle_union_intersect)
 
    rd = r1;
 
-   ck_assert(eina_rectangle_intersection(&rd, &r3));
-   ck_assert(!eina_rectangle_intersection(&rd, &r2));
+   fail_if(eina_rectangle_intersection(&rd, &r3));
+   fail_if(!eina_rectangle_intersection(&rd, &r2));
 
-   ck_assert(rd.x != r2.x
+   fail_if(rd.x != r2.x
            || rd.y != r2.y
            || rd.w != r2.w
            || rd.h != r2.h);
 
    rd = r1;
 
-   ck_assert(!eina_rectangle_intersection(&rd, &r4));
+   fail_if(!eina_rectangle_intersection(&rd, &r4));
 
-   ck_assert(rd.x != 30
+   fail_if(rd.x != 30
            || rd.y != 30
            || rd.w != 30
            || rd.h != 30);
 
    rd = r1;
    eina_rectangle_union(&rd, &r2);
-   ck_assert(rd.x != r1.x
+   fail_if(rd.x != r1.x
            || rd.y != r1.y
            || rd.w != r1.w
            || rd.h != r1.h);
 
    rd = r6;
-   ck_assert(eina_rectangle_intersection(&rd, &r5));
+   fail_if(eina_rectangle_intersection(&rd, &r5));
 
    rd = r7;
-   ck_assert(eina_rectangle_intersection(&rd, &r3));
+   fail_if(eina_rectangle_intersection(&rd, &r3));
 
    rd = r8;
-   ck_assert(eina_rectangle_intersection(&rd, &r3));
+   fail_if(eina_rectangle_intersection(&rd, &r3));
 
    rd = r1;
    eina_rectangle_union(&rd, &r3);
-   ck_assert(rd.x != 0
+   fail_if(rd.x != 0
            || rd.y != 0
            || rd.w != 60
            || rd.h != 60);
 
    rd = r3;
    eina_rectangle_union(&rd, &r4);
-   ck_assert(rd.x != 0
+   fail_if(rd.x != 0
            || rd.y != 0
            || rd.w != 80
            || rd.h != 80);
 
    rd = r5;
    eina_rectangle_union(&rd, &r6);
-   ck_assert(rd.x != 10
+   fail_if(rd.x != 10
            || rd.y != 10
            || rd.w != 20
            || rd.h != 20);

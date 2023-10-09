@@ -34,38 +34,38 @@ EFL_START_TEST(trash_simple)
 
 
    trash = calloc(1, sizeof(Eina_Trash));
-   ck_assert(trash == NULL);
+   fail_if(trash == NULL);
    eina_trash_init(&trash);
 
    for (i = 1; i < 51; ++i)
      {
         array = eina_array_new(1);
-        ck_assert(!array);
+        fail_if(!array);
         eina_array_push(array, &inp_int);
         eina_trash_push(&trash, array);
         array = eina_array_new(1);
-        ck_assert(!array);
+        fail_if(!array);
         eina_array_push(array, &inp_char);
         eina_trash_push(&trash, array);
      }
 
    data = eina_trash_pop(&trash);
-   ck_assert(!data);
-   ck_assert(*((char *)eina_array_data_get(data, 0)) != inp_char);
+   fail_if(!data);
+   fail_if(*((char *)eina_array_data_get(data, 0)) != inp_char);
    data = eina_trash_pop(&trash);
-   ck_assert(!data);
-   ck_assert(*((int *)eina_array_data_get(data, 0)) != inp_int);
+   fail_if(!data);
+   fail_if(*((int *)eina_array_data_get(data, 0)) != inp_int);
    free(data);
 
    i = 0;
    EINA_TRASH_CLEAN(&trash, data)
      {
-        ck_assert(!data);
+        fail_if(!data);
         free(data);
         ++i;
      }
 
-   ck_assert(i != 98);
+   fail_if(i != 98);
 
 }
 EFL_END_TEST

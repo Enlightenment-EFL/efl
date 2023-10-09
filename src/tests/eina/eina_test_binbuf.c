@@ -35,46 +35,46 @@ EFL_START_TEST(binbuf_simple)
    Eina_Rw_Slice rw_slice;
 
    buf = eina_binbuf_new();
-   ck_assert(!buf);
+   fail_if(!buf);
 
    eina_binbuf_append_length(buf, cbuf, size);
-   ck_assert(memcmp(eina_binbuf_string_get(buf), cbuf, size));
-   ck_assert(size != eina_binbuf_length_get(buf));
+   fail_if(memcmp(eina_binbuf_string_get(buf), cbuf, size));
+   fail_if(size != eina_binbuf_length_get(buf));
 
    ro_slice = eina_binbuf_slice_get(buf);
-   ck_assert(ro_slice.len != size);
-   ck_assert(ro_slice.mem != eina_binbuf_string_get(buf));
+   fail_if(ro_slice.len != size);
+   fail_if(ro_slice.mem != eina_binbuf_string_get(buf));
 
    rw_slice = eina_binbuf_rw_slice_get(buf);
-   ck_assert(rw_slice.len != size);
-   ck_assert(rw_slice.mem != eina_binbuf_string_get(buf));
+   fail_if(rw_slice.len != size);
+   fail_if(rw_slice.mem != eina_binbuf_string_get(buf));
 
    test_buf = eina_binbuf_new();
-   ck_assert(!test_buf);
-   ck_assert(!eina_binbuf_append_buffer(test_buf, buf));
-   ck_assert(memcmp(eina_binbuf_string_get(test_buf), cbuf, size));
-   ck_assert(size != eina_binbuf_length_get(test_buf));
+   fail_if(!test_buf);
+   fail_if(!eina_binbuf_append_buffer(test_buf, buf));
+   fail_if(memcmp(eina_binbuf_string_get(test_buf), cbuf, size));
+   fail_if(size != eina_binbuf_length_get(test_buf));
 
    ro_slice.mem = cbuf;
    ro_slice.len = size;
 
    eina_binbuf_append_slice(buf, ro_slice);
-   ck_assert(memcmp(eina_binbuf_string_get(buf), cbuf, size));
-   ck_assert(memcmp(eina_binbuf_string_get(buf) + size, cbuf, size));
-   ck_assert(2 * size != eina_binbuf_length_get(buf));
+   fail_if(memcmp(eina_binbuf_string_get(buf), cbuf, size));
+   fail_if(memcmp(eina_binbuf_string_get(buf) + size, cbuf, size));
+   fail_if(2 * size != eina_binbuf_length_get(buf));
 
    txt = eina_binbuf_string_steal(buf);
-   ck_assert(memcmp(txt, cbuf, size));
-   ck_assert(memcmp(txt + size, cbuf, size));
+   fail_if(memcmp(txt, cbuf, size));
+   fail_if(memcmp(txt + size, cbuf, size));
    free(txt);
-   ck_assert(eina_binbuf_length_get(buf) != 0);
+   fail_if(eina_binbuf_length_get(buf) != 0);
 
    eina_binbuf_append_length(buf, cbuf, size);
-   ck_assert(memcmp(eina_binbuf_string_get(buf), cbuf, size));
-   ck_assert(size != eina_binbuf_length_get(buf));
+   fail_if(memcmp(eina_binbuf_string_get(buf), cbuf, size));
+   fail_if(size != eina_binbuf_length_get(buf));
 
    eina_binbuf_reset(buf);
-   ck_assert(eina_binbuf_length_get(buf) != 0);
+   fail_if(eina_binbuf_length_get(buf) != 0);
 
    eina_binbuf_free(test_buf);
    eina_binbuf_free(buf);
@@ -90,22 +90,22 @@ EFL_START_TEST(binbuf_remove)
    size_t size = sizeof(cbuf) - 1; /* We don't care about the real NULL */
 
    buf = eina_binbuf_new();
-   ck_assert(!buf);
+   fail_if(!buf);
 
    eina_binbuf_append_length(buf, cbuf, size);
-   ck_assert(size != eina_binbuf_length_get(buf));
+   fail_if(size != eina_binbuf_length_get(buf));
    eina_binbuf_remove(buf, 0, 4);
-   ck_assert(size - 4 != eina_binbuf_length_get(buf));
+   fail_if(size - 4 != eina_binbuf_length_get(buf));
    eina_binbuf_remove(buf, 8, 1000);
-   ck_assert(8 != eina_binbuf_length_get(buf));
+   fail_if(8 != eina_binbuf_length_get(buf));
    eina_binbuf_remove(buf, 7, eina_binbuf_length_get(buf));
-   ck_assert(7 != eina_binbuf_length_get(buf));
+   fail_if(7 != eina_binbuf_length_get(buf));
    eina_binbuf_remove(buf, 2, 4);
-   ck_assert(5 != eina_binbuf_length_get(buf));
+   fail_if(5 != eina_binbuf_length_get(buf));
    eina_binbuf_remove(buf, 4, 1);
-   ck_assert(5 != eina_binbuf_length_get(buf));
+   fail_if(5 != eina_binbuf_length_get(buf));
    eina_binbuf_remove(buf, 0, eina_binbuf_length_get(buf));
-   ck_assert(0 != eina_binbuf_length_get(buf));
+   fail_if(0 != eina_binbuf_length_get(buf));
 
    eina_binbuf_free(buf);
 }
@@ -125,14 +125,14 @@ EFL_START_TEST(binbuf_manage_simple)
    memcpy(alloc_buf, cbuf, size);
 
    buf = eina_binbuf_manage_new_length(alloc_buf, size);
-   ck_assert(!buf);
+   fail_if(!buf);
 
-   ck_assert(memcmp(eina_binbuf_string_get(buf), cbuf, size));
-   ck_assert(size != eina_binbuf_length_get(buf));
+   fail_if(memcmp(eina_binbuf_string_get(buf), cbuf, size));
+   fail_if(size != eina_binbuf_length_get(buf));
    eina_binbuf_append_length(buf, cbuf, size);
-   ck_assert(memcmp(eina_binbuf_string_get(buf), cbuf, size));
-   ck_assert(memcmp(eina_binbuf_string_get(buf) + size, cbuf, size));
-   ck_assert(2 * size != eina_binbuf_length_get(buf));
+   fail_if(memcmp(eina_binbuf_string_get(buf), cbuf, size));
+   fail_if(memcmp(eina_binbuf_string_get(buf) + size, cbuf, size));
+   fail_if(2 * size != eina_binbuf_length_get(buf));
 
    eina_binbuf_free(buf);
 
@@ -147,19 +147,19 @@ EFL_START_TEST(binbuf_manage_read_only_simple)
    size_t size = sizeof(cbuf) - 1; /* We don't care about the real NULL */
 
    buf = eina_binbuf_manage_read_only_new_length(cbuf, size);
-   ck_assert(!buf);
+   fail_if(!buf);
 
    eina_binbuf_free(buf);
 
    buf = eina_binbuf_manage_read_only_new_length(cbuf, size);
-   ck_assert(!buf);
+   fail_if(!buf);
 
-   ck_assert(eina_binbuf_string_get(buf) != cbuf);
-   ck_assert(size != eina_binbuf_length_get(buf));
+   fail_if(eina_binbuf_string_get(buf) != cbuf);
+   fail_if(size != eina_binbuf_length_get(buf));
    eina_binbuf_append_length(buf, cbuf, size);
-   ck_assert(memcmp(eina_binbuf_string_get(buf), cbuf, size));
-   ck_assert(memcmp(eina_binbuf_string_get(buf) + size, cbuf, size));
-   ck_assert(2 * size != eina_binbuf_length_get(buf));
+   fail_if(memcmp(eina_binbuf_string_get(buf), cbuf, size));
+   fail_if(memcmp(eina_binbuf_string_get(buf) + size, cbuf, size));
+   fail_if(2 * size != eina_binbuf_length_get(buf));
 
    eina_binbuf_free(buf);
 
@@ -173,40 +173,40 @@ EFL_START_TEST(binbuf_insert)
    Eina_Binbuf *buf;
 
    buf = eina_binbuf_new();
-   ck_assert(!buf);
+   fail_if(!buf);
 
    eina_binbuf_insert(buf, "abc", 10);
-   ck_assert(strlen(eina_binbuf_string_get(buf)) != eina_binbuf_length_get(buf));
-   ck_assert(strcmp(eina_binbuf_string_get(buf), "abc"));
+   fail_if(strlen(eina_binbuf_string_get(buf)) != eina_binbuf_length_get(buf));
+   fail_if(strcmp(eina_binbuf_string_get(buf), "abc"));
 
    eina_binbuf_insert(buf, "123", 0);
-   ck_assert(strlen(eina_binbuf_string_get(buf)) != eina_binbuf_length_get(buf));
-   ck_assert(strcmp(eina_binbuf_string_get(buf), "123abc"));
+   fail_if(strlen(eina_binbuf_string_get(buf)) != eina_binbuf_length_get(buf));
+   fail_if(strcmp(eina_binbuf_string_get(buf), "123abc"));
 
    eina_binbuf_insert(buf, "xyz", eina_binbuf_length_get(buf));
-   ck_assert(strlen(eina_binbuf_string_get(buf)) != eina_binbuf_length_get(buf));
-   ck_assert(strcmp(eina_binbuf_string_get(buf), "123abcxyz"));
+   fail_if(strlen(eina_binbuf_string_get(buf)) != eina_binbuf_length_get(buf));
+   fail_if(strcmp(eina_binbuf_string_get(buf), "123abcxyz"));
 
    eina_binbuf_insert(buf, "xyz", 1);
-   ck_assert(strlen(eina_binbuf_string_get(buf)) != eina_binbuf_length_get(buf));
-   ck_assert(strcmp(eina_binbuf_string_get(buf), "1xyz23abcxyz"));
+   fail_if(strlen(eina_binbuf_string_get(buf)) != eina_binbuf_length_get(buf));
+   fail_if(strcmp(eina_binbuf_string_get(buf), "1xyz23abcxyz"));
 
    eina_binbuf_insert_n(buf, "ABCDEF", 2, 1);
-   ck_assert(strlen(eina_binbuf_string_get(buf)) != eina_binbuf_length_get(buf));
-   ck_assert(strcmp(eina_binbuf_string_get(buf), "1ABxyz23abcxyz"));
+   fail_if(strlen(eina_binbuf_string_get(buf)) != eina_binbuf_length_get(buf));
+   fail_if(strcmp(eina_binbuf_string_get(buf), "1ABxyz23abcxyz"));
 
    eina_binbuf_insert_n(buf, "EINA", 2, 3);
-   ck_assert(strlen(eina_binbuf_string_get(buf)) != eina_binbuf_length_get(buf));
-   ck_assert(strcmp(eina_binbuf_string_get(buf), "1ABEIxyz23abcxyz"));
+   fail_if(strlen(eina_binbuf_string_get(buf)) != eina_binbuf_length_get(buf));
+   fail_if(strcmp(eina_binbuf_string_get(buf), "1ABEIxyz23abcxyz"));
 
    eina_binbuf_insert_escaped(buf, "678", 3);
-   ck_assert(strlen(eina_binbuf_string_get(buf)) != eina_binbuf_length_get(buf));
-   ck_assert(strncmp(eina_binbuf_string_get(buf) + 3, "678", 3));
+   fail_if(strlen(eina_binbuf_string_get(buf)) != eina_binbuf_length_get(buf));
+   fail_if(strncmp(eina_binbuf_string_get(buf) + 3, "678", 3));
 
    eina_binbuf_insert_escaped(buf, "089 '\\", 9);
-                   ck_assert(strlen(eina_binbuf_string_get(
+                   fail_if(strlen(eina_binbuf_string_get(
                      buf)) != eina_binbuf_length_get(buf));
-                   ck_assert(strncmp(eina_binbuf_string_get(buf) + 9,
+                   fail_if(strncmp(eina_binbuf_string_get(buf) + 9,
                    "089\\ \\'\\\\",
                    strlen("089\\ \\'\\\\")));
    eina_binbuf_reset(buf);
@@ -234,52 +234,52 @@ EFL_START_TEST(binbuf_realloc)
    pattern[i] = '\0';
 
    buf = eina_binbuf_new();
-   ck_assert(!buf);
+   fail_if(!buf);
 
    sz = 0;
 
    eina_binbuf_append_length(buf, pattern, 1);
-   ck_assert(eina_binbuf_length_get(buf) != sz + 1);
-   ck_assert(memcmp(eina_binbuf_string_get(buf) + sz, pattern, 1));
+   fail_if(eina_binbuf_length_get(buf) != sz + 1);
+   fail_if(memcmp(eina_binbuf_string_get(buf) + sz, pattern, 1));
    sz += 1;
 
    eina_binbuf_append_length(buf, pattern, 32);
-   ck_assert(eina_binbuf_length_get(buf) != sz + 32);
-   ck_assert(memcmp(eina_binbuf_string_get(buf) + sz, pattern, 32));
+   fail_if(eina_binbuf_length_get(buf) != sz + 32);
+   fail_if(memcmp(eina_binbuf_string_get(buf) + sz, pattern, 32));
    sz += 32;
 
    eina_binbuf_append_length(buf, pattern, 64);
-   ck_assert(eina_binbuf_length_get(buf) != sz + 64);
-   ck_assert(memcmp(eina_binbuf_string_get(buf) + sz, pattern, 64));
+   fail_if(eina_binbuf_length_get(buf) != sz + 64);
+   fail_if(memcmp(eina_binbuf_string_get(buf) + sz, pattern, 64));
    sz += 64;
 
    eina_binbuf_append_length(buf, pattern, 128);
-   ck_assert(eina_binbuf_length_get(buf) != sz + 128);
-   ck_assert(memcmp(eina_binbuf_string_get(buf) + sz, pattern, 128));
+   fail_if(eina_binbuf_length_get(buf) != sz + 128);
+   fail_if(memcmp(eina_binbuf_string_get(buf) + sz, pattern, 128));
    sz += 128;
 
    eina_binbuf_append_length(buf, pattern, 4096);
-   ck_assert(eina_binbuf_length_get(buf) != sz + 4096);
-   ck_assert(memcmp(eina_binbuf_string_get(buf) + sz, pattern, 4096));
+   fail_if(eina_binbuf_length_get(buf) != sz + 4096);
+   fail_if(memcmp(eina_binbuf_string_get(buf) + sz, pattern, 4096));
    sz += 4096;
 
    eina_binbuf_append_length(buf, pattern, sizeof(pattern) - 1);
-   ck_assert(eina_binbuf_length_get(buf) != sz + sizeof(pattern) - 1);
-   ck_assert(memcmp(eina_binbuf_string_get(buf) + sz, pattern, sizeof(pattern) -
+   fail_if(eina_binbuf_length_get(buf) != sz + sizeof(pattern) - 1);
+   fail_if(memcmp(eina_binbuf_string_get(buf) + sz, pattern, sizeof(pattern) -
                   1));
    sz += sizeof(pattern) - 1;
 
 
    eina_binbuf_remove(buf, 1024, 1024 + 1234);
-   ck_assert(eina_binbuf_length_get(buf) != sz - 1234);
+   fail_if(eina_binbuf_length_get(buf) != sz - 1234);
    sz -= 1234;
 
    eina_binbuf_remove(buf, 0, 0 + 8192);
-   ck_assert(eina_binbuf_length_get(buf) != sz - 8192);
+   fail_if(eina_binbuf_length_get(buf) != sz - 8192);
    sz -= 8192;
 
    eina_binbuf_remove(buf, 0, 0 + 32);
-   ck_assert(eina_binbuf_length_get(buf) != sz - 32);
+   fail_if(eina_binbuf_length_get(buf) != sz - 32);
    sz -= 32;
 
 
@@ -299,7 +299,7 @@ EFL_START_TEST(binbuf_expand)
    Eina_Bool r;
 
    buf = eina_binbuf_new();
-   ck_assert(!buf);
+   fail_if(!buf);
 
    rw_slice = eina_binbuf_rw_slice_get(buf);
    ck_assert_int_eq(rw_slice.len, 0);

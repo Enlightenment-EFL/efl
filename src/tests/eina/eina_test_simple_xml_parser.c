@@ -92,7 +92,7 @@ EFL_START_TEST(eina_simple_xml_parser_null_node_dump)
 {
    
    char *out = eina_simple_xml_node_dump(NULL, "  ");
-   ck_assert(out != NULL);
+   fail_if(out != NULL);
 
 }
 EFL_END_TEST
@@ -104,9 +104,9 @@ EFL_START_TEST(eina_simple_xml_parser_childs_count)
 	    "<test version=\"0.1\"><child>I'm a child.</child><child><![CDATA[I'm a 2-nd child.]]></child><!-- Some comment --></test>";
     const int sz = strlen(buf);
     Eina_Simple_XML_Node_Root *root = eina_simple_xml_node_load(buf, sz, EINA_TRUE);
-    ck_assert(root == NULL);
-    ck_assert(root->children == NULL);
-    ck_assert(eina_inlist_count(root->children) != 2);
+    fail_if(root == NULL);
+    fail_if(root->children == NULL);
+    fail_if(eina_inlist_count(root->children) != 2);
     eina_simple_xml_node_root_free(root);
 
 }
@@ -142,73 +142,73 @@ eina_simple_xml_parser_parse_with_custom_callback_tag_cb(void *data,
       {
         if (!strncmp("gpx ", content, strlen("gpx ")))
           {
-            ck_assert(*parse_current_state != simple_xml_parser_current_state_begin);
+            fail_if(*parse_current_state != simple_xml_parser_current_state_begin);
             *parse_current_state = simple_xml_parser_current_state_gpx;
           }
         else if (!strncmp("metadata>", content, strlen("metadata>")))
           {
-            ck_assert(*parse_current_state != simple_xml_parser_current_state_gpx);
+            fail_if(*parse_current_state != simple_xml_parser_current_state_gpx);
             *parse_current_state = simple_xml_parser_current_state_metadata;
           }
         else if (!strncmp("link ", content, strlen("link ")))
           {
-            ck_assert(*parse_current_state != simple_xml_parser_current_state_metadata);
+            fail_if(*parse_current_state != simple_xml_parser_current_state_metadata);
             *parse_current_state = simple_xml_parser_current_state_link;
           }
         else if (!strncmp("text>", content, strlen("text>")))
           {
-            ck_assert(*parse_current_state != simple_xml_parser_current_state_link);
+            fail_if(*parse_current_state != simple_xml_parser_current_state_link);
             *parse_current_state = simple_xml_parser_current_state_text;
           }
         else if (!strncmp("time>", content, strlen("time>")))
           {
-            ck_assert(*parse_current_state != simple_xml_parser_current_state_text);
+            fail_if(*parse_current_state != simple_xml_parser_current_state_text);
             *parse_current_state = simple_xml_parser_current_state_time;
           }
         else if (!strncmp("trk>", content, strlen("trk>")))
           {
-            ck_assert(*parse_current_state != simple_xml_parser_current_state_time);
+            fail_if(*parse_current_state != simple_xml_parser_current_state_time);
             *parse_current_state = simple_xml_parser_current_state_trk;
           }
         else if (!strncmp("name>", content, strlen("name>")))
           {
-            ck_assert(*parse_current_state != simple_xml_parser_current_state_trk);
+            fail_if(*parse_current_state != simple_xml_parser_current_state_trk);
             *parse_current_state = simple_xml_parser_current_state_name;
           }
         else if (!strncmp("trkseg>", content, strlen("trkseg>")))
           {
-            ck_assert(*parse_current_state != simple_xml_parser_current_state_name);
+            fail_if(*parse_current_state != simple_xml_parser_current_state_name);
             *parse_current_state = simple_xml_parser_current_state_trkseg;
           }
         else
           {
-            ck_assert(*parse_current_state != simple_xml_parser_current_state_trkpt);
+            fail_if(*parse_current_state != simple_xml_parser_current_state_trkpt);
           }
       }
     else if (type == EINA_SIMPLE_XML_OPEN_EMPTY)
       {
         if (!strncmp("trkpt ", content, strlen("trkpt ")))
           {
-            ck_assert(*parse_current_state != simple_xml_parser_current_state_trkseg &&
+            fail_if(*parse_current_state != simple_xml_parser_current_state_trkseg &&
                     *parse_current_state != simple_xml_parser_current_state_trkpt);
             *parse_current_state = simple_xml_parser_current_state_trkpt;
           }
       }
     else if (type == EINA_SIMPLE_XML_COMMENT)
       {
-        ck_assert(*parse_current_state != simple_xml_parser_current_state_trkpt);
+        fail_if(*parse_current_state != simple_xml_parser_current_state_trkpt);
         *parse_current_state = simple_xml_parser_current_state_comment;
       }
     else if (type == EINA_SIMPLE_XML_CDATA)
       {
-        ck_assert(*parse_current_state != simple_xml_parser_current_state_comment);
+        fail_if(*parse_current_state != simple_xml_parser_current_state_comment);
         *parse_current_state = simple_xml_parser_current_state_cdata;
       }
     else if (type == EINA_SIMPLE_XML_CLOSE)
       {
         if (!strncmp("gpx", content, strlen("gpx")))
           {
-            ck_assert(*parse_current_state != simple_xml_parser_current_state_cdata);
+            fail_if(*parse_current_state != simple_xml_parser_current_state_cdata);
             *parse_current_state = simple_xml_parser_current_state_end;
           }
       }
@@ -245,7 +245,7 @@ EFL_START_TEST(eina_simple_xml_parser_parse_with_custom_callback)
                                           EINA_TRUE,
                                           eina_simple_xml_parser_parse_with_custom_callback_tag_cb,
                                           &parse_current_state);
-                    ck_assert(parse_current_state != simple_xml_parser_current_state_end);
+                    fail_if(parse_current_state != simple_xml_parser_current_state_end);
                   }
                 free(buf);
               }

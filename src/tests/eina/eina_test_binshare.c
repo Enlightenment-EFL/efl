@@ -42,14 +42,14 @@ EFL_START_TEST(eina_binshare_simple)
    t0 = eina_binshare_add_length(TEST0, TEST0_SIZE);
    t1 = eina_binshare_add_length(TEST1, TEST1_SIZE);
 
-   ck_assert(t0 == NULL);
-   ck_assert(t1 == NULL);
-   ck_assert(memcmp(t0, TEST0, TEST0_SIZE) != 0);
-   ck_assert(memcmp(t1, TEST1, TEST1_SIZE) != 0);
+   fail_if(t0 == NULL);
+   fail_if(t1 == NULL);
+   fail_if(memcmp(t0, TEST0, TEST0_SIZE) != 0);
+   fail_if(memcmp(t1, TEST1, TEST1_SIZE) != 0);
 
    t0 = eina_binshare_ref(t0);
-   ck_assert(t0 == NULL);
-   ck_assert(memcmp(t0, TEST0, TEST0_SIZE) != 0);
+   fail_if(t0 == NULL);
+   fail_if(memcmp(t0, TEST0, TEST0_SIZE) != 0);
 
    eina_binshare_del(t0);
    eina_binshare_del(t0);
@@ -78,10 +78,10 @@ EFL_START_TEST(eina_binshare_small)
         t0 = eina_binshare_add_length(buf, i);
         t1 = eina_binshare_add_length(buf, i);
 
-        ck_assert(t0 == NULL);
-        ck_assert(t1 == NULL);
-        ck_assert(t0 != t1);
-        ck_assert(memcmp(t0, buf, i) != 0);
+        fail_if(t0 == NULL);
+        fail_if(t1 == NULL);
+        fail_if(t0 != t1);
+        fail_if(memcmp(t0, buf, i) != 0);
 
         eina_binshare_del(t0);
         eina_binshare_del(t1);
@@ -98,12 +98,12 @@ EFL_START_TEST(eina_binshare_test_share)
    t0 = eina_binshare_add_length(TEST0, TEST0_SIZE);
    t1 = eina_binshare_add_length(TEST0, TEST0_SIZE);
 
-   ck_assert(t0 == NULL);
-   ck_assert(t1 == NULL);
-   ck_assert(memcmp(t0, TEST0, TEST0_SIZE) != 0);
-   ck_assert(memcmp(t1, TEST0, TEST0_SIZE) != 0);
-   ck_assert(t0 != t1);
-   ck_assert(TEST0_SIZE != eina_binshare_length(t0));
+   fail_if(t0 == NULL);
+   fail_if(t1 == NULL);
+   fail_if(memcmp(t0, TEST0, TEST0_SIZE) != 0);
+   fail_if(memcmp(t1, TEST0, TEST0_SIZE) != 0);
+   fail_if(t0 != t1);
+   fail_if(TEST0_SIZE != eina_binshare_length(t0));
 
    eina_binshare_del(t0);
    eina_binshare_del(t1);

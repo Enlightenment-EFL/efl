@@ -34,31 +34,31 @@ EFL_START_TEST(eina_array_simple)
    unsigned int i;
 
    ea = eina_array_new(11);
-        ck_assert(!ea);
+        fail_if(!ea);
 
    for (i = 0; i < 201; ++i)
      {
         tmp = malloc(sizeof(char) * 10);
-        ck_assert(!tmp);
+        fail_if(!tmp);
         eina_convert_itoa(i, tmp);
 
         eina_array_push(ea, tmp);
      }
 
-   ck_assert(eina_array_data_get(ea, 10) == NULL);
-   ck_assert(atoi(eina_array_data_get(ea, 10)) != 10);
+   fail_if(eina_array_data_get(ea, 10) == NULL);
+   fail_if(atoi(eina_array_data_get(ea, 10)) != 10);
    tmp = eina_array_pop(ea);
-   ck_assert(tmp == NULL);
-   ck_assert(atoi(tmp) != 200);
+   fail_if(tmp == NULL);
+   fail_if(atoi(tmp) != 200);
    free(tmp);
 
    EINA_ARRAY_ITER_NEXT(ea, i, tmp, it)
      {
-	ck_assert((unsigned int)atoi(tmp) != i);
+	fail_if((unsigned int)atoi(tmp) != i);
 	free(tmp);
      }
 
-   ck_assert(i != 200);
+   fail_if(i != 200);
 
    eina_array_clean(ea);
    eina_array_flush(ea);
@@ -79,22 +79,22 @@ EFL_START_TEST(eina_array_static)
    for (i = 0; i < 200; ++i)
      {
         tmp = malloc(sizeof(char) * 10);
-        ck_assert(!tmp);
+        fail_if(!tmp);
         eina_convert_itoa(i, tmp);
 
         eina_array_push(&sea, tmp);
      }
 
-   ck_assert(eina_array_data_get(&sea, 10) == NULL);
-   ck_assert(atoi(eina_array_data_get(&sea, 10)) != 10);
+   fail_if(eina_array_data_get(&sea, 10) == NULL);
+   fail_if(atoi(eina_array_data_get(&sea, 10)) != 10);
 
    EINA_ARRAY_ITER_NEXT(&sea, i, tmp, it)
      {
-	ck_assert((unsigned int)atoi(tmp) != i);
+	fail_if((unsigned int)atoi(tmp) != i);
         free(tmp);
      }
 
-   ck_assert(i != 200);
+   fail_if(i != 200);
 
    eina_array_clean(&sea);
    eina_array_flush(&sea);
@@ -107,8 +107,8 @@ keep_int(void *data, void *gdata)
 {
    int *tmp = data;
 
-   ck_assert(gdata);
-   ck_assert(!tmp);
+   fail_if(gdata);
+   fail_if(!tmp);
 
    if (*tmp == 0)
       return EINA_FALSE;
@@ -124,12 +124,12 @@ EFL_START_TEST(eina_array_remove_stuff)
    unsigned int i;
 
    ea = eina_array_new(64);
-        ck_assert(!ea);
+        fail_if(!ea);
 
    for (i = 0; i < 1000; ++i)
      {
         tmp = malloc(sizeof(int));
-        ck_assert(!tmp);
+        fail_if(!tmp);
         *tmp = i;
 
         eina_array_push(ea, tmp);
@@ -139,35 +139,35 @@ EFL_START_TEST(eina_array_remove_stuff)
    for (i = 0; i < 10; ++i)
      {
         tmp = eina_array_data_get(ea, i);
-        ck_assert(!tmp);
+        fail_if(!tmp);
         *tmp = 0;
      }
-   ck_assert(eina_array_remove(ea, keep_int, NULL) != EINA_TRUE);
+   fail_if(eina_array_remove(ea, keep_int, NULL) != EINA_TRUE);
 
-   ck_assert(eina_array_count(ea) != 990);
+   fail_if(eina_array_count(ea) != 990);
    EINA_ARRAY_ITER_NEXT(ea, i, tmp, it)
-     ck_assert(*tmp == 0);
+     fail_if(*tmp == 0);
 
    // Remove the last items
    for (i = 980; i < 990; ++i)
      {
         tmp = eina_array_data_get(ea, i);
-        ck_assert(!tmp);
+        fail_if(!tmp);
         *tmp = 0;
      }
         eina_array_remove(ea, keep_int, NULL);
 
    // Remove all items
-   ck_assert(eina_array_count(ea) != 980);
+   fail_if(eina_array_count(ea) != 980);
    EINA_ARRAY_ITER_NEXT(ea, i, tmp, it)
      {
-        ck_assert(*tmp == 0);
+        fail_if(*tmp == 0);
         *tmp = 0;
      }
 
    eina_array_remove(ea, keep_int, NULL);
 
-   ck_assert(eina_array_count(ea) != 0);
+   fail_if(eina_array_count(ea) != 0);
 
    eina_array_free(ea);
 
@@ -180,22 +180,22 @@ EFL_START_TEST(eina_array_find_test)
    uintptr_t i;
    unsigned int out = 0;
 
-   ck_assert(eina_array_find(NULL, (void *)1, NULL) != EINA_FALSE);
+   fail_if(eina_array_find(NULL, (void *)1, NULL) != EINA_FALSE);
 
    eina_array_step_set(&sea, sizeof(sea), 5);
 
    for (i = 1 ; i < 10 ; i++)
      eina_array_push(&sea, (void *)i);
 
-   ck_assert(eina_array_find(&sea, (void *)15, NULL) != EINA_FALSE);
+   fail_if(eina_array_find(&sea, (void *)15, NULL) != EINA_FALSE);
 
-   ck_assert(eina_array_find(&sea, (void *)5, NULL) != EINA_TRUE);
-   ck_assert(eina_array_find(&sea, (void *)6, &out) != EINA_TRUE);
-   ck_assert(out != 5);
+   fail_if(eina_array_find(&sea, (void *)5, NULL) != EINA_TRUE);
+   fail_if(eina_array_find(&sea, (void *)6, &out) != EINA_TRUE);
+   fail_if(out != 5);
 
    eina_array_data_set(&sea, 7, (void *)99);
-   ck_assert(eina_array_find(&sea, (void *)99, &out) != EINA_TRUE);
-   ck_assert(out != 7);
+   fail_if(eina_array_find(&sea, (void *)99, &out) != EINA_TRUE);
+   fail_if(out != 7);
 
    eina_array_flush(&sea);
 

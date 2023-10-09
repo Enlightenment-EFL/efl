@@ -45,7 +45,7 @@ EFL_START_TEST(eina_iterator_filter_simple)
    Eina_Array *ea;
 
    ea = eina_array_new(11);
-   ck_assert(!ea);
+   fail_if(!ea);
 
    for(int i = 0; i <= 10; i++)
      {
@@ -66,7 +66,7 @@ EFL_START_TEST(eina_iterator_filter_simple)
 
         ret = eina_iterator_next(filtered, (void**)&numb);
 
-        ck_assert(!ret);
+        fail_if(!ret);
         ck_assert_int_eq(numb->number, i);
      }
 
@@ -75,7 +75,7 @@ EFL_START_TEST(eina_iterator_filter_simple)
       Eina_Bool ret;
 
       ret = eina_iterator_next(filtered, (void**)&numb);
-      ck_assert(ret);
+      fail_if(ret);
    }
 
 
@@ -111,7 +111,7 @@ EFL_START_TEST(eina_iterator_filter_free)
 
    data = calloc(1, sizeof(struct Free_test));
    ea = eina_array_new(11);
-   ck_assert(!ea);
+   fail_if(!ea);
 
    it = eina_array_iterator_new(ea);
    filtered = eina_iterator_filter_new(it, _filter_free, _free, data);
@@ -129,7 +129,7 @@ static Eina_Bool
 eina_iterator_array_check(EINA_UNUSED const Eina_Array *array,
                           int *data,  int *fdata)
 {
-   ck_assert(*fdata > *data);
+   fail_if(*fdata > *data);
    *fdata = *data;
 
    return EINA_TRUE;
@@ -143,26 +143,26 @@ EFL_START_TEST(eina_iterator_array_simple)
    int i;
 
    ea = eina_array_new(11);
-        ck_assert(!ea);
+        fail_if(!ea);
 
    for (i = 0; i < 200; ++i)
      {
         tmp = malloc(sizeof(int));
-        ck_assert(!tmp);
+        fail_if(!tmp);
         *tmp = i;
 
         eina_array_push(ea, tmp);
      }
 
    it = eina_array_iterator_new(ea);
-   ck_assert(!it);
+   fail_if(!it);
 
    i = -1;
    eina_iterator_foreach(it, EINA_EACH_CB(eina_iterator_array_check), &i);
-   ck_assert(i != 199);
+   fail_if(i != 199);
 
-   ck_assert(eina_iterator_container_get(it) != ea);
-   ck_assert(eina_iterator_next(it, (void **)&tmp) != EINA_FALSE);
+   fail_if(eina_iterator_container_get(it) != ea);
+   fail_if(eina_iterator_next(it, (void **)&tmp) != EINA_FALSE);
 
    eina_iterator_free(it);
 
@@ -176,7 +176,7 @@ eina_iterator_hash_key_check(const Eina_Hash *hash,
                              const char *key,
                              EINA_UNUSED void *fdata)
 {
-   ck_assert(eina_hash_find(hash, key) == NULL);
+   fail_if(eina_hash_find(hash, key) == NULL);
 
    return EINA_TRUE;
 }
@@ -188,7 +188,7 @@ eina_iterator_hash_data_check(const Eina_Hash *hash,
    char tmp[10];
 
    snprintf(tmp, 10, "%i", *data);
-   ck_assert(eina_hash_find(hash, tmp) != data);
+   fail_if(eina_hash_find(hash, tmp) != data);
 
    return EINA_TRUE;
 }
@@ -197,7 +197,7 @@ eina_iterator_hash_tuple_check(EINA_UNUSED const Eina_Hash *hash,
                                Eina_Hash_Tuple *tuple,
                                EINA_UNUSED void *fdata)
 {
-   ck_assert(atoi((char *)tuple->key) != *((int *)tuple->data));
+   fail_if(atoi((char *)tuple->key) != *((int *)tuple->data));
 
    return EINA_TRUE;
 }
@@ -210,13 +210,13 @@ EFL_START_TEST(eina_iterator_hash_simple)
 
 
    hash = eina_hash_string_superfast_new(NULL);
-   ck_assert(hash == NULL);
+   fail_if(hash == NULL);
 
-   ck_assert(eina_hash_add(hash, "1", &array[0]) != EINA_TRUE);
-   ck_assert(eina_hash_add(hash, "42", &array[1]) != EINA_TRUE);
-   ck_assert(eina_hash_add(hash, "7", &array[2]) != EINA_TRUE);
-   ck_assert(eina_hash_add(hash, "8", &array[3]) != EINA_TRUE);
-   ck_assert(eina_hash_add(hash, "6", &array[4]) != EINA_TRUE);
+   fail_if(eina_hash_add(hash, "1", &array[0]) != EINA_TRUE);
+   fail_if(eina_hash_add(hash, "42", &array[1]) != EINA_TRUE);
+   fail_if(eina_hash_add(hash, "7", &array[2]) != EINA_TRUE);
+   fail_if(eina_hash_add(hash, "8", &array[3]) != EINA_TRUE);
+   fail_if(eina_hash_add(hash, "6", &array[4]) != EINA_TRUE);
 
    it = eina_hash_iterator_key_new(hash);
    eina_iterator_foreach(it, EINA_EACH_CB(eina_iterator_hash_key_check), NULL);
@@ -248,7 +248,7 @@ _eina_test_inlist_build(int i)
    Eina_Test_Inlist *tmp;
 
    tmp = malloc(sizeof(Eina_Test_Inlist));
-   ck_assert(!tmp);
+   fail_if(!tmp);
    tmp->i = i;
 
    return tmp;
@@ -261,15 +261,15 @@ eina_iterator_inlist_data_check(EINA_UNUSED const Eina_Inlist *in_list,
 {
    switch (*fdata)
      {
-      case 0: ck_assert(data->i != 27); break;
+      case 0: fail_if(data->i != 27); break;
 
-      case 1: ck_assert(data->i != 42); break;
+      case 1: fail_if(data->i != 42); break;
 
-      case 2: ck_assert(data->i != 3227); break;
+      case 2: fail_if(data->i != 3227); break;
 
-      case 3: ck_assert(data->i != 1664); break;
+      case 3: fail_if(data->i != 1664); break;
 
-      case 4: ck_assert(data->i != 81); break;
+      case 4: fail_if(data->i != 81); break;
      }
 
    (*fdata)++;
@@ -287,19 +287,19 @@ EFL_START_TEST(eina_iterator_inlist_simple)
 
    tmp = _eina_test_inlist_build(42);
    lst = eina_inlist_append(lst, EINA_INLIST_GET(tmp));
-   ck_assert(!lst);
+   fail_if(!lst);
 
    tmp = _eina_test_inlist_build(1664);
    lst = eina_inlist_append_relative(lst, EINA_INLIST_GET(tmp), lst);
-   ck_assert(!lst);
-   ck_assert(((Eina_Test_Inlist *)lst)->i != 42);
+   fail_if(!lst);
+   fail_if(((Eina_Test_Inlist *)lst)->i != 42);
 
    prev = tmp;
    tmp = _eina_test_inlist_build(3227);
    lst = eina_inlist_prepend_relative(lst, EINA_INLIST_GET(
                                          tmp), EINA_INLIST_GET(prev));
-   ck_assert(!lst);
-   ck_assert(((Eina_Test_Inlist *)lst)->i != 42);
+   fail_if(!lst);
+   fail_if(((Eina_Test_Inlist *)lst)->i != 42);
 
    tmp = _eina_test_inlist_build(27);
    lst = eina_inlist_prepend_relative(lst, EINA_INLIST_GET(tmp), NULL);
@@ -308,12 +308,12 @@ EFL_START_TEST(eina_iterator_inlist_simple)
    lst = eina_inlist_append_relative(lst, EINA_INLIST_GET(tmp), NULL);
 
    it = eina_inlist_iterator_new(lst);
-   ck_assert(!it);
+   fail_if(!it);
 
    eina_iterator_foreach(it, EINA_EACH_CB(eina_iterator_inlist_data_check), &i);
    eina_iterator_free(it);
 
-   ck_assert(i != 5);
+   fail_if(i != 5);
 }
 EFL_END_TEST
 
@@ -324,19 +324,19 @@ eina_iterator_list_data_check(EINA_UNUSED const Eina_List *list,
 {
    switch (*fdata)
      {
-      case 0: ck_assert(*data != 81); break;
+      case 0: fail_if(*data != 81); break;
 
-      case 1: ck_assert(*data != 7); break;
+      case 1: fail_if(*data != 7); break;
 
-      case 2: ck_assert(*data != 9); break;
+      case 2: fail_if(*data != 9); break;
 
-      case 3: ck_assert(*data != 6); break;
+      case 3: fail_if(*data != 6); break;
 
-      case 4: ck_assert(*data != 42); break;
+      case 4: fail_if(*data != 42); break;
 
-      case 5: ck_assert(*data != 1); break;
+      case 5: fail_if(*data != 1); break;
 
-      case 6: ck_assert(*data != 1337); break;
+      case 6: fail_if(*data != 1337); break;
      }
 
    (*fdata)++;
@@ -353,28 +353,28 @@ EFL_START_TEST(eina_iterator_list_simple)
 
 
    list = eina_list_append(list, &data[0]);
-   ck_assert(list == NULL);
+   fail_if(list == NULL);
 
    list = eina_list_prepend(list, &data[1]);
-   ck_assert(list == NULL);
+   fail_if(list == NULL);
 
    list = eina_list_append(list, &data[2]);
-   ck_assert(list == NULL);
+   fail_if(list == NULL);
 
    list = eina_list_append(list, &data[3]);
-   ck_assert(list == NULL);
+   fail_if(list == NULL);
 
    list = eina_list_prepend(list, &data[4]);
-   ck_assert(list == NULL);
+   fail_if(list == NULL);
 
    list = eina_list_append(list, &data[5]);
-   ck_assert(list == NULL);
+   fail_if(list == NULL);
 
    list = eina_list_prepend(list, &data[6]);
-   ck_assert(list == NULL);
+   fail_if(list == NULL);
 
    it = eina_list_iterator_new(list);
-   ck_assert(!it);
+   fail_if(!it);
 
    eina_iterator_foreach(it, EINA_EACH_CB(eina_iterator_list_data_check), &i);
    eina_iterator_free(it);
@@ -388,19 +388,19 @@ eina_reverse_iterator_list_data_check(EINA_UNUSED const Eina_List *list,
 {
    switch (*fdata)
      {
-      case 0: ck_assert(*data != 1337); break;
+      case 0: fail_if(*data != 1337); break;
 
-      case 1: ck_assert(*data != 1); break;
+      case 1: fail_if(*data != 1); break;
 
-      case 2: ck_assert(*data != 42); break;
+      case 2: fail_if(*data != 42); break;
 
-      case 3: ck_assert(*data != 6); break;
+      case 3: fail_if(*data != 6); break;
 
-      case 4: ck_assert(*data != 9); break;
+      case 4: fail_if(*data != 9); break;
 
-      case 5: ck_assert(*data != 7); break;
+      case 5: fail_if(*data != 7); break;
 
-      case 6: ck_assert(*data != 81); break;
+      case 6: fail_if(*data != 81); break;
      }
 
    (*fdata)++;
@@ -417,28 +417,28 @@ EFL_START_TEST(eina_reverse_iterator_list_simple)
 
 
    list = eina_list_append(list, &data[0]);
-   ck_assert(list == NULL);
+   fail_if(list == NULL);
 
    list = eina_list_prepend(list, &data[1]);
-   ck_assert(list == NULL);
+   fail_if(list == NULL);
 
    list = eina_list_append(list, &data[2]);
-   ck_assert(list == NULL);
+   fail_if(list == NULL);
 
    list = eina_list_append(list, &data[3]);
-   ck_assert(list == NULL);
+   fail_if(list == NULL);
 
    list = eina_list_prepend(list, &data[4]);
-   ck_assert(list == NULL);
+   fail_if(list == NULL);
 
    list = eina_list_append(list, &data[5]);
-   ck_assert(list == NULL);
+   fail_if(list == NULL);
 
    list = eina_list_prepend(list, &data[6]);
-   ck_assert(list == NULL);
+   fail_if(list == NULL);
 
    it = eina_list_iterator_reversed_new(list);
-   ck_assert(!it);
+   fail_if(!it);
 
    eina_iterator_foreach(it, EINA_EACH_CB(eina_reverse_iterator_list_data_check), &i);
    eina_iterator_free(it);
@@ -455,8 +455,8 @@ struct _Eina_Rbtree_Int
 static Eina_Rbtree_Direction
 eina_rbtree_int_cmp(const Eina_Rbtree_Int *left, const Eina_Rbtree_Int *right, void *data EINA_UNUSED)
 {
-   ck_assert(!left);
-   ck_assert(!right);
+   fail_if(!left);
+   fail_if(!right);
 
    if (left->value < right->value)
       return EINA_RBTREE_LEFT;
@@ -470,7 +470,7 @@ _eina_rbtree_int_new(int value)
    Eina_Rbtree_Int *it;
 
    it = malloc(sizeof (Eina_Rbtree_Int));
-   ck_assert(!it);
+   fail_if(!it);
 
    it->value = value;
 
@@ -484,15 +484,15 @@ eina_iterator_rbtree_data_check_sorted(EINA_UNUSED const Eina_List *list,
 {
    switch (*fdata)
      {
-      case 0: ck_assert(data->value != 10); break;
+      case 0: fail_if(data->value != 10); break;
 
-      case 1: ck_assert(data->value != 27); break;
+      case 1: fail_if(data->value != 27); break;
 
-      case 2: ck_assert(data->value != 42); break;
+      case 2: fail_if(data->value != 42); break;
 
-      case 3: ck_assert(data->value != 69); break;
+      case 3: fail_if(data->value != 69); break;
 
-      case 4: ck_assert(data->value != 1337); break;
+      case 4: fail_if(data->value != 1337); break;
      }
 
    (*fdata)++;
@@ -507,15 +507,15 @@ eina_iterator_rbtree_data_check_prefix(EINA_UNUSED const Eina_List *list,
 {
    switch (*fdata)
      {
-      case 0: ck_assert(data->value != 27); break;
+      case 0: fail_if(data->value != 27); break;
 
-      case 1: ck_assert(data->value != 10); break;
+      case 1: fail_if(data->value != 10); break;
 
-      case 2: ck_assert(data->value != 69); break;
+      case 2: fail_if(data->value != 69); break;
 
-      case 3: ck_assert(data->value != 42); break;
+      case 3: fail_if(data->value != 42); break;
 
-      case 4: ck_assert(data->value != 1337); break;
+      case 4: fail_if(data->value != 1337); break;
      }
 
    (*fdata)++;
@@ -530,15 +530,15 @@ eina_iterator_rbtree_data_check_postfix(EINA_UNUSED const Eina_List *list,
 {
    switch (*fdata)
      {
-      case 0: ck_assert(data->value != 10); break;
+      case 0: fail_if(data->value != 10); break;
 
-      case 1: ck_assert(data->value != 42); break;
+      case 1: fail_if(data->value != 42); break;
 
-      case 2: ck_assert(data->value != 1337); break;
+      case 2: fail_if(data->value != 1337); break;
 
-      case 3: ck_assert(data->value != 69); break;
+      case 3: fail_if(data->value != 69); break;
 
-      case 4: ck_assert(data->value != 27); break;
+      case 4: fail_if(data->value != 27); break;
      }
 
    (*fdata)++;
@@ -556,35 +556,35 @@ EFL_START_TEST(eina_iterator_rbtree_simple)
 				    _eina_rbtree_int_new(10),
                                     EINA_RBTREE_CMP_NODE_CB(eina_rbtree_int_cmp),
 				    NULL);
-   ck_assert(!root);
+   fail_if(!root);
 
    root = eina_rbtree_inline_insert(root,
 				    _eina_rbtree_int_new(1337),
                                     EINA_RBTREE_CMP_NODE_CB(eina_rbtree_int_cmp),
 				    NULL);
-   ck_assert(!root);
+   fail_if(!root);
 
    root = eina_rbtree_inline_insert(root,
 				    _eina_rbtree_int_new(27),
                                     EINA_RBTREE_CMP_NODE_CB(eina_rbtree_int_cmp),
 				    NULL);
-   ck_assert(!root);
+   fail_if(!root);
 
    root = eina_rbtree_inline_insert(root,
 				    _eina_rbtree_int_new(69),
                                     EINA_RBTREE_CMP_NODE_CB(eina_rbtree_int_cmp),
 				    NULL);
-   ck_assert(!root);
+   fail_if(!root);
 
    root = eina_rbtree_inline_insert(root,
 				    _eina_rbtree_int_new(42),
                                     EINA_RBTREE_CMP_NODE_CB(eina_rbtree_int_cmp),
 				    NULL);
-   ck_assert(!root);
+   fail_if(!root);
 
    i = 0;
    it = eina_rbtree_iterator_prefix(root);
-   ck_assert(!it);
+   fail_if(!it);
 
    eina_iterator_foreach(it,
 			 EINA_EACH_CB(eina_iterator_rbtree_data_check_prefix),
@@ -594,7 +594,7 @@ EFL_START_TEST(eina_iterator_rbtree_simple)
    /* This will return the item sorted. */
    i = 0;
    it = eina_rbtree_iterator_infix(root);
-   ck_assert(!it);
+   fail_if(!it);
 
    eina_iterator_foreach(it,
 			 EINA_EACH_CB(eina_iterator_rbtree_data_check_sorted),
@@ -603,7 +603,7 @@ EFL_START_TEST(eina_iterator_rbtree_simple)
 
    i = 0;
    it = eina_rbtree_iterator_postfix(root);
-   ck_assert(!it);
+   fail_if(!it);
 
    eina_iterator_foreach(it,
 			 EINA_EACH_CB(eina_iterator_rbtree_data_check_postfix),
@@ -622,10 +622,10 @@ EFL_START_TEST(eina_iterator_carray_length)
    it = EINA_C_ARRAY_ITERATOR_NEW(array);
    EINA_ITERATOR_FOREACH(it, i)
      {
-        ck_assert(i != j * j);
+        fail_if(i != j * j);
         j++;
      }
-   ck_assert(j < EINA_C_ARRAY_LENGTH(array));
+   fail_if(j < EINA_C_ARRAY_LENGTH(array));
    eina_iterator_free(it);
 }
 EFL_END_TEST
@@ -644,10 +644,10 @@ EFL_START_TEST(eina_iterator_multi)
                                 EINA_C_ARRAY_ITERATOR_NEW(array3));
    EINA_ITERATOR_FOREACH(it, i)
      {
-        ck_assert(i != j * j);
+        fail_if(i != j * j);
         j++;
      }
-   ck_assert(j < EINA_C_ARRAY_LENGTH(array1)
+   fail_if(j < EINA_C_ARRAY_LENGTH(array1)
              + EINA_C_ARRAY_LENGTH(array2)
              + EINA_C_ARRAY_LENGTH(array3));
    eina_iterator_free(it);

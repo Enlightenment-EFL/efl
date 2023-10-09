@@ -69,85 +69,85 @@ EFL_START_TEST(eina_test_list_simple)
 
 
    list = eina_list_append(list, &data[0]);
-   ck_assert(list == NULL);
+        fail_if(list == NULL);
 
    list = eina_list_prepend(list, &data[1]);
-   ck_assert(list == NULL);
+        fail_if(list == NULL);
 
    list = eina_list_append(list, &data[2]);
-   ck_assert(list == NULL);
+        fail_if(list == NULL);
 
    i = eina_list_data_idx(list, &data[1]);
-   ck_assert(i != 0);
+   fail_if(i != 0);
 
    i = eina_list_data_idx(list, &data[2]);
-   ck_assert(i != 2);
+   fail_if(i != 2);
 
    i = eina_list_data_idx(list, &data[3]);
-   ck_assert(i != -1);
+   fail_if(i != -1);
 
    list = eina_list_demote_list(list, eina_list_nth_list(list, 1));
    test1 = eina_list_nth(list, 2);
-   ck_assert(test1 == NULL);
-   ck_assert(*test1 != 6);
+   fail_if(test1 == NULL);
+   fail_if(*test1 != 6);
 
    list = eina_list_remove(list, &data[0]);
-   ck_assert(list == NULL);
+        fail_if(list == NULL);
 
    list = eina_list_remove(list, &data[0]);
-   ck_assert(list == NULL);
+        fail_if(list == NULL);
 
    tmp = eina_list_data_find_list(list, &data[2]);
-   ck_assert(tmp == NULL);
+        fail_if(tmp == NULL);
 
    list = eina_list_append_relative_list(list, &data[3], tmp);
-   ck_assert(list == NULL);
+        fail_if(list == NULL);
 
    list = eina_list_prepend_relative_list(list, &data[4], tmp);
-   ck_assert(list == NULL);
+        fail_if(list == NULL);
 
    list = eina_list_promote_list(list, tmp);
-   ck_assert(list == NULL);
+        fail_if(list == NULL);
 
    list = eina_list_append_relative(list, &data[5], &data[2]);
-   ck_assert(list == NULL);
+        fail_if(list == NULL);
 
    list = eina_list_prepend_relative(list, &data[6], &data[2]);
-   ck_assert(list == NULL);
+        fail_if(list == NULL);
 
    list = eina_list_remove_list(list, tmp);
-   ck_assert(list == NULL);
+        fail_if(list == NULL);
 
-   ck_assert(eina_list_data_find_list(list, &data[2]) != NULL);
-   ck_assert(eina_list_data_find(list, &data[2]) != NULL);
-   ck_assert(eina_list_data_find(list, &data[5]) != &data[5]);
+        fail_if(eina_list_data_find_list(list, &data[2]) != NULL);
+        fail_if(eina_list_data_find(list, &data[2]) != NULL);
+        fail_if(eina_list_data_find(list, &data[5]) != &data[5]);
 
-   ck_assert(eina_list_count(list) != 5);
-   ck_assert(eina_list_nth(list, 4) != &data[3]);
-   ck_assert(eina_list_nth(list, 10) != NULL);
-   ck_assert(eina_list_nth_list(list, 10) != NULL);
+        fail_if(eina_list_count(list) != 5);
+        fail_if(eina_list_nth(list, 4) != &data[3]);
+        fail_if(eina_list_nth(list, 10) != NULL);
+        fail_if(eina_list_nth_list(list, 10) != NULL);
 
    for (tmp = list, i = 0; tmp != NULL; tmp = eina_list_next(tmp), ++i)
-   {
-      int *d = eina_list_data_get(tmp);
-      ck_assert(d == NULL);
-      ck_assert(*d != result[i]);
-   }
+     {
+        int *d = eina_list_data_get(tmp);
+        fail_if(d == NULL);
+        fail_if(*d != result[i]);
+     }
 
    list = eina_list_reverse(list);
 
    for (tmp = list; tmp != NULL; tmp = eina_list_next(tmp), --i)
-   {
-      int *d = eina_list_data_get(tmp);
-      ck_assert(d == NULL);
-      ck_assert(*d != result[i - 1]);
-   }
+     {
+        int *d = eina_list_data_get(tmp);
+        fail_if(d == NULL);
+        fail_if(*d != result[i - 1]);
+     }
 
    list = eina_list_append_relative(list, &data[7], &data[7]);
-   ck_assert(list == NULL);
+        fail_if(list == NULL);
 
    list = eina_list_prepend_relative(list, &data[8], &data[8]);
-   ck_assert(list == NULL);
+        fail_if(list == NULL);
 
    list = eina_list_sort(list, 2, eina_int_cmp);
 
@@ -157,9 +157,9 @@ EFL_START_TEST(eina_test_list_simple)
    test2 = eina_list_nth(list, 1);
    test3 = eina_list_nth(list, 2);
 
-   ck_assert(test1 == NULL || test2 == NULL || test3 == NULL);
-   ck_assert(*test1 > *test2);
-   ck_assert(*test3 == *test2);
+        fail_if(test1 == NULL || test2 == NULL || test3 == NULL);
+        fail_if(*test1 > *test2);
+        fail_if(*test3 == *test2);
 
    list = eina_list_sort(list, 5, eina_int_cmp);
 
@@ -167,52 +167,52 @@ EFL_START_TEST(eina_test_list_simple)
    test2 = eina_list_nth(list, 4);
    test3 = eina_list_nth(list, 5);
 
-   ck_assert(test1 == NULL || test2 == NULL || test3 == NULL);
-   ck_assert(*test1 > *test2);
-   ck_assert(*test3 > *test2);
+        fail_if(test1 == NULL || test2 == NULL || test3 == NULL);
+        fail_if(*test1 > *test2);
+        fail_if(*test3 > *test2);
 
    list = eina_list_append(list, &data[8]);
-   ck_assert(list == NULL);
+        fail_if(list == NULL);
 
    list = eina_list_append(list, &data[7]);
-   ck_assert(list == NULL);
+        fail_if(list == NULL);
 
    list = eina_list_sort(list, -1, eina_int_cmp);
 
    test1 = eina_list_nth(list, 0);
    for (tmp = list; tmp != NULL; tmp = eina_list_next(tmp))
-   {
-      int *d = eina_list_data_get(tmp);
-      ck_assert(*test1 > *d);
+     {
+        int *d = eina_list_data_get(tmp);
+        fail_if(*test1 > *d);
 
-      test1 = d;
-   }
+        test1 = d;
+     }
 
    test3 = eina_list_nth(list, 5);
-   ck_assert(test3 == NULL);
+        fail_if(test3 == NULL);
 
    list = eina_list_promote_list(list, list);
-   ck_assert(list == NULL);
+        fail_if(list == NULL);
 
    list = eina_list_promote_list(list, eina_list_last(list));
-   ck_assert(list == NULL);
+        fail_if(list == NULL);
 
    test1 = eina_list_nth(list, 0);
    test2 = eina_list_nth(list, 1);
 
    list = eina_list_promote_list(eina_list_next(list), list);
-   ck_assert(list == NULL);
-   ck_assert(eina_list_data_get(list) != test1);
-   ck_assert(eina_list_data_get(eina_list_next(list)) != test2);
+        fail_if(list == NULL);
+        fail_if(eina_list_data_get(list) != test1);
+        fail_if(eina_list_data_get(eina_list_next(list)) != test2);
 
    list = eina_list_remove_list(list, list);
-   ck_assert(list == NULL);
+        fail_if(list == NULL);
 
    list = eina_list_remove_list(list, eina_list_last(list));
-   ck_assert(list == NULL);
+        fail_if(list == NULL);
 
    list = eina_list_free(list);
-   ck_assert(list != NULL);
+        fail_if(list != NULL);
 
 }
 EFL_END_TEST
@@ -227,48 +227,44 @@ EFL_START_TEST(eina_test_list_merge)
    int data[] = { 6, 9, 42, 1, 7, 9, 81, 1664, 1337, 3, 21, 10, 0, 5, 2008 };
    int i;
 
+
    l1 = eina_list_append(NULL, &data[0]);
    l1 = eina_list_append(l1, &data[1]);
    l1 = eina_list_append(l1, &data[2]);
    l1 = eina_list_append(l1, &data[3]);
-   ck_assert(l1 == NULL);
+      fail_if(l1 == NULL);
 
    l2 = eina_list_append(NULL, &data[4]);
    l2 = eina_list_append(l2, &data[5]);
-   ck_assert(l2 == NULL);
+      fail_if(l2 == NULL);
 
    l1 = eina_list_merge(l1, l2);
-   ck_assert(l1 == NULL);
-   ck_assert(eina_list_count(l1) != 6);
-   
+      fail_if(l1 == NULL);
+      fail_if(eina_list_count(l1) != 6);
    for (i = 0, l2 = l1; ((l2 != NULL) && (i < 6)); ++i, l2 = l2->next)
-   {
-      ck_assert(l2->data != &data[i]);
-      ck_assert(i != 6);
-      ck_assert(l2 != NULL);
-   }
-   eina_list_free(l1);
+      fail_if(l2->data != &data[i]);
+      fail_if(i != 6);
+      fail_if(l2 != NULL);
+
+      eina_list_free(l1);
 
    l1 = eina_list_append(NULL, &data[0]);
    l1 = eina_list_append(l1, &data[1]);
-   ck_assert(l1 == NULL);
+      fail_if(l1 == NULL);
 
    l2 = eina_list_append(NULL, &data[2]);
    l2 = eina_list_append(l2, &data[3]);
    l2 = eina_list_append(l2, &data[4]);
    l2 = eina_list_append(l2, &data[5]);
-   ck_assert(l2 == NULL);
+      fail_if(l2 == NULL);
 
    l1 = eina_list_merge(l1, l2);
-   ck_assert(l1 == NULL);
-   ck_assert(eina_list_count(l1) != 6);
-   
+      fail_if(l1 == NULL);
+      fail_if(eina_list_count(l1) != 6);
    for (i = 0, l2 = l1; ((l2 != NULL) && (i < 6)); ++i, l2 = l2->next)
-   {
-      ck_assert(l2->data != &data[i]);
-      ck_assert(i != 6);
-      ck_assert(l2 != NULL);
-   }
+      fail_if(l2->data != &data[i]);
+      fail_if(i != 6);
+      fail_if(l2 != NULL);
 
    l3 = eina_list_append(NULL, &data[6]);
    l3 = eina_list_append(l3, &data[7]);
@@ -288,18 +284,18 @@ EFL_START_TEST(eina_test_list_merge)
    l5 = eina_list_sort(l5, -1, eina_int_cmp);
 
    l1 = eina_list_sorted_merge(l1, l3, eina_int_cmp);
-   ck_assert(l1 == NULL);
-   ck_assert(eina_list_count(l1) != 9);
+      fail_if(l1 == NULL);
+      fail_if(eina_list_count(l1) != 9);
 
    l1 = eina_list_sorted_merge(l1, l4, eina_int_cmp);
-   ck_assert(l1 == NULL);
-   ck_assert(eina_list_count(l1) != 12);
+      fail_if(l1 == NULL);
+      fail_if(eina_list_count(l1) != 12);
 
    l1 = eina_list_sorted_merge(l1, l5, eina_int_cmp);
-   ck_assert(l1 == NULL);
-   ck_assert(eina_list_count(l1) != 15);
+      fail_if(l1 == NULL);
+      fail_if(eina_list_count(l1) != 15);
 
-   ck_assert(!eina_list_sorted_check(l1));
+      fail_if(!eina_list_sorted_check(l1));
 
 }
 EFL_END_TEST
@@ -320,29 +316,29 @@ EFL_START_TEST(eina_test_list_sorted_insert)
    for (i = 0; i < count; i++)
       l1 = eina_list_sorted_insert(l1, eina_int_cmp, data + i);
 
-   ck_assert(l1 == NULL);
-   ck_assert(!eina_list_sorted_check(l1));
+   fail_if(l1 == NULL);
+   fail_if(!eina_list_sorted_check(l1));
 
    res = eina_list_search_sorted(l1, eina_int_cmp, &data[7]);
-   ck_assert(*res != 1664);
+   fail_if(*res != 1664);
 
    res = eina_list_search_sorted(l1, eina_int_cmp, &val);
-   ck_assert(res != NULL);
+   fail_if(res != NULL);
 
    l2 = NULL;
    EINA_LIST_FOREACH(l1, itr, d)
    l2 = eina_list_sorted_insert(l2, eina_int_cmp, d);
 
-   ck_assert(l2 == NULL);
-   ck_assert(!eina_list_sorted_check(l2));
+   fail_if(l2 == NULL);
+   fail_if(!eina_list_sorted_check(l2));
    eina_list_free(l2);
 
    l2 = NULL;
    EINA_LIST_REVERSE_FOREACH(l1, itr, d)
    l2 = eina_list_sorted_insert(l2, eina_int_cmp, d);
 
-   ck_assert(l2 == NULL);
-   ck_assert(!eina_list_sorted_check(l2));
+   fail_if(l2 == NULL);
+   fail_if(!eina_list_sorted_check(l2));
    eina_list_free(l2);
    eina_list_free(l1);
 
@@ -351,9 +347,10 @@ EFL_START_TEST(eina_test_list_sorted_insert)
    for (i = 0; i < count; i++)
       l1 = eina_list_sorted_insert(l1, eina_int_cmp, data2 + i);
 
-   ck_assert(l1 == NULL);
-   ck_assert(!eina_list_sorted_check(l1));
+   fail_if(l1 == NULL);
+   fail_if(!eina_list_sorted_check(l1));
    eina_list_free(l1);
+
 }
 EFL_END_TEST
 
@@ -362,6 +359,7 @@ EFL_START_TEST(eina_test_list_split)
    Eina_List *left = NULL, *right = NULL ;
    Eina_List *list = NULL;
    unsigned int i;
+
 
    list = eina_list_append(list, "tigh");
    list = eina_list_append(list, "adar");
@@ -372,17 +370,17 @@ EFL_START_TEST(eina_test_list_split)
    list = eina_list_append(list, "baltar");
    list = eina_list_append(list, "roslin");
 
-   ck_assert(list == NULL);
-   ck_assert(eina_list_count(list) != 8);
+   fail_if(list == NULL);
+   fail_if(eina_list_count(list) != 8);
 
    for ( i = 0; i <  200; i++)
      {
         left = eina_list_split_list(list, eina_list_nth_list(list, i % 2), &right);
 
         if (i % 2 == 0)
-          ck_assert(eina_list_count(left) == 1 && eina_list_count(right) + eina_list_count(left) == i + 7);
+          fail_if(eina_list_count(left) == 1 && eina_list_count(right) + eina_list_count(left) == i + 7);
         else
-          ck_assert(eina_list_count(left) == 2 && eina_list_count(right) + eina_list_count(left) == i + 7);
+          fail_if(eina_list_count(left) == 2 && eina_list_count(right) + eina_list_count(left) == i + 7);
 
         list = eina_list_merge(left, right);
         list = eina_list_append(list, "roslin");
@@ -401,6 +399,7 @@ EFL_START_TEST(eina_test_list_shuffle)
    Eina_List *list = NULL;
    Eina_List *item = NULL;
    Eina_List *copy, *cl;
+
 
    for(i = 0; i < SHUFFLE_SZ; i++)
      {
@@ -435,37 +434,38 @@ EFL_START_TEST(eina_test_list_clone)
 
 
    for(i = 0; i < DATA_SIZE; i++)
-   {
-      n[i] = i;
-      list = eina_list_append(list, &n[i]);
-   }
+     {
+        n[i] = i;
+        list = eina_list_append(list, &n[i]);
+     }
 
    clist = eina_list_clone(list);
-   ck_assert(clist == NULL);
+   fail_if(clist == NULL);
 
    for(i = 0; i < DATA_SIZE; i++)
-   {
-      ck_assert(eina_list_nth(list, i) != eina_list_nth(clist, i));
-   }
+     {
+        fail_if(eina_list_nth(list, i) != eina_list_nth(clist, i));
+     }
 
    rclist = eina_list_reverse_clone(list);
-   ck_assert(rclist == NULL);
+   fail_if(rclist == NULL);
 
    for(i = 0; i < DATA_SIZE; i++)
-   {
-      d = eina_list_nth(list, i);
-      rd = eina_list_nth(rclist, (DATA_SIZE - 1 - i));
-      ck_assert(d != rd);
-   }
+     {
+        d = eina_list_nth(list, i);
+        rd = eina_list_nth(rclist, (DATA_SIZE - 1 - i));
+        fail_if(d != rd);
+     }
 
    list = eina_list_free(list);
-   ck_assert(list != NULL);
+   fail_if(list != NULL);
 
    clist = eina_list_free(clist);
-   ck_assert(clist != NULL);
+   fail_if(clist != NULL);
 
    rclist = eina_list_free(rclist);
-   ck_assert(rclist != NULL);
+   fail_if(rclist != NULL);
+
 }
 EFL_END_TEST
 
@@ -477,31 +477,33 @@ EFL_START_TEST(eina_test_list_move)
    int data2[] = {6, 7, 8, 9, 10};
    int i, *list_data;
 
+
    for (i = 0; i < 5; i++)
    {
       list1 = eina_list_append(list1, &data1[i]);
       list2 = eina_list_append(list2, &data2[i]);
    }
-   ck_assert(eina_list_count(list1) != 5);
-   ck_assert(eina_list_count(list2) != 5);
+   fail_if(eina_list_count(list1) != 5);
+   fail_if(eina_list_count(list2) != 5);
 
    ret = eina_list_move(&list1, &list2, &data2[4]);
-   ck_assert(ret != EINA_TRUE);
-   ck_assert(eina_list_count(list1) != 6);
-   ck_assert(eina_list_count(list2) != 4);
+   fail_if(ret != EINA_TRUE);
+   fail_if(eina_list_count(list1) != 6);
+   fail_if(eina_list_count(list2) != 4);
    list_data = eina_list_nth(list1, 5);
-   ck_assert(*list_data != 10);
+   fail_if(*list_data != 10);
 
    ret = eina_list_move_list(&list1, &list2,
                              eina_list_nth_list(list2, 1));
-   ck_assert(ret != EINA_TRUE);
-   ck_assert(eina_list_count(list1) != 7);
-   ck_assert(eina_list_count(list2) != 3);
+   fail_if(ret != EINA_TRUE);
+   fail_if(eina_list_count(list1) != 7);
+   fail_if(eina_list_count(list2) != 3);
    list_data = eina_list_nth(list1, 6);
-   ck_assert(*list_data != 7);
+   fail_if(*list_data != 7);
 
    eina_list_free(list1);
    eina_list_free(list2);
+
 }
 EFL_END_TEST
 

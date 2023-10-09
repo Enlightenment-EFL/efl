@@ -226,7 +226,7 @@ _eina_rbtree_black_height(Eina_Rbtree *tree, Eina_Rbtree_Cmp_Node_Cb cmp)
    right = tree->son[EINA_RBTREE_RIGHT];
 
    /* Consecutive red links. */
-        ck_assert(_eina_rbtree_is_red(tree) &&
+        fail_if(_eina_rbtree_is_red(tree) &&
            (_eina_rbtree_is_red(left) || _eina_rbtree_is_red(right)));
 
    left_height = _eina_rbtree_black_height(left, cmp);
@@ -236,20 +236,20 @@ _eina_rbtree_black_height(Eina_Rbtree *tree, Eina_Rbtree_Cmp_Node_Cb cmp)
    if (left)
      {
         dir = cmp(tree, left, NULL);
-        ck_assert(dir != EINA_RBTREE_LEFT);
+        fail_if(dir != EINA_RBTREE_LEFT);
      }
 
    if (right)
      {
         dir = cmp(tree, right, NULL);
-        ck_assert(dir != EINA_RBTREE_RIGHT);
+        fail_if(dir != EINA_RBTREE_RIGHT);
      }
 
    /* Check black height */
    if (left_height != right_height)
       fprintf(stderr, "%i != %i\n", left_height, right_height);
 
-   ck_assert(left_height != right_height);
+   fail_if(left_height != right_height);
 
    return _eina_rbtree_is_red(tree) ? left_height : left_height + 1;
 }
@@ -266,8 +266,8 @@ eina_rbtree_int_cmp(const Eina_Rbtree_Int *left,
                     const Eina_Rbtree_Int *right,
                     EINA_UNUSED void *data)
 {
-   ck_assert(!left);
-   ck_assert(!right);
+   fail_if(!left);
+   fail_if(!right);
 
    if (left->value < right->value)
       return EINA_RBTREE_LEFT;
@@ -281,7 +281,7 @@ eina_rbtree_int_key(const Eina_Rbtree_Int *node,
                     EINA_UNUSED int length,
                     EINA_UNUSED void *data)
 {
-   ck_assert(!node);
+   fail_if(!node);
    return node->value - *key;
 }
 
@@ -351,7 +351,7 @@ EFL_START_TEST(eina_rbtree_lookup)
                                                        EINA_RBTREE_CMP_KEY_CB(
                                                           eina_rbtree_int_key),
                                                        NULL);
-   ck_assert(!item);
+   fail_if(!item);
 
    i = 42;
    item =
@@ -361,7 +361,7 @@ EFL_START_TEST(eina_rbtree_lookup)
                                                    EINA_RBTREE_CMP_KEY_CB(
                                                       eina_rbtree_int_key),
                                                    NULL);
-   ck_assert(item);
+   fail_if(item);
    free(mem);
 }
 EFL_END_TEST
@@ -380,7 +380,7 @@ EFL_START_TEST(eina_rbtree_remove)
    mem = _eina_rbtree_int_init(num_nodes);
 
    ea = eina_array_new(num_nodes);
-   ck_assert(!ea);
+   fail_if(!ea);
 
 
    for (i = 0; i < num_nodes; ++i)
@@ -410,7 +410,7 @@ EFL_START_TEST(eina_rbtree_remove)
                                   EINA_RBTREE_CMP_NODE_CB(eina_rbtree_int_cmp));
      }
 
-   ck_assert(root != NULL);
+   fail_if(root != NULL);
    eina_array_free(ea);
    free(mem);
 }
@@ -435,7 +435,7 @@ EFL_START_TEST(eina_rbtree_simple_remove)
    _eina_rbtree_black_height(root,
                              EINA_RBTREE_CMP_NODE_CB(eina_rbtree_int_cmp));
 
-   ck_assert(root == NULL);
+   fail_if(root == NULL);
 
    i = 69;
    lookup = eina_rbtree_inline_lookup(root,
@@ -445,7 +445,7 @@ EFL_START_TEST(eina_rbtree_simple_remove)
                                          eina_rbtree_int_key),
                                       NULL);
    _eina_rbtree_black_height(root, EINA_RBTREE_CMP_NODE_CB(eina_rbtree_int_cmp));
-   ck_assert(lookup == NULL);
+   fail_if(lookup == NULL);
 
    root =
       eina_rbtree_inline_remove(root, lookup, EINA_RBTREE_CMP_NODE_CB(
@@ -475,7 +475,7 @@ EFL_START_TEST(eina_rbtree_simple_remove2)
    _eina_rbtree_black_height(root,
                              EINA_RBTREE_CMP_NODE_CB(eina_rbtree_int_cmp));
 
-   ck_assert(root == NULL);
+   fail_if(root == NULL);
 
    i = 69;
    lookup = eina_rbtree_inline_lookup(root,
@@ -485,7 +485,7 @@ EFL_START_TEST(eina_rbtree_simple_remove2)
                                          eina_rbtree_int_key),
                                       NULL);
    _eina_rbtree_black_height(root, EINA_RBTREE_CMP_NODE_CB(eina_rbtree_int_cmp));
-   ck_assert(lookup == NULL);
+   fail_if(lookup == NULL);
 
    root =
       eina_rbtree_inline_remove(root, lookup, EINA_RBTREE_CMP_NODE_CB(
@@ -528,7 +528,7 @@ EFL_START_TEST(eina_rbtree_simple_remove3)
    _eina_rbtree_black_height(root,
                              EINA_RBTREE_CMP_NODE_CB(eina_rbtree_int_cmp));
 
-   ck_assert(root == NULL);
+   fail_if(root == NULL);
 
    i = 1113497590;
    lookup = eina_rbtree_inline_lookup(root,
@@ -538,7 +538,7 @@ EFL_START_TEST(eina_rbtree_simple_remove3)
                                          eina_rbtree_int_key),
                                       NULL);
    _eina_rbtree_black_height(root, EINA_RBTREE_CMP_NODE_CB(eina_rbtree_int_cmp));
-   ck_assert(lookup == NULL);
+   fail_if(lookup == NULL);
 
    root =
       eina_rbtree_inline_remove(root, lookup, EINA_RBTREE_CMP_NODE_CB(

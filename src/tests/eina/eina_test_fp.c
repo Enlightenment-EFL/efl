@@ -47,7 +47,7 @@ EFL_START_TEST(eina_fp_cos)
         dresult = cos(dc);
 
         delta = fabs(dresult - eina_f32p32_double_to(fresult));
-        ck_assert(delta > 0.005);
+        fail_if(delta > 0.005);
      }
 
 }
@@ -73,7 +73,7 @@ EFL_START_TEST(eina_fp_sin)
         dresult = sin(dc);
 
         delta = fabs(dresult - eina_f32p32_double_to(fresult));
-        ck_assert(delta > 0.005);
+        fail_if(delta > 0.005);
      }
 
 
@@ -117,7 +117,7 @@ EFL_START_TEST(eina_fp_mul)
               if (delta > 0.008 || delta_per > 0.01)
                 {
                    printf("%f*%f = %f (delta: %f, %f%%)\n", dc1, dc2, dresult, delta, delta_per*100);
-                   ck_assert(delta > 0.005 || delta_per > 0.01);
+                   fail_if(delta > 0.005 || delta_per > 0.01);
                 }
               if (delta > maxdelta)
                 maxdelta = delta;
@@ -166,7 +166,7 @@ EFL_START_TEST(eina_fp_div)
               if (delta > 0.005 || delta_per > 0.03)
                 {
                    printf("%f/%f = %f (delta %f, %f%%)\n", dc1, dc2, dresult, delta, delta_per*100);
-                   ck_assert(delta > 0.005 || delta_per > 0.03);
+                   fail_if(delta > 0.005 || delta_per > 0.03);
                 }
               if (delta > maxdelta)
                 maxdelta = delta;

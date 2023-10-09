@@ -98,7 +98,7 @@ EFL_START_TEST(eina_test_quaternion_norm)
    double result = eina_quaternion_norm(&q);
 
 
-   ck_assert(!EINA_FLT_EQ(result, sqrt(51)));
+   fail_if(!EINA_FLT_EQ(result, sqrt(51)));
 
 }
 EFL_END_TEST
@@ -113,8 +113,8 @@ EFL_START_TEST(eina_test_quaternion_conjugate)
    eina_quaternion_conjugate(&t1, &q1);
    eina_quaternion_conjugate(&t2, &q2);
 
-   ck_assert(!eina_quaternion_cmp(&t1, &r1));
-   ck_assert(!eina_quaternion_cmp(&t2, &r2));
+   fail_if(!eina_quaternion_cmp(&t1, &r1));
+   fail_if(!eina_quaternion_cmp(&t2, &r2));
 
 }
 EFL_END_TEST
@@ -133,10 +133,10 @@ EFL_START_TEST(eina_test_quaternion_matrix)
 
 
    eina_quaternion_rotation_matrix3_get(&tm, &q);
-   ck_assert(!eina_matrix3_cmp(&tm, &m));
+   fail_if(!eina_matrix3_cmp(&tm, &m));
 
    eina_matrix3_quaternion_get(&tq, &m);
-   ck_assert(!eina_quaternion_cmp(&tq, &q) && !eina_quaternion_cmp(&tq, &q1));
+   fail_if(!eina_quaternion_cmp(&tq, &q) && !eina_quaternion_cmp(&tq, &q1));
 
 }
 EFL_END_TEST
@@ -151,7 +151,7 @@ EFL_START_TEST(eina_test_quaternion_op)
    eina_quaternion_negative(&neg, &q);
    eina_quaternion_add(&r, &q, &neg);
 
-   ck_assert(!eina_quaternion_cmp(&z, &r));
+   fail_if(!eina_quaternion_cmp(&z, &r));
 
 }
 EFL_END_TEST
@@ -167,32 +167,32 @@ EFL_START_TEST(eina_test_quaternion_f16p16)
 
 
    eina_quaternion_f16p16_set(&p, x, y, z, w);
-   ck_assert(!eina_quaternion_cmp(&p, &q));
+   fail_if(!eina_quaternion_cmp(&p, &q));
 
    res = eina_quaternion_f16p16_norm(&r);
-   ck_assert(res != 131070);
+   fail_if(res != 131070);
 
    eina_quaternion_f16p16_negative(&s, &r);
-   ck_assert(s.x != s.y ||
+   fail_if(s.x != s.y ||
            s.y != s.z ||
            s.z != s.w ||
            s.w != -65536);
 
    eina_quaternion_f16p16_add(&t, &s, &r);
-   ck_assert(t.x != t.y ||
+   fail_if(t.x != t.y ||
            t.y != t.z ||
            t.z != t.w ||
            t.w != 0);
 
    res = 1;
    eina_quaternion_f16p16_scale(&t, &r, res);
-   ck_assert(t.x != t.y ||
+   fail_if(t.x != t.y ||
            t.y != t.z ||
            t.z != t.w ||
            t.w != 65536);
 
    eina_quaternion_f16p16_conjugate(&t, &r);
-   ck_assert(t.x != -65536 ||
+   fail_if(t.x != -65536 ||
            t.y != -65536 ||
            t.z != -65536 ||
            t.w != 65536);
@@ -202,10 +202,10 @@ EFL_START_TEST(eina_test_quaternion_f16p16)
    s.z = 65536;
    s.w = 65536;
    res = eina_quaternion_f16p16_dot(&s, &r);
-   ck_assert(res != 262144);
+   fail_if(res != 262144);
 
    eina_quaternion_f16p16_mul(&t, &s, &r);
-   ck_assert(t.x != 131072 ||
+   fail_if(t.x != 131072 ||
            t.y != 131072 ||
            t.z != 131072 ||
            t.w != 0);
@@ -220,7 +220,7 @@ EFL_START_TEST(eina_test_quaternion_dot)
 
 
    res = eina_quaternion_dot(&q, &r);
-   ck_assert(!EINA_DBL_EQ(res, 59));
+   fail_if(!EINA_DBL_EQ(res, 59));
 
 }
 EFL_END_TEST
@@ -233,7 +233,7 @@ EFL_START_TEST(eina_test_quaternion_scale)
 
 
    eina_quaternion_scale(&r, &q, scale);
-   ck_assert(!eina_quaternion_cmp(&r, &res));
+   fail_if(!eina_quaternion_cmp(&r, &res));
 
 }
 EFL_END_TEST
@@ -245,7 +245,7 @@ EFL_START_TEST(eina_test_quaternion_set)
 
    eina_quaternion_set(&q, 1, 3, 4, 5);
 
-   ck_assert(!eina_quaternion_cmp(&q, &r));
+   fail_if(!eina_quaternion_cmp(&q, &r));
 
 }
 EFL_END_TEST
@@ -258,7 +258,7 @@ EFL_START_TEST(eina_test_quaternion_mul)
 
 
    eina_quaternion_mul(&r, &p, &q);
-   ck_assert(!eina_quaternion_cmp(&r, &res));
+   fail_if(!eina_quaternion_cmp(&r, &res));
 
 }
 EFL_END_TEST
@@ -280,7 +280,7 @@ EFL_START_TEST(eina_test_matrix_recompose)
                               &scale,
                               &skew);
 
-   ck_assert(eina_matrix4_type_get(&m4) != EINA_MATRIX_TYPE_IDENTITY);
+   fail_if(eina_matrix4_type_get(&m4) != EINA_MATRIX_TYPE_IDENTITY);
 
 }
 EFL_END_TEST
@@ -292,7 +292,7 @@ EFL_START_TEST(eina_test_quaternion_normalized)
 
 
    eina_quaternion_normalized(&res, &p);
-   ck_assert(!eina_quaternion_cmp(&q, &res));
+   fail_if(!eina_quaternion_cmp(&q, &res));
 
 }
 EFL_END_TEST
@@ -316,7 +316,7 @@ EFL_START_TEST(eina_test_matrix_quaternion)
    eina_matrix3_scale(&m3, 4, 5);
    eina_matrix3_matrix4_to(&m4, &m3);
 
-   ck_assert(!eina_matrix4_quaternion_to(&rotation,
+   fail_if(!eina_matrix4_quaternion_to(&rotation,
                                        &perspective,
                                        &translation,
                                        &scale,
@@ -332,13 +332,13 @@ EFL_START_TEST(eina_test_matrix_quaternion)
 
    eina_matrix4_matrix3_to(&m3r, &m4r);
 
-   ck_assert(!eina_point_3d_cmp(&scale, &rsc));
-   ck_assert(!eina_point_3d_cmp(&translation, &rt));
-   ck_assert(!eina_quaternion_cmp(&perspective, &rp));
-   ck_assert(!eina_quaternion_cmp(&rotation, &rr));
+   fail_if(!eina_point_3d_cmp(&scale, &rsc));
+   fail_if(!eina_point_3d_cmp(&translation, &rt));
+   fail_if(!eina_quaternion_cmp(&perspective, &rp));
+   fail_if(!eina_quaternion_cmp(&rotation, &rr));
 
    // Disable this test for the moment as it seems a rounding issue
-   // ck_assert(!eina_matrix3_cmp(&m3r, &m3));
+   // fail_if(!eina_matrix3_cmp(&m3r, &m3));
 
 }
 EFL_END_TEST
@@ -353,19 +353,19 @@ EFL_START_TEST(eina_test_quaternion_f16p16_lerp)
 
 
    eina_quaternion_f16p16_lerp(&r, &p, &q, 65536);
-   ck_assert(!eina_quaternion_f16p16_cmp(&r, &res1));
+   fail_if(!eina_quaternion_f16p16_cmp(&r, &res1));
    eina_quaternion_f16p16_lerp(&r, &p, &q, 0);
-   ck_assert(!eina_quaternion_f16p16_cmp(&r, &res2));
+   fail_if(!eina_quaternion_f16p16_cmp(&r, &res2));
 
    eina_quaternion_f16p16_slerp(&r, &p, &q, 0);
-   ck_assert(!eina_quaternion_f16p16_cmp(&r, &res2));
+   fail_if(!eina_quaternion_f16p16_cmp(&r, &res2));
    eina_quaternion_f16p16_slerp(&r, &p, &q, 65536);
-   ck_assert(!eina_quaternion_f16p16_cmp(&r, &res1));
+   fail_if(!eina_quaternion_f16p16_cmp(&r, &res1));
 
    eina_quaternion_f16p16_nlerp(&r, &p, &q, 0);
-   ck_assert(!eina_quaternion_f16p16_cmp(&r, &res2));
+   fail_if(!eina_quaternion_f16p16_cmp(&r, &res2));
    eina_quaternion_f16p16_nlerp(&r, &p, &q, 65536);
-   ck_assert(!eina_quaternion_f16p16_cmp(&r, &res1));
+   fail_if(!eina_quaternion_f16p16_cmp(&r, &res1));
 
 }
 EFL_END_TEST
@@ -378,28 +378,28 @@ EFL_START_TEST(eina_test_quaternion_lerp)
 
 
    eina_quaternion_lerp(&rr, &rp, &rq, 0.5);
-   ck_assert(!eina_quaternion_cmp(&rr, &res));
+   fail_if(!eina_quaternion_cmp(&rr, &res));
 
    eina_quaternion_set(&rp, 1, 1, 1, 0);
    eina_quaternion_set(&rq, 0, 1, 1, 0);
    eina_quaternion_set(&res, 0.5, 1.0, 1.0, 0.0);
 
    eina_quaternion_lerp(&rr, &rp, &rq, 0.5);
-   ck_assert(!eina_quaternion_cmp(&rr, &res));
+   fail_if(!eina_quaternion_cmp(&rr, &res));
 
    eina_quaternion_set(&rp, 0, 0, 1, 0);
    eina_quaternion_set(&rq, 1, 1, 1, 0);
    eina_quaternion_set(&res, 0.5, 0.5, 1.0, 0.0);
 
    eina_quaternion_slerp(&rr, &rp, &rq, 0.5);
-   ck_assert(!eina_quaternion_cmp(&rr, &res));
+   fail_if(!eina_quaternion_cmp(&rr, &res));
 
    eina_quaternion_set(&rp, 0, 0, 0, 0);
    eina_quaternion_set(&rq, 1, 1, 1, 0);
    eina_quaternion_set(&res, 1.0, 1.0, 1.0, 0.0);
 
    eina_quaternion_nlerp(&rr, &rp, &rq, 1.0);
-   ck_assert(!eina_quaternion_cmp(&rr, &res));
+   fail_if(!eina_quaternion_cmp(&rr, &res));
 
 }
 EFL_END_TEST
@@ -415,12 +415,12 @@ EFL_START_TEST(eina_test_quaternion_f16p16_rotate_matrix)
 
 
    eina_quaternion_f16p16_rotate(&r, &c, &q);
-   ck_assert(r.x != res.x ||
+   fail_if(r.x != res.x ||
            r.y != res.y ||
            r.z != res.z);
 
    eina_quaternion_f16p16_rotation_matrix3_get(&m, &q);
-   ck_assert(!eina_matrix3_f16p16_cmp(&m, &mres));
+   fail_if(!eina_matrix3_f16p16_cmp(&m, &mres));
 
 }
 EFL_END_TEST
@@ -434,11 +434,11 @@ EFL_START_TEST(eina_test_quaternion_rotate)
 
 
    eina_quaternion_rotate(&r, &c, &q);
-   ck_assert(!eina_point_3d_cmp(&r, &res));
+   fail_if(!eina_point_3d_cmp(&r, &res));
 
    eina_quaternion_set(&q, 1, 1, 0, 0);
    eina_quaternion_rotate(&r, &c, &q);
-   ck_assert(!eina_point_3d_cmp(&r, &res1));
+   fail_if(!eina_point_3d_cmp(&r, &res1));
 
 }
 EFL_END_TEST
@@ -453,32 +453,32 @@ EFL_START_TEST(eina_test_quaternion_operations)
    Eina_Matrix4 m;
 
    eina_quaternion_inverse(&out, &in);
-   ck_assert((out.x + 0.2 > DBL_EPSILON) || (out.y + 0.2 > DBL_EPSILON) ||
+   fail_if((out.x + 0.2 > DBL_EPSILON) || (out.y + 0.2 > DBL_EPSILON) ||
            (out.z + 0.1 > DBL_EPSILON) || (out.w - 0.1 > DBL_EPSILON));
 
    eina_quaternion_array_set(&out, v);
-   ck_assert((!EINA_DBL_EQ(out.x,  0)) || (!EINA_DBL_EQ(out.y,  1)) ||
+   fail_if((!EINA_DBL_EQ(out.x,  0)) || (!EINA_DBL_EQ(out.y,  1)) ||
            (!EINA_DBL_EQ(out.z,  2)) || (!EINA_DBL_EQ(out.w,  3)));
 
    eina_quaternion_copy(&out, &in);
-   ck_assert((!EINA_DBL_EQ(out.x,  2)) || (!EINA_DBL_EQ(out.y,  2)) ||
+   fail_if((!EINA_DBL_EQ(out.x,  2)) || (!EINA_DBL_EQ(out.y,  2)) ||
            (!EINA_DBL_EQ(out.z,  1)) || (!EINA_DBL_EQ(out.w,  1)));
 
    eina_quaternion_homogeneous_regulate(&out, &in2);
-   ck_assert((!EINA_DBL_EQ(out.x,  1)) || (!EINA_DBL_EQ(out.y,  1)) ||
+   fail_if((!EINA_DBL_EQ(out.x,  1)) || (!EINA_DBL_EQ(out.y,  1)) ||
            (!EINA_DBL_EQ(out.z,  1)) || (!EINA_DBL_EQ(out.w,  1)));
 
    eina_quaternion_subtract(&out, &in2, &in);
-   ck_assert((!EINA_DBL_EQ(out.x,  3)) || (!EINA_DBL_EQ(out.y,  3)) ||
+   fail_if((!EINA_DBL_EQ(out.x,  3)) || (!EINA_DBL_EQ(out.y,  3)) ||
            (!EINA_DBL_EQ(out.z,  4)) || (!EINA_DBL_EQ(out.w,  4)));
 
-   ck_assert(!EINA_DBL_EQ(eina_quaternion_length_get(&in2), 10));
-   ck_assert(!EINA_DBL_EQ(eina_quaternion_length_square_get(&in), 10));
-   ck_assert((eina_quaternion_distance_get(&in2, &in) - sqrt(50)) > DBL_EPSILON);
-   ck_assert(!EINA_DBL_EQ(eina_quaternion_distance_square_get(&in2, &in), 50));
+   fail_if(!EINA_DBL_EQ(eina_quaternion_length_get(&in2), 10));
+   fail_if(!EINA_DBL_EQ(eina_quaternion_length_square_get(&in), 10));
+   fail_if((eina_quaternion_distance_get(&in2, &in) - sqrt(50)) > DBL_EPSILON);
+   fail_if(!EINA_DBL_EQ(eina_quaternion_distance_square_get(&in2, &in), 50));
 
    angle = eina_quaternion_angle_plains(&in, &in2);
-   ck_assert(angle - 0.963 > DBL_EPSILON);
+   fail_if(angle - 0.963 > DBL_EPSILON);
 
    eina_matrix4_values_set(&m,
                            1, 0, 0, 0,
@@ -486,7 +486,7 @@ EFL_START_TEST(eina_test_quaternion_operations)
                            0, 0, 1, 0,
                            0, 0, 0, 1);
    eina_quaternion_transform(&out, &in, &m);
-   ck_assert((fabs(out.x) - 2.0) > DBL_EPSILON ||
+   fail_if((fabs(out.x) - 2.0) > DBL_EPSILON ||
            (fabs(out.y) - 2.0) > DBL_EPSILON ||
            (fabs(out.z) - 1.0) > DBL_EPSILON ||
            (fabs(out.w) - 1.0) > DBL_EPSILON
@@ -498,7 +498,7 @@ EFL_START_TEST(eina_test_quaternion_operations)
                            0, 0, 1, 0,
                            0, 0, 0, 1);
    eina_quaternion_transform(&out, &in, &m);
-   ck_assert((fabs(out.x) - 1.0) > DBL_EPSILON ||
+   fail_if((fabs(out.x) - 1.0) > DBL_EPSILON ||
            (fabs(out.y) - 1.0) > DBL_EPSILON ||
            (fabs(out.z) - 1.0) > DBL_EPSILON ||
            (fabs(out.w) - 1.0) > DBL_EPSILON

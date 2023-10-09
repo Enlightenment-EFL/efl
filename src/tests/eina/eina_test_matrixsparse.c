@@ -29,7 +29,7 @@ static void matrixsparse_initialize(Eina_Matrixsparse *matrix,
          if (data[i][j] != 0)
            {
               r = eina_matrixsparse_data_idx_set(matrix, i, j, &data[i][j]);
-                ck_assert(r == EINA_FALSE);
+                fail_if(r == EINA_FALSE);
            }
 
 }
@@ -48,12 +48,12 @@ static void matrixsparse_check(Eina_Matrixsparse *matrix,
            if (data[i][j] != 0)
              {
                 test1 = eina_matrixsparse_data_idx_get(matrix, i, j);
-                ck_assert(test1 == NULL || *test1 != data[i][j]);
+                fail_if(test1 == NULL || *test1 != data[i][j]);
              }
            else
              {
                 test1 = eina_matrixsparse_data_idx_get(matrix, i, j);
-                ck_assert(test1 != NULL);
+                fail_if(test1 != NULL);
              }
         }
 }
@@ -108,95 +108,95 @@ EFL_START_TEST(eina_test_simple)
 
    matrix = eina_matrixsparse_new(MAX_ROWS, MAX_COLS,
                                   eina_matrixsparse_free_cell_cb, data);
-   ck_assert(matrix == NULL);
+   fail_if(matrix == NULL);
 
    r = eina_matrixsparse_cell_idx_get(matrix, 3, 5, &cell);
-   ck_assert(r == EINA_FALSE);
-   ck_assert(cell != NULL);
+   fail_if(r == EINA_FALSE);
+   fail_if(cell != NULL);
 
    matrixsparse_initialize(matrix, data, MAX_ROWS, MAX_COLS);
 
    /* data fetching */
    test1 = eina_matrixsparse_data_idx_get(matrix, 3, 0);
-   ck_assert(test1 == NULL);
-   ck_assert(*test1 != data[3][0]);
+   fail_if(test1 == NULL);
+   fail_if(*test1 != data[3][0]);
 
    test1 = eina_matrixsparse_data_idx_get(matrix, 3, 5);
-   ck_assert(test1 == NULL);
-   ck_assert(*test1 != data[3][5]);
+   fail_if(test1 == NULL);
+   fail_if(*test1 != data[3][5]);
 
    test1 = eina_matrixsparse_data_idx_get(matrix, 3, 6);
-   ck_assert(test1 == NULL);
-   ck_assert(*test1 != data[3][6]);
+   fail_if(test1 == NULL);
+   fail_if(*test1 != data[3][6]);
 
    test1 = eina_matrixsparse_data_idx_get(matrix, 3, 1);
-   ck_assert(test1 != NULL);
+   fail_if(test1 != NULL);
 
    r = eina_matrixsparse_cell_idx_get(matrix, 3, 5, &cell);
-   ck_assert(r == EINA_FALSE);
-   ck_assert(cell == NULL);
+   fail_if(r == EINA_FALSE);
+   fail_if(cell == NULL);
 
    test1 = eina_matrixsparse_cell_data_get(cell);
-   ck_assert(test1 == NULL);
-   ck_assert(*test1 != data[3][5]);
+   fail_if(test1 == NULL);
+   fail_if(*test1 != data[3][5]);
 
    r = eina_matrixsparse_cell_position_get(cell, &row, &col);
-   ck_assert(r == EINA_FALSE);
-   ck_assert(row != 3 || col != 5);
+   fail_if(r == EINA_FALSE);
+   fail_if(row != 3 || col != 5);
 
    test1 = eina_matrixsparse_data_idx_get(matrix, 4, 3);
-   ck_assert(test1 == NULL);
-   ck_assert(*test1 != data[4][3]);
+   fail_if(test1 == NULL);
+   fail_if(*test1 != data[4][3]);
 
    test1 = eina_matrixsparse_data_idx_get(matrix, 1, 3);
-   ck_assert(test1 == NULL);
-   ck_assert(*test1 != data[1][3]);
+   fail_if(test1 == NULL);
+   fail_if(*test1 != data[1][3]);
 
    /* data changing */
    r = eina_matrixsparse_data_idx_set(matrix, 1, 9, &data[1][9]);
-   ck_assert(r == EINA_FALSE);
+   fail_if(r == EINA_FALSE);
 
    r = eina_matrixsparse_data_idx_replace(matrix, 4, 3, &value, (void **)&test1);
-   ck_assert(r == EINA_FALSE);
-   ck_assert(test1 == NULL);
-   ck_assert(*test1 != data[4][3]);
+   fail_if(r == EINA_FALSE);
+   fail_if(test1 == NULL);
+   fail_if(*test1 != data[4][3]);
    data[4][3] = value;
 
    test1 = eina_matrixsparse_data_idx_get(matrix, 4, 3);
-   ck_assert(test1 == NULL || *test1 != value);
+   fail_if(test1 == NULL || *test1 != value);
 
    r = eina_matrixsparse_cell_data_replace(cell, &value2, (void **)&test1);
-   ck_assert(r == EINA_FALSE);
-   ck_assert(test1 == NULL);
-   ck_assert(*test1 != data[3][5]);
+   fail_if(r == EINA_FALSE);
+   fail_if(test1 == NULL);
+   fail_if(*test1 != data[3][5]);
    data[3][5] = value2;
 
    test1 = eina_matrixsparse_data_idx_get(matrix, 3, 5);
-   ck_assert(test1 == NULL);
-   ck_assert(*test1 != value2);
+   fail_if(test1 == NULL);
+   fail_if(*test1 != value2);
 
    r = eina_matrixsparse_cell_idx_get(matrix, 4, 2, &cell);
-   ck_assert(r == EINA_FALSE || cell == NULL);
+   fail_if(r == EINA_FALSE || cell == NULL);
 
    r = eina_matrixsparse_cell_data_set(cell, &value3);
-   ck_assert(r == EINA_FALSE);
+   fail_if(r == EINA_FALSE);
    data[4][2] = value3;
 
    test1 = eina_matrixsparse_data_idx_get(matrix, 4, 2);
-   ck_assert(test1 == NULL || *test1 != value3);
+   fail_if(test1 == NULL || *test1 != value3);
 
    r = eina_matrixsparse_data_idx_replace(matrix,
                                           6,
                                           5,
                                           &value4,
                                           (void **)&test1);
-   ck_assert(r == EINA_FALSE || test1 != NULL);
+   fail_if(r == EINA_FALSE || test1 != NULL);
    data[6][5] = value4;
 
 
    /* cell deletion */
    r = eina_matrixsparse_row_idx_clear(matrix, 4);
-   ck_assert(r == EINA_FALSE);
+   fail_if(r == EINA_FALSE);
    data[4][6] = 0;
    data[4][8] = 0;
    data[4][2] = 0;
@@ -204,17 +204,17 @@ EFL_START_TEST(eina_test_simple)
    data[4][7] = 0;
 
    test1 = eina_matrixsparse_data_idx_get(matrix, 4, 3);
-   ck_assert(test1 != NULL);
+   fail_if(test1 != NULL);
 
    test1 = eina_matrixsparse_data_idx_get(matrix, 4, 8);
-   ck_assert(test1 != NULL);
+   fail_if(test1 != NULL);
 
    test1 = eina_matrixsparse_data_idx_get(matrix, 5, 3);
-   ck_assert(!test1);
-   ck_assert(*test1 != data[5][3]);
+   fail_if(!test1);
+   fail_if(*test1 != data[5][3]);
 
    r = eina_matrixsparse_column_idx_clear(matrix, 3);
-   ck_assert(r != EINA_TRUE);
+   fail_if(r != EINA_TRUE);
    data[0][3] = 0;
    data[1][3] = 0;
    data[4][3] = 0;
@@ -223,45 +223,45 @@ EFL_START_TEST(eina_test_simple)
    data[7][3] = 0;
 
    r = eina_matrixsparse_cell_idx_clear(matrix, 3, 5);
-   ck_assert(r != EINA_TRUE);
+   fail_if(r != EINA_TRUE);
    data[3][5] = 0;
 
    r = eina_matrixsparse_cell_idx_clear(matrix, 3, 9);
-   ck_assert(r != EINA_TRUE);
+   fail_if(r != EINA_TRUE);
    data[3][9] = 0;
 
    r = eina_matrixsparse_cell_idx_clear(matrix, 4, 3);
-   ck_assert(r != EINA_TRUE);
+   fail_if(r != EINA_TRUE);
    data[4][3] = 0;
 
    r = eina_matrixsparse_cell_idx_get(matrix, 3, 7, &cell);
-   ck_assert(r == EINA_FALSE);
-   ck_assert(cell == NULL);
+   fail_if(r == EINA_FALSE);
+   fail_if(cell == NULL);
 
    r = eina_matrixsparse_cell_clear(cell);
-   ck_assert(r == EINA_FALSE);
+   fail_if(r == EINA_FALSE);
    data[3][7] = 0;
 
    r = eina_matrixsparse_cell_idx_get(matrix, 2, 7, &cell);
-   ck_assert(r == EINA_FALSE);
+   fail_if(r == EINA_FALSE);
 
    r = eina_matrixsparse_cell_idx_clear(matrix, 2, 8);
-   ck_assert(r == EINA_FALSE);
+   fail_if(r == EINA_FALSE);
    data[2][8] = 0;
 
    r = eina_matrixsparse_cell_idx_clear(matrix, 2, 7);
-   ck_assert(r == EINA_FALSE);
+   fail_if(r == EINA_FALSE);
    data[2][7] = 0;
 
    r = eina_matrixsparse_cell_idx_get(matrix, 7, 7, &cell);
-   ck_assert(r == EINA_FALSE);
+   fail_if(r == EINA_FALSE);
 
    r = eina_matrixsparse_row_idx_clear(matrix, 8);
-   ck_assert(r == EINA_FALSE);
+   fail_if(r == EINA_FALSE);
    data[8][8] = 0;
 
    r = eina_matrixsparse_row_idx_clear(matrix, 7);
-   ck_assert(r == EINA_FALSE);
+   fail_if(r == EINA_FALSE);
    data[7][3] = 0;
    data[7][7] = 0;
 
@@ -287,7 +287,7 @@ EFL_START_TEST(eina_test_resize)
 
    matrix = eina_matrixsparse_new(MAX_ROWS, MAX_COLS,
                                   eina_matrixsparse_free_cell_cb, data);
-   ck_assert(matrix == NULL);
+   fail_if(matrix == NULL);
 
    /* cell insertion */
    data[0][5] = 5;
@@ -322,10 +322,10 @@ EFL_START_TEST(eina_test_resize)
    matrixsparse_initialize(matrix, data, MAX_ROWS, MAX_COLS);
 
    eina_matrixsparse_size_get(matrix, &nrows, &ncols);
-   ck_assert(nrows != MAX_ROWS || ncols != MAX_COLS);
+   fail_if(nrows != MAX_ROWS || ncols != MAX_COLS);
 
    r = eina_matrixsparse_size_set(matrix, nrows - 2, ncols - 2);
-   ck_assert(r == EINA_FALSE);
+   fail_if(r == EINA_FALSE);
    data[1][9] = 0;
    data[1][8] = 0;
    data[2][8] = 0;
@@ -335,7 +335,7 @@ EFL_START_TEST(eina_test_resize)
    matrixsparse_check(matrix, data, MAX_ROWS, MAX_COLS);
 
    r = eina_matrixsparse_size_set(matrix, 5, 1);
-   ck_assert(r == EINA_FALSE);
+   fail_if(r == EINA_FALSE);
    data[0][5] = 0;
    data[1][3] = 0;
    data[1][6] = 0;
@@ -358,21 +358,21 @@ EFL_START_TEST(eina_test_resize)
    matrixsparse_check(matrix, data, MAX_ROWS, MAX_COLS);
 
    r = eina_matrixsparse_size_set(matrix, 1, 1);
-   ck_assert(r == EINA_FALSE);
+   fail_if(r == EINA_FALSE);
    data[3][0] = 0;
    data[1][0] = 0;
    matrixsparse_check(matrix, data, MAX_ROWS, MAX_COLS);
 
    r = eina_matrixsparse_size_set(matrix, 5, 4);
-   ck_assert(r == EINA_FALSE);
+   fail_if(r == EINA_FALSE);
 
    r = eina_matrixsparse_data_idx_set(matrix, 4, 2, &data[4][2]);
-   ck_assert(r == EINA_FALSE);
+   fail_if(r == EINA_FALSE);
    data[4][2] = 42;
    matrixsparse_check(matrix, data, MAX_ROWS, MAX_COLS);
 
    r = eina_matrixsparse_size_set(matrix, 5, 1);
-   ck_assert(r == EINA_FALSE);
+   fail_if(r == EINA_FALSE);
    data[4][2] = 0;
    matrixsparse_check(matrix, data, MAX_ROWS, MAX_COLS);
 
@@ -407,69 +407,69 @@ EFL_START_TEST(eina_test_iterators)
 
    matrix = eina_matrixsparse_new(MAX_ROWS, MAX_COLS,
                                   eina_matrixsparse_free_cell_cb, data);
-   ck_assert(matrix == NULL);
+   fail_if(matrix == NULL);
 
    r = eina_matrixsparse_data_idx_set(matrix, 3, 5, &data[3][5]);
-   ck_assert(r == EINA_FALSE);
+   fail_if(r == EINA_FALSE);
    r = eina_matrixsparse_data_idx_set(matrix, 3, 6, &data[3][6]);
-   ck_assert(r == EINA_FALSE);
+   fail_if(r == EINA_FALSE);
    r = eina_matrixsparse_data_idx_set(matrix, 3, 7, &data[3][7]);
-   ck_assert(r == EINA_FALSE);
+   fail_if(r == EINA_FALSE);
    r = eina_matrixsparse_data_idx_set(matrix, 3, 9, &data[3][9]);
-   ck_assert(r == EINA_FALSE);
+   fail_if(r == EINA_FALSE);
    r = eina_matrixsparse_data_idx_set(matrix, 3, 0, &data[3][0]);
-   ck_assert(r == EINA_FALSE);
+   fail_if(r == EINA_FALSE);
    r = eina_matrixsparse_data_idx_set(matrix, 4, 6, &data[4][6]);
-   ck_assert(r == EINA_FALSE);
+   fail_if(r == EINA_FALSE);
    r = eina_matrixsparse_data_idx_set(matrix, 4, 8, &data[4][8]);
-   ck_assert(r == EINA_FALSE);
+   fail_if(r == EINA_FALSE);
    r = eina_matrixsparse_data_idx_set(matrix, 4, 2, &data[4][2]);
-   ck_assert(r == EINA_FALSE);
+   fail_if(r == EINA_FALSE);
    r = eina_matrixsparse_data_idx_set(matrix, 4, 3, &data[4][3]);
-   ck_assert(r == EINA_FALSE);
+   fail_if(r == EINA_FALSE);
    r = eina_matrixsparse_data_idx_set(matrix, 4, 7, &data[4][7]);
-   ck_assert(r == EINA_FALSE);
+   fail_if(r == EINA_FALSE);
    r = eina_matrixsparse_data_idx_set(matrix, 6, 4, &data[6][4]);
-   ck_assert(r == EINA_FALSE);
+   fail_if(r == EINA_FALSE);
    r = eina_matrixsparse_data_idx_set(matrix, 5, 3, &data[5][3]);
-   ck_assert(r == EINA_FALSE);
+   fail_if(r == EINA_FALSE);
    r = eina_matrixsparse_data_idx_set(matrix, 6, 3, &data[6][3]);
-   ck_assert(r == EINA_FALSE);
+   fail_if(r == EINA_FALSE);
    r = eina_matrixsparse_data_idx_set(matrix, 7, 3, &data[7][3]);
-   ck_assert(r == EINA_FALSE);
+   fail_if(r == EINA_FALSE);
    r = eina_matrixsparse_data_idx_set(matrix, 0, 3, &data[0][3]);
-   ck_assert(r == EINA_FALSE);
+   fail_if(r == EINA_FALSE);
    r = eina_matrixsparse_data_idx_set(matrix, 1, 3, &data[1][3]);
-   ck_assert(r == EINA_FALSE);
+   fail_if(r == EINA_FALSE);
    r = eina_matrixsparse_data_idx_set(matrix, 1, 6, &data[1][6]);
-   ck_assert(r == EINA_FALSE);
+   fail_if(r == EINA_FALSE);
    r = eina_matrixsparse_data_idx_set(matrix, 1, 9, &data[1][9]);
-   ck_assert(r == EINA_FALSE);
+   fail_if(r == EINA_FALSE);
 
    it = eina_matrixsparse_iterator_new(matrix);
-   ck_assert(it == NULL);
+   fail_if(it == NULL);
    EINA_ITERATOR_FOREACH(it, cell)
    {
-      ck_assert(cell == NULL);
+      fail_if(cell == NULL);
       r = eina_matrixsparse_cell_position_get(cell, &row, &col);
-      ck_assert(r == EINA_FALSE);
+      fail_if(r == EINA_FALSE);
 
       test1 = eina_matrixsparse_cell_data_get(cell);
-      ck_assert(test1 == NULL || *test1 != data[row][col]);
+      fail_if(test1 == NULL || *test1 != data[row][col]);
    }
       eina_iterator_free(it);
 
    it = eina_matrixsparse_iterator_complete_new(matrix);
-   ck_assert(it == NULL);
+   fail_if(it == NULL);
    EINA_ITERATOR_FOREACH(it, cell)
    {
-         ck_assert(cell == NULL);
+         fail_if(cell == NULL);
       r = eina_matrixsparse_cell_position_get(cell, &row, &col);
-         ck_assert(r == EINA_FALSE);
+         fail_if(r == EINA_FALSE);
 
       test1 = eina_matrixsparse_cell_data_get(cell);
       if (test1)
-         ck_assert(*test1 != data[row][col]);
+         fail_if(*test1 != data[row][col]);
    }
          eina_iterator_free(it);
 

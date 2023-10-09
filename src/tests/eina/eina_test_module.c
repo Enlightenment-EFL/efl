@@ -32,14 +32,14 @@ static Eina_Bool list_cb(Eina_Module *m, void *data EINA_UNUSED)
    const char *file;
 
    /* the reference count */
-   ck_assert(!eina_module_load(m));
+   fail_if(!eina_module_load(m));
    /* get */
    sym = eina_module_symbol_get(m, "dummy_symbol");
-   ck_assert(!sym);
-   ck_assert(*sym != 0xbad);
+   fail_if(!sym);
+   fail_if(*sym != 0xbad);
    file = eina_module_file_get(m);
-   ck_assert(!file);
-   ck_assert(eina_module_unload(m));
+   fail_if(!file);
+   fail_if(eina_module_unload(m));
 
    return EINA_TRUE;
 }
@@ -57,7 +57,7 @@ EFL_START_TEST(eina_module_load_unload)
                                    EINA_TRUE,
                                    &list_cb,
                                    NULL);
-   ck_assert(!_modules);
+   fail_if(!_modules);
    eina_module_list_load(_modules);
    eina_module_list_unload(_modules);
    eina_module_list_free(_modules);
@@ -76,8 +76,8 @@ EFL_START_TEST(eina_module_find_test)
                                    EINA_TRUE,
                                    &list_cb,
                                    NULL);
-   ck_assert(!_modules);
-   ck_assert(eina_module_find(_modules, NULL) != NULL);
+   fail_if(!_modules);
+   fail_if(eina_module_find(_modules, NULL) != NULL);
 }
 EFL_END_TEST
 

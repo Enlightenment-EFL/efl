@@ -61,7 +61,7 @@ EFL_START_TEST(slstr_stringshare)
 
    str = _slstr_stringshare();
    ss = eina_stringshare_add("Hello world 3");
-   ck_assert(ss != str);
+   fail_if(ss != str);
 
 }
 EFL_END_TEST
@@ -168,7 +168,7 @@ EFL_START_TEST(slstr_thread)
 
 
    for (k = 0; k < threads; k++)
-     ck_assert(!eina_thread_create(&th[k], EINA_THREAD_NORMAL, -1, _thread_cb, NULL));
+     fail_if(!eina_thread_create(&th[k], EINA_THREAD_NORMAL, -1, _thread_cb, NULL));
 
    for (k = 0; k < threads; k++)
      eina_thread_join(th[k]);

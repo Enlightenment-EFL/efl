@@ -39,18 +39,18 @@ EFL_START_TEST(eina_matrix2)
    eina_matrix2_values_set(&m,
                            1, 0,
                            0, 1);
-   ck_assert(eina_matrix2_type_get(&m) != EINA_MATRIX_TYPE_IDENTITY);
+   fail_if(eina_matrix2_type_get(&m) != EINA_MATRIX_TYPE_IDENTITY);
 
    eina_matrix2_inverse(&n, &m);
-   ck_assert(eina_matrix2_type_get(&n) != EINA_MATRIX_TYPE_IDENTITY);
+   fail_if(eina_matrix2_type_get(&n) != EINA_MATRIX_TYPE_IDENTITY);
 
    eina_matrix2_values_get(&m,
                            &xx, &xy,
                            &yx, &yy);
 
-   ck_assert(!EINA_DBL_EQ(xx, yy) ||
+   fail_if(!EINA_DBL_EQ(xx, yy) ||
            !EINA_DBL_EQ(yy, 1));
-   ck_assert(!EINA_DBL_EQ(xy, yx) ||
+   fail_if(!EINA_DBL_EQ(xy, yx) ||
            !EINA_DBL_EQ(xy, 0));
 
 }
@@ -69,23 +69,23 @@ EFL_START_TEST(eina_matrix2_operation)
    eina_matrix2_values_get(&m1,
                            &xx, &xy,
                            &yx, &yy);
-   ck_assert((xx - (-0.4) > DBL_EPSILON) || (xy - 0.6 > DBL_EPSILON) ||
+   fail_if((xx - (-0.4) > DBL_EPSILON) || (xy - 0.6 > DBL_EPSILON) ||
            (yx - 0.6 > DBL_EPSILON) || (yy - (-0.4) > DBL_EPSILON));
 
    eina_matrix2_identity(&m1);
    eina_matrix2_values_get(&m1,
                            &xx, &xy,
                            &yx, &yy);
-   ck_assert(!EINA_DBL_EQ(xx, yy) ||
+   fail_if(!EINA_DBL_EQ(xx, yy) ||
            !EINA_DBL_EQ(yy, 1));
-   ck_assert(!EINA_DBL_EQ(xy, yx) ||
+   fail_if(!EINA_DBL_EQ(xy, yx) ||
            !EINA_DBL_EQ(xy, 0));
 
    eina_matrix2_array_set(&m1, arr);
    eina_matrix2_values_get(&m1,
                            &xx, &xy,
                            &yx, &yy);
-   ck_assert(!EINA_DBL_EQ(xx, yy) ||
+   fail_if(!EINA_DBL_EQ(xx, yy) ||
            !EINA_DBL_EQ(yx, xy) ||
            !EINA_DBL_EQ(xy, 1));
 
@@ -93,7 +93,7 @@ EFL_START_TEST(eina_matrix2_operation)
    eina_matrix2_values_get(&m2,
                            &xx, &xy,
                            &yx, &yy);
-   ck_assert(!EINA_DBL_EQ(xx, yy) ||
+   fail_if(!EINA_DBL_EQ(xx, yy) ||
            !EINA_DBL_EQ(yx, xy) ||
            !EINA_DBL_EQ(xy, 1));
 
@@ -104,7 +104,7 @@ EFL_START_TEST(eina_matrix2_operation)
    eina_matrix2_values_get(&m3,
                            &xx, &xy,
                            &yx, &yy);
-   ck_assert(!EINA_DBL_EQ(xx, yy) ||
+   fail_if(!EINA_DBL_EQ(xx, yy) ||
            !EINA_DBL_EQ(yx, xy) ||
            !EINA_DBL_EQ(xy, 5));
 
@@ -112,7 +112,7 @@ EFL_START_TEST(eina_matrix2_operation)
    eina_matrix2_values_get(&m3,
                            &xx, &xy,
                            &yx, &yy);
-   ck_assert(!EINA_DBL_EQ(xx, yy) ||
+   fail_if(!EINA_DBL_EQ(xx, yy) ||
            !EINA_DBL_EQ(yx, xy) ||
            !EINA_DBL_EQ(xy, 5));
 
@@ -134,13 +134,13 @@ EFL_START_TEST(eina_matrix4)
                            0, 1, 0, 0,
                            0, 0, 1, 0,
                            0, 0, 0, 1);
-   ck_assert(eina_matrix4_type_get(&m) != EINA_MATRIX_TYPE_IDENTITY);
+   fail_if(eina_matrix4_type_get(&m) != EINA_MATRIX_TYPE_IDENTITY);
 
-   ck_assert(!eina_matrix4_normalized(&n, &m));
-   ck_assert(eina_matrix4_type_get(&n) != EINA_MATRIX_TYPE_IDENTITY);
+   fail_if(!eina_matrix4_normalized(&n, &m));
+   fail_if(eina_matrix4_type_get(&n) != EINA_MATRIX_TYPE_IDENTITY);
 
-   ck_assert(!eina_matrix4_inverse(&n, &m));
-   ck_assert(eina_matrix4_type_get(&n) != EINA_MATRIX_TYPE_IDENTITY);
+   fail_if(!eina_matrix4_inverse(&n, &m));
+   fail_if(eina_matrix4_type_get(&n) != EINA_MATRIX_TYPE_IDENTITY);
 
    eina_matrix4_values_get(&m,
                            &xx, &xy, &xz, &xw,
@@ -148,11 +148,11 @@ EFL_START_TEST(eina_matrix4)
                            &zx, &zy, &zz, &zw,
                            &wx, &wy, &wz, &ww);
 
-   ck_assert(!EINA_DBL_EQ(xx, yy) ||
+   fail_if(!EINA_DBL_EQ(xx, yy) ||
            !EINA_DBL_EQ(yy, zz) ||
            !EINA_DBL_EQ(zz, ww) ||
            !EINA_DBL_EQ(ww, 1));
-   ck_assert(!EINA_DBL_EQ(xy, xz) ||
+   fail_if(!EINA_DBL_EQ(xy, xz) ||
            !EINA_DBL_EQ(xz, xw) ||
            !EINA_DBL_EQ(xw, yx) ||
            !EINA_DBL_EQ(yx, yz) ||
@@ -172,7 +172,7 @@ EFL_START_TEST(eina_matrix4)
                            13, 14, 15, 16);
 
    eina_matrix4_transpose(&n, &m);
-   ck_assert(!EINA_DBL_EQ(n.xx, 1) ||
+   fail_if(!EINA_DBL_EQ(n.xx, 1) ||
            !EINA_DBL_EQ(n.xy, 5) ||
            !EINA_DBL_EQ(n.xz, 9) ||
            !EINA_DBL_EQ(n.xw, 13) ||
@@ -228,7 +228,7 @@ EFL_START_TEST(eina_matrix4_operation)
                            0, 0, 0, 2,
                            0, 2, 0, 0);
    det = eina_matrix4_determinant(&m);
-   ck_assert(!EINA_DBL_EQ(det, -16));
+   fail_if(!EINA_DBL_EQ(det, -16));
 
    eina_matrix4_inverse(&m1, &m);
    eina_matrix4_values_get(&m1,
@@ -341,7 +341,7 @@ EFL_START_TEST(eina_matrix4_operation)
                            &zx, &zy, &zz, &zw,
                            &wx, &wy, &wz, &ww);
 
-   ck_assert(!MATRIX4_CMP(xx, xy, xz, xw,
+   fail_if(!MATRIX4_CMP(xx, xy, xz, xw,
                         yx, yy, yz, yw,
                         zx, zy, zz, zw,
                         wx, wy, wz, ww,
@@ -356,7 +356,7 @@ EFL_START_TEST(eina_matrix4_operation)
                            &yx, &yy, &yz, &yw,
                            &zx, &zy, &zz, &zw,
                            &wx, &wy, &wz, &ww);
-   ck_assert(!MATRIX4_CMP(xx, xy, xz, xw,
+   fail_if(!MATRIX4_CMP(xx, xy, xz, xw,
                         yx, yy, yz, yw,
                         zx, zy, zz, zw,
                         wx, wy, wz, ww,
@@ -372,7 +372,7 @@ EFL_START_TEST(eina_matrix4_operation)
                            &yx, &yy, &yz, &yw,
                            &zx, &zy, &zz, &zw,
                            &wx, &wy, &wz, &ww);
-   ck_assert(!MATRIX4_CMP(xx, xy, xz, xw,
+   fail_if(!MATRIX4_CMP(xx, xy, xz, xw,
                         yx, yy, yz, yw,
                         zx, zy, zz, zw,
                         wx, wy, wz, ww,
@@ -388,7 +388,7 @@ EFL_START_TEST(eina_matrix4_operation)
                            &yx, &yy, &yz, &yw,
                            &zx, &zy, &zz, &zw,
                            &wx, &wy, &wz, &ww);
-   ck_assert(!MATRIX4_CMP(xx, xy, xz, xw,
+   fail_if(!MATRIX4_CMP(xx, xy, xz, xw,
                         yx, yy, yz, yw,
                         zx, zy, zz, zw,
                         wx, wy, wz, ww,
@@ -404,7 +404,7 @@ EFL_START_TEST(eina_matrix4_operation)
                            &yx, &yy, &yz, &yw,
                            &zx, &zy, &zz, &zw,
                            &wx, &wy, &wz, &ww);
-   ck_assert(!MATRIX4_CMP(xx, xy, xz, xw,
+   fail_if(!MATRIX4_CMP(xx, xy, xz, xw,
                         yx, yy, yz, yw,
                         zx, zy, zz, zw,
                         wx, wy, wz, ww,
@@ -426,7 +426,7 @@ EFL_START_TEST(eina_matrix4_operation)
                            &yx, &yy, &yz, &yw,
                            &zx, &zy, &zz, &zw,
                            &wx, &wy, &wz, &ww);
-   ck_assert(!MATRIX4_CMP(xx, xy, xz, xw,
+   fail_if(!MATRIX4_CMP(xx, xy, xz, xw,
                         yx, yy, yz, yw,
                         zx, zy, zz, zw,
                         wx, wy, wz, ww,
@@ -451,7 +451,7 @@ EFL_START_TEST(eina_matrix4_2_3)
    eina_matrix3_matrix4_to(&m4, &m3);
    eina_matrix4_matrix3_to(&m3b, &m4);
 
-   ck_assert(memcmp(&m3, &m3b, sizeof (Eina_Matrix3)) != 0);
+   fail_if(memcmp(&m3, &m3b, sizeof (Eina_Matrix3)) != 0);
 
 }
 EFL_END_TEST
@@ -479,27 +479,27 @@ EFL_START_TEST(eina_matrix3)
                            1, 1, 1,
                            0, 1, 0,
                            0, 0, 1);
-   ck_assert(eina_matrix3_type_get(&m) != EINA_MATRIX_TYPE_IDENTITY);
+   fail_if(eina_matrix3_type_get(&m) != EINA_MATRIX_TYPE_IDENTITY);
 
    eina_matrix3_values_get(&m,
                            &xx, &xy, &xz,
                            &yx, &yy, &yz,
                            &zx, &zy, &zz);
 
-   ck_assert(!EINA_DBL_EQ(xx, yy) ||
+   fail_if(!EINA_DBL_EQ(xx, yy) ||
            !EINA_DBL_EQ(yy, zz) ||
            !EINA_DBL_EQ(zz, 1));
 
-   ck_assert(!EINA_DBL_EQ(xy, xz) ||
+   fail_if(!EINA_DBL_EQ(xy, xz) ||
            !EINA_DBL_EQ(yx, yz) ||
            !EINA_DBL_EQ(zx, zy) ||
            !EINA_DBL_EQ(zy, 0));
 
    ret = eina_matrix3_equal(&m, &m1);
-   ck_assert(ret != EINA_TRUE);
+   fail_if(ret != EINA_TRUE);
 
    ret = eina_matrix3_equal(&m1, &m2);
-   ck_assert(ret != EINA_FALSE);
+   fail_if(ret != EINA_FALSE);
 
 }
 EFL_END_TEST
@@ -554,7 +554,7 @@ EFL_START_TEST(eina_matrix3_operations)
                            &xx, &xy, &xz,
                            &yx, &yy, &yz,
                            &zx, &zy, &zz);
-   ck_assert(!MATRIX3_CMP(xx, xy, xz,
+   fail_if(!MATRIX3_CMP(xx, xy, xz,
                         yx, yy, yz,
                         zx, zy, zz,
                         1, 0, tx,
@@ -571,7 +571,7 @@ EFL_START_TEST(eina_matrix3_operations)
                            &xx, &xy, &xz,
                            &yx, &yy, &yz,
                            &zx, &zy, &zz);
-   ck_assert(!MATRIX3_CMP(xx, xy, xz,
+   fail_if(!MATRIX3_CMP(xx, xy, xz,
                        yx, yy, yz,
                        zx, zy, zz,
                        tx, 0, 0,
@@ -599,11 +599,11 @@ EFL_START_TEST(eina_matrix3_operations)
                            &xx, &xy, &xz,
                            &yx, &yy, &yz,
                            &zx, &zy, &zz);
-   ck_assert(!EINA_DBL_EQ(xx, yy) ||
+   fail_if(!EINA_DBL_EQ(xx, yy) ||
            !EINA_DBL_EQ(yy, zz) ||
            !EINA_DBL_EQ(zz, 1));
 
-   ck_assert(!EINA_DBL_EQ(xy, xz) ||
+   fail_if(!EINA_DBL_EQ(xy, xz) ||
            !EINA_DBL_EQ(yx, yz) ||
            !EINA_DBL_EQ(zx, zy) ||
            !EINA_DBL_EQ(zy, 0));
@@ -613,7 +613,7 @@ EFL_START_TEST(eina_matrix3_operations)
                            2, 1, 1,
                            1, 2, 2);
    ret = eina_matrix3_determinant(&m1);
-   ck_assert(!EINA_DBL_EQ(ret, -3));
+   fail_if(!EINA_DBL_EQ(ret, -3));
 
    eina_matrix3_values_set(&m1,
                            3, 3, 3,
@@ -641,7 +641,7 @@ EFL_START_TEST(eina_matrix3_operations)
                            &xx, &xy, &xz,
                            &yx, &yy, &yz,
                            &zx, &zy, &zz);
-   ck_assert(!MATRIX3_CMP(xx, xy, xz,
+   fail_if(!MATRIX3_CMP(xx, xy, xz,
                         yx, yy, yz,
                         zx, zy, zz,
                         -0.5, 0.5, 0.0,
@@ -657,7 +657,7 @@ EFL_START_TEST(eina_matrix3_operations)
                            &xx, &xy, &xz,
                            &yx, &yy, &yz,
                            &zx, &zy, &zz);
-   ck_assert(!MATRIX3_CMP(xx, xy, xz,
+   fail_if(!MATRIX3_CMP(xx, xy, xz,
                         yx, yy, yz,
                         zx, zy, zz,
                         1, 4, 7,
@@ -673,7 +673,7 @@ EFL_START_TEST(eina_matrix3_operations)
                            &xx, &xy, &xz,
                            &yx, &yy, &yz,
                            &zx, &zy, &zz);
-   ck_assert(!MATRIX3_CMP(xx, xy, xz,
+   fail_if(!MATRIX3_CMP(xx, xy, xz,
                         yx, yy, yz,
                         zx, zy, zz,
                         24, 5, -4,
@@ -685,7 +685,7 @@ EFL_START_TEST(eina_matrix3_operations)
                            &xx, &xy, &xz,
                            &yx, &yy, &yz,
                            &zx, &zy, &zz);
-   ck_assert(!MATRIX3_CMP(xx, xy, xz,
+   fail_if(!MATRIX3_CMP(xx, xy, xz,
                         yx, yy, yz,
                         zx, zy, zz,
                         24, -12, -2,
@@ -705,7 +705,7 @@ EFL_START_TEST(eina_matrix3_operations)
                            &xx, &xy, &xz,
                            &yx, &yy, &yz,
                            &zx, &zy, &zz);
-   ck_assert(!MATRIX3_CMP(xx, xy, xz,
+   fail_if(!MATRIX3_CMP(xx, xy, xz,
                         yx, yy, yz,
                         zx, zy, zz,
                         12, 12, 12,
@@ -721,7 +721,7 @@ EFL_START_TEST(eina_matrix3_operations)
                            &xx, &xy, &xz,
                            &yx, &yy, &yz,
                            &zx, &zy, &zz);
-   ck_assert(!MATRIX3_CMP(xx, xy, xz,
+   fail_if(!MATRIX3_CMP(xx, xy, xz,
                         yx, yy, yz,
                         zx, zy, zz,
                         12, 12, 12,
@@ -733,7 +733,7 @@ EFL_START_TEST(eina_matrix3_operations)
                            &xx, &xy, &xz,
                            &yx, &yy, &yz,
                            &zx, &zy, &zz);
-   ck_assert(!MATRIX3_CMP(xx, xy, xz,
+   fail_if(!MATRIX3_CMP(xx, xy, xz,
                         yx, yy, yz,
                         zx, zy, zz,
                         2, 2, 2,
@@ -745,7 +745,7 @@ EFL_START_TEST(eina_matrix3_operations)
                            &xx, &xy, &xz,
                            &yx, &yy, &yz,
                            &zx, &zy, &zz);
-   ck_assert(!MATRIX3_CMP(xx, xy, xz,
+   fail_if(!MATRIX3_CMP(xx, xy, xz,
                         yx, yy, yz,
                         zx, zy, zz,
                         1, 1, 1,
@@ -791,11 +791,11 @@ EFL_START_TEST(eina_matrix3_f16p16)
                                  &xx, &xy, &xz,
                                  &yx, &yy, &yz,
                                  &zx, &zy, &zz);
-   ck_assert(xx != yy ||
+   fail_if(xx != yy ||
            yy != zz ||
            zz != 65536);
 
-   ck_assert(xy != xz ||
+   fail_if(xy != xz ||
            yx != yz ||
            zx != zy ||
            zy != 0);
@@ -806,11 +806,11 @@ EFL_START_TEST(eina_matrix3_f16p16)
                            7, 8, 9);
    eina_matrix3_matrix3_f16p16_to(&m2, &m1);
    eina_matrix3_f16p16_identity(&m1);
-   ck_assert(m1.xx != m1.yy ||
+   fail_if(m1.xx != m1.yy ||
            m1.yy != m1.zz ||
            m1.zz != 65536);
 
-   ck_assert(m1.xy != m1.xz ||
+   fail_if(m1.xy != m1.xz ||
            m1.yx != m1.yz ||
            m1.zx != m1.zy ||
            m1.zy != 0);
@@ -849,13 +849,13 @@ EFL_START_TEST(eina_matrix3_map_transform)
    eina_matrix3_point_transform(&m,
                                 x, y,
                                 &x1, &y1);
-   ck_assert(!EINA_DBL_EQ(x1, 3) ||
+   fail_if(!EINA_DBL_EQ(x1, 3) ||
            !EINA_DBL_EQ(y1, 2));
 
    EINA_RECTANGLE_SET(&r, 0, 0, 3, 4);
    eina_matrix3_rectangle_transform(&m, &r, &q);
 
-   ck_assert(!EINA_DBL_EQ(q.x0, 0) ||
+   fail_if(!EINA_DBL_EQ(q.x0, 0) ||
            !EINA_DBL_EQ(q.y0, 0) ||
            !EINA_DBL_EQ(q.x1, 0) ||
            !EINA_DBL_EQ(q.y1, 3) ||
@@ -870,9 +870,9 @@ EFL_START_TEST(eina_matrix3_map_transform)
                         3.0, 3.0,
                         0.0, 3.0);
    ret = eina_matrix3_square_quad_map(&m, &q);
-   ck_assert(ret != EINA_TRUE);
+   fail_if(ret != EINA_TRUE);
 
-   ck_assert(!MATRIX3_CMP(m.xx, m.xy, m.xz,
+   fail_if(!MATRIX3_CMP(m.xx, m.xy, m.xz,
                         m.yx, m.yy, m.yz,
                         m.zx, m.zy, m.zz,
                         3, 0, 0,
@@ -880,9 +880,9 @@ EFL_START_TEST(eina_matrix3_map_transform)
                         0, 0, 1));
 
    ret = eina_matrix3_quad_square_map(&m, &q);
-   ck_assert(ret != EINA_TRUE);
+   fail_if(ret != EINA_TRUE);
 
-   ck_assert(!EINA_DBL_EQ(q.x0, 0) ||
+   fail_if(!EINA_DBL_EQ(q.x0, 0) ||
            !EINA_DBL_EQ(q.y0, 0) ||
            !EINA_DBL_EQ(q.x1, 3) ||
            !EINA_DBL_EQ(q.y1, 0) ||
@@ -914,7 +914,7 @@ EFL_START_TEST(eina_normal3_test)
                            &zx, &zy, &zz
                            );
 
-   ck_assert((fabs(xy) - 1.0) > DBL_EPSILON ||
+   fail_if((fabs(xy) - 1.0) > DBL_EPSILON ||
            (fabs(yx) - 1.0) > DBL_EPSILON ||
            (fabs(yz) - 1.0) > DBL_EPSILON ||
            (fabs(zy) - 1.0) > DBL_EPSILON
@@ -931,7 +931,7 @@ EFL_START_TEST(eina_normal3_test)
                            &yx, &yy, &yz,
                            &zx, &zy, &zz
                            );
-   ck_assert((fabs(xy)) > DBL_EPSILON ||
+   fail_if((fabs(xy)) > DBL_EPSILON ||
            (fabs(yx)) > DBL_EPSILON ||
            (fabs(yz)) > DBL_EPSILON ||
            (fabs(zy)) > DBL_EPSILON

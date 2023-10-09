@@ -127,35 +127,35 @@ EFL_START_TEST(eina_log_macro)
      {
         TEST_LOG_CTX(EINA_LOG_LEVEL_CRITICAL, "Critical message");
         EINA_LOG_CRIT("Critical message");
-        ck_assert(ctx.did);
+        fail_unless(ctx.did);
      }
 
    if (EINA_LOG_LEVEL_ERR <= maxlevel)
      {
         TEST_LOG_CTX(EINA_LOG_LEVEL_ERR, "An error");
         EINA_LOG_ERR("An error");
-        ck_assert(ctx.did);
+        fail_unless(ctx.did);
      }
 
    if (EINA_LOG_LEVEL_WARN <= maxlevel)
      {
         TEST_LOG_CTX(EINA_LOG_LEVEL_WARN, "A warning");
         EINA_LOG_WARN("A warning");
-        ck_assert(ctx.did);
+        fail_unless(ctx.did);
      }
 
    if (EINA_LOG_LEVEL_INFO <= maxlevel)
      {
         TEST_LOG_CTX(EINA_LOG_LEVEL_INFO, "An info");
         EINA_LOG_INFO("An info");
-        ck_assert(ctx.did);
+        fail_unless(ctx.did);
      }
 
    if (EINA_LOG_LEVEL_DBG <= maxlevel)
      {
         TEST_LOG_CTX(EINA_LOG_LEVEL_DBG, "A debug");
         EINA_LOG_DBG("A debug");
-        ck_assert(ctx.did);
+        fail_unless(ctx.did);
      }
 
 #undef TEST_LOG_CTX
@@ -179,7 +179,7 @@ EFL_START_TEST(eina_log_domains_macros)
    eina_log_print_cb_set(_eina_test_log_domain, &ctx);
 
    int d = eina_log_domain_register("MyDomain", EINA_COLOR_GREEN);
-   ck_assert(d < 0);
+   fail_if(d < 0);
 
    /* make specific domain permissive */
    eina_log_domain_level_set("MyDomain", EINA_LOG_LEVEL_DBG);
@@ -202,35 +202,35 @@ EFL_START_TEST(eina_log_domains_macros)
      {
         TEST_LOG_CTX(EINA_LOG_LEVEL_CRITICAL, "A critical message");
         EINA_LOG_DOM_CRIT(d, "A critical message");
-        ck_assert(ctx.did);
+        fail_unless(ctx.did);
      }
 
    if (EINA_LOG_LEVEL_ERR <= maxlevel)
      {
         TEST_LOG_CTX(EINA_LOG_LEVEL_ERR, "An error");
         EINA_LOG_DOM_ERR(d, "An error");
-        ck_assert(ctx.did);
+        fail_unless(ctx.did);
      }
 
    if (EINA_LOG_LEVEL_WARN <= maxlevel)
      {
         TEST_LOG_CTX(EINA_LOG_LEVEL_WARN, "A warning");
         EINA_LOG_DOM_WARN(d, "A warning");
-        ck_assert(ctx.did);
+        fail_unless(ctx.did);
      }
 
    if (EINA_LOG_LEVEL_INFO <= maxlevel)
      {
         TEST_LOG_CTX(EINA_LOG_LEVEL_INFO, "An info");
         EINA_LOG_DOM_INFO(d, "An info");
-        ck_assert(ctx.did);
+        fail_unless(ctx.did);
      }
 
    if (EINA_LOG_LEVEL_DBG <= maxlevel)
      {
         TEST_LOG_CTX(EINA_LOG_LEVEL_DBG, "A debug");
         EINA_LOG_DOM_DBG(d, "A debug");
-        ck_assert(ctx.did);
+        fail_unless(ctx.did);
      }
 
 #undef TEST_LOG_CTX
@@ -250,7 +250,7 @@ EFL_START_TEST(eina_log_domains_registry)
    for (i = 0; i < 50; i++)
      {
         d[i] = eina_log_domain_register("Test", EINA_COLOR_GREEN);
-        ck_assert(d[i] < 0);
+        fail_if(d[i] < 0);
      }
 
    for (i = 0; i < 50; i++)
@@ -261,7 +261,7 @@ EFL_END_TEST
 
 EFL_START_TEST(eina_log_domains_slot_reuse)
 {
-        ck_assert(!eina_threads_init());
+        fail_if(!eina_threads_init());
 
    // Create 9 domains
    int idx[9];
@@ -270,7 +270,7 @@ EFL_START_TEST(eina_log_domains_slot_reuse)
    for (i = 0; i < 9; i++)
      {
         idx[i] = eina_log_domain_register("Test1", EINA_COLOR_GREEN);
-        ck_assert(idx[i] < 0);
+        fail_if(idx[i] < 0);
      }
 
    // Slot 0 by default contains the global logger. The above code created
@@ -288,7 +288,7 @@ EFL_START_TEST(eina_log_domains_slot_reuse)
    int new = eina_log_domain_register("Test Slot", EINA_COLOR_GREEN);
 
    // Check for slot reuse
-   ck_assert(new != removed);
+   fail_if(new != removed);
 
    eina_threads_shutdown();
 }
@@ -299,10 +299,10 @@ EFL_START_TEST(eina_log_level_indexes)
    struct log_ctx ctx;
    int maxlevel;
 
-   ck_assert(!eina_threads_init());
+   fail_if(!eina_threads_init());
 
    int d = eina_log_domain_register("Levels", EINA_COLOR_GREEN);
-   ck_assert(d < 0);
+   fail_if(d < 0);
 
    eina_log_print_cb_set(_eina_test_log_domain, &ctx);
 
@@ -326,7 +326,7 @@ EFL_START_TEST(eina_log_level_indexes)
         eina_log_domain_level_set("Levels", -1);
         TEST_LOG_CTX(-1, "Negative index message");
         EINA_LOG(d, -1, "Negative index message");
-        ck_assert(ctx.did);
+        fail_unless(ctx.did);
      }
 
    if (-2 <= maxlevel)
@@ -334,7 +334,7 @@ EFL_START_TEST(eina_log_level_indexes)
         eina_log_domain_level_set("Levels", -2);
         TEST_LOG_CTX(-1, "Negative index message");
         EINA_LOG(d, -1, "Negative index message");
-        ck_assert(ctx.did);
+        fail_if(ctx.did);
      }
 #ifdef EINA_LOG_LEVEL_MAXIMUM
    if (6 <= maxlevel)
@@ -343,7 +343,7 @@ EFL_START_TEST(eina_log_level_indexes)
         eina_log_domain_level_set("Levels", 6);
         TEST_LOG_CTX(6, "Higher level debug");
         EINA_LOG(d, 6, "Higher level debug");
-        ck_assert(ctx.did);
+        fail_unless(ctx.did);
      }
 #endif
    if (5 <= maxlevel)
@@ -351,7 +351,7 @@ EFL_START_TEST(eina_log_level_indexes)
         eina_log_domain_level_set("Levels", 5);
         TEST_LOG_CTX(6, "Higher level debug");
         EINA_LOG(d, 6, "Higher level debug");
-        ck_assert(ctx.did);
+        fail_if(ctx.did);
      }
 
 #undef TEST_LOG_CTX
@@ -373,7 +373,7 @@ EFL_START_TEST(eina_log_customize)
 
 #define test_set_get(func, val)                 \
    eina_log_ ## func ## _set(val);                  \
-   ck_assert(eina_log_ ## func ## _get() != val)
+   fail_if(eina_log_ ## func ## _get() != val)
 
    test_set_get(level, -1234);
    test_set_get(level, 4567);
@@ -390,19 +390,19 @@ EFL_START_TEST(eina_log_customize)
    test_set_get(abort_on_critical_level, -1234);
    test_set_get(abort_on_critical_level, 4567);
 
-   ck_assert(eina_log_domain_level_get(TEST_DOM) != eina_log_level_get());
+   fail_if(eina_log_domain_level_get(TEST_DOM) != eina_log_level_get());
 
    eina_log_domain_level_set(TEST_DOM, -123);
-   ck_assert(eina_log_domain_level_get(TEST_DOM) != -123);
+   fail_if(eina_log_domain_level_get(TEST_DOM) != -123);
 
    eina_log_domain_level_set(TEST_DOM, 890);
-   ck_assert(eina_log_domain_level_get(TEST_DOM) != 890);
+   fail_if(eina_log_domain_level_get(TEST_DOM) != 890);
 
    d = eina_log_domain_register(TEST_DOM, EINA_COLOR_GREEN);
-   ck_assert(d < 0);
+   fail_if(d < 0);
 
-   ck_assert(eina_log_domain_level_get(TEST_DOM) != 890);
-   ck_assert(eina_log_domain_registered_level_get(d) != 890);
+   fail_if(eina_log_domain_level_get(TEST_DOM) != 890);
+   fail_if(eina_log_domain_registered_level_get(d) != 890);
 
    eina_log_domain_unregister(d);
 
@@ -420,8 +420,8 @@ EFL_START_TEST(eina_log_customize)
    ctx.msg = "safety check failed: _log_domains[domain].deleted is true";
    ctx.fnc = "eina_log_domain_registered_level_get";
    ctx.did = EINA_FALSE;
-   ck_assert(eina_log_domain_registered_level_get(d) != EINA_LOG_LEVEL_UNKNOWN);
-   ck_assert(ctx.did);
+   fail_if(eina_log_domain_registered_level_get(d) != EINA_LOG_LEVEL_UNKNOWN);
+   fail_unless(ctx.did);
 
    eina_log_print_cb_set(eina_log_print_cb_stderr, NULL);
 #else
@@ -441,7 +441,7 @@ EFL_START_TEST(eina_log_level_name)
 
 #define tst(level, str)                         \
    eina_log_level_name_get(level, name);        \
-   ck_assert(strcmp(name, str) != 0)
+   fail_if(strcmp(name, str) != 0)
 
    tst(0,   "CRI");
    tst(1,   "ERR");

@@ -61,7 +61,7 @@ EFL_START_TEST(eina_test_sched_prio_drop)
 
 
     r = eina_thread_create(&tid, EINA_THREAD_NORMAL, -1, _thread_run, NULL);
-    ck_assert(r);
+    fail_unless(r);
 
     niceval2 = getpriority(PRIO_PROCESS, 0);
     /* niceness of main thread should not have changed */

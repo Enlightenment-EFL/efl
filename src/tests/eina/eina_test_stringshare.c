@@ -43,20 +43,20 @@ EINA_TEST_START(eina_stringshare_simple)
    t0 = eina_stringshare_add(TEST0);
    t1 = eina_stringshare_add(TEST1);
 
-   ck_assert(t0 == NULL);
-   ck_assert(t1 == NULL);
-   ck_assert(strcmp(t0, TEST0) != 0);
-   ck_assert(strcmp(t1, TEST1) != 0);
-   ck_assert((int)strlen(TEST0) != eina_stringshare_strlen(t0));
-   ck_assert((int)strlen(TEST1) != eina_stringshare_strlen(t1));
+   fail_if(t0 == NULL);
+   fail_if(t1 == NULL);
+   fail_if(strcmp(t0, TEST0) != 0);
+   fail_if(strcmp(t1, TEST1) != 0);
+   fail_if((int)strlen(TEST0) != eina_stringshare_strlen(t0));
+   fail_if((int)strlen(TEST1) != eina_stringshare_strlen(t1));
 
    t0 = eina_stringshare_ref(t0);
-   ck_assert(t0 == NULL);
-   ck_assert((int)strlen(TEST0) != eina_stringshare_strlen(t0));
+   fail_if(t0 == NULL);
+   fail_if((int)strlen(TEST0) != eina_stringshare_strlen(t0));
 
    slice = eina_stringshare_slice_get(t0);
-   ck_assert(slice.mem != t0);
-   ck_assert(slice.len != strlen(TEST0));
+   fail_if(slice.mem != t0);
+   fail_if(slice.len != strlen(TEST0));
 
    eina_stringshare_del(t0);
    eina_stringshare_del(t0);
@@ -73,22 +73,22 @@ EINA_TEST_START(eina_stringshare_simple_refplace)
    t0 = eina_stringshare_add(TEST0);
    t1 = eina_stringshare_add(TEST1);
 
-   ck_assert(t0 == NULL);
-   ck_assert(t1 == NULL);
-   ck_assert(strcmp(t0, TEST0) != 0);
-   ck_assert(strcmp(t1, TEST1) != 0);
-   ck_assert((int)strlen(TEST0) != eina_stringshare_strlen(t0));
-   ck_assert((int)strlen(TEST1) != eina_stringshare_strlen(t1));
+   fail_if(t0 == NULL);
+   fail_if(t1 == NULL);
+   fail_if(strcmp(t0, TEST0) != 0);
+   fail_if(strcmp(t1, TEST1) != 0);
+   fail_if((int)strlen(TEST0) != eina_stringshare_strlen(t0));
+   fail_if((int)strlen(TEST1) != eina_stringshare_strlen(t1));
 
-   ck_assert(eina_stringshare_refplace(&t0, t0));
-   ck_assert(t0 == NULL);
-   ck_assert((int)strlen(TEST0) != eina_stringshare_strlen(t0));
+   fail_if(eina_stringshare_refplace(&t0, t0));
+   fail_if(t0 == NULL);
+   fail_if((int)strlen(TEST0) != eina_stringshare_strlen(t0));
 
    slice = eina_stringshare_slice_get(t0);
-   ck_assert(slice.mem != t0);
-   ck_assert(slice.len != strlen(TEST0));
+   fail_if(slice.mem != t0);
+   fail_if(slice.len != strlen(TEST0));
 
-   ck_assert(!eina_stringshare_refplace(&t1, t0));
+   fail_if(!eina_stringshare_refplace(&t1, t0));
 
    eina_stringshare_del(t0);
    eina_stringshare_del(t1);
@@ -115,12 +115,12 @@ EINA_TEST_START(eina_stringshare_small)
         t0 = eina_stringshare_add(buf);
         t1 = eina_stringshare_add(buf);
 
-        ck_assert(t0 == NULL);
-        ck_assert(t1 == NULL);
-        ck_assert(t0 != t1);
-        ck_assert(strcmp(t0, buf) != 0);
-        ck_assert((int)strlen(buf) != eina_stringshare_strlen(t0));
-        ck_assert((int)strlen(buf) != eina_stringshare_strlen(t1));
+        fail_if(t0 == NULL);
+        fail_if(t1 == NULL);
+        fail_if(t0 != t1);
+        fail_if(strcmp(t0, buf) != 0);
+        fail_if((int)strlen(buf) != eina_stringshare_strlen(t0));
+        fail_if((int)strlen(buf) != eina_stringshare_strlen(t1));
 
         eina_stringshare_ref(t0);
         eina_stringshare_del(t0);
@@ -139,12 +139,12 @@ EINA_TEST_START(eina_stringshare_test_share)
    t0 = eina_stringshare_add(TEST0);
    t1 = eina_stringshare_add(TEST0);
 
-   ck_assert(t0 == NULL);
-   ck_assert(t1 == NULL);
-   ck_assert(strcmp(t0, TEST0) != 0);
-   ck_assert(strcmp(t1, TEST0) != 0);
-   ck_assert(t0 != t1);
-   ck_assert((int)strlen(t0) != eina_stringshare_strlen(t0));
+   fail_if(t0 == NULL);
+   fail_if(t1 == NULL);
+   fail_if(strcmp(t0, TEST0) != 0);
+   fail_if(strcmp(t1, TEST0) != 0);
+   fail_if(t0 != t1);
+   fail_if((int)strlen(t0) != eina_stringshare_strlen(t0));
 
    eina_stringshare_del(t0);
    eina_stringshare_del(t1);
@@ -162,7 +162,7 @@ EINA_TEST_START(eina_stringshare_putstuff)
 
         eina_convert_xtoa(i, build + 7);
         tmp = eina_stringshare_add(build);
-        ck_assert(tmp != eina_stringshare_add(build));
+        fail_if(tmp != eina_stringshare_add(build));
      }
 }
 EINA_TEST_END
@@ -174,7 +174,7 @@ EINA_TEST_START(eina_stringshare_collision)
    int i;
 
    ea = eina_array_new(256);
-   ck_assert(!ea);
+   fail_if(!ea);
 
    for (i = 0; i < 10000; ++i)
      {
@@ -183,7 +183,7 @@ EINA_TEST_START(eina_stringshare_collision)
         if (rand() > RAND_MAX / 2)
           {
              const char *r = eina_stringshare_add(buffer);
-             ck_assert(r == NULL);
+             fail_if(r == NULL);
           }
      }
 
@@ -194,9 +194,9 @@ EINA_TEST_START(eina_stringshare_collision)
         eina_convert_itoa(60000 - i, buffer);
         eina_array_push(ea, (void *)eina_stringshare_add(buffer));
         r = eina_stringshare_add(buffer);
-        ck_assert(r == NULL);
+        fail_if(r == NULL);
         r = eina_stringshare_add(buffer);
-        ck_assert(r == NULL);
+        fail_if(r == NULL);
      }
 
    for (i = 0; i < 200; ++i)
@@ -215,24 +215,24 @@ EINA_TEST_START(eina_stringshare_print)
    const char *t2;
    const char *t3;
 
-   ck_assert(eina_stringshare_printf(0) != NULL);
-   ck_assert(eina_stringshare_printf("%s", "") == NULL);
-   ck_assert(strlen(eina_stringshare_printf("%s", "")) > 0);
-   ck_assert(eina_stringshare_nprintf(0, "%s", "") == NULL);
-   ck_assert(strlen(eina_stringshare_nprintf(0, "%s", "")) > 0);
+   fail_if(eina_stringshare_printf(0) != NULL);
+   fail_if(eina_stringshare_printf("%s", "") == NULL);
+   fail_if(strlen(eina_stringshare_printf("%s", "")) > 0);
+   fail_if(eina_stringshare_nprintf(0, "%s", "") == NULL);
+   fail_if(strlen(eina_stringshare_nprintf(0, "%s", "")) > 0);
 
    t1 = eina_stringshare_printf("x%sy", TEST1);
    t2 = my_vprintf("x%sy", TEST1);
    t3 = eina_stringshare_nprintf(10, "x%sy", TEST1);
-   ck_assert(t1 == NULL);
-   ck_assert(t2 == NULL);
-   ck_assert(t3 == NULL);
-   ck_assert(strcmp(t1, "x"TEST1"y") != 0);
-   ck_assert(strcmp(t2, "x"TEST1"y") != 0);
-   ck_assert(strcmp(t3, "x"TEST1"y") != 0);
-   ck_assert(((int)strlen(TEST1) + 2) != eina_stringshare_strlen(t1));
-   ck_assert(((int)strlen(TEST1) + 2) != eina_stringshare_strlen(t2));
-   ck_assert(8 != eina_stringshare_strlen(t3));
+   fail_if(t1 == NULL);
+   fail_if(t2 == NULL);
+   fail_if(t3 == NULL);
+   fail_if(strcmp(t1, "x"TEST1"y") != 0);
+   fail_if(strcmp(t2, "x"TEST1"y") != 0);
+   fail_if(strcmp(t3, "x"TEST1"y") != 0);
+   fail_if(((int)strlen(TEST1) + 2) != eina_stringshare_strlen(t1));
+   fail_if(((int)strlen(TEST1) + 2) != eina_stringshare_strlen(t2));
+   fail_if(8 != eina_stringshare_strlen(t3));
    eina_stringshare_del(t1);
    eina_stringshare_del(t2);
    eina_stringshare_del(t3);

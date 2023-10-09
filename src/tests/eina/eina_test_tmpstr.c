@@ -39,7 +39,7 @@ EFL_START_TEST(tmpstr_simple)
         snprintf(buf, max_str_len, "Tmp string %d", (i + 1));
         tmp_strings[i] = eina_tmpstr_add(buf);
 
-        ck_assert(strcmp(buf, tmp_strings[i]));
+        fail_if(strcmp(buf, tmp_strings[i]));
      }
 
    // Delete these tmp strings
@@ -47,7 +47,7 @@ EFL_START_TEST(tmpstr_simple)
      {
         snprintf(buf, max_str_len, "Tmp string %d", (cnt_tmp_strings - i - 1 + 1));
 
-        ck_assert(strcmp(buf, tmp_strings[cnt_tmp_strings - i - 1]));
+        fail_if(strcmp(buf, tmp_strings[cnt_tmp_strings - i - 1]));
 
         eina_tmpstr_del(tmp_strings[cnt_tmp_strings - i - 1]);
         tmp_strings[cnt_tmp_strings - i - 1] = 0;
@@ -73,7 +73,7 @@ EFL_START_TEST(tmpstr_simple_len)
         snprintf(buf, max_str_len, "Tmp string %d", (i + 1));
         tmp_strings[i] = eina_tmpstr_add_length(buf, (max_str_len + 1));
 
-        ck_assert(strcmp(buf, tmp_strings[i]));
+        fail_if(strcmp(buf, tmp_strings[i]));
      }
 
    // Delete these tmp strings
@@ -81,7 +81,7 @@ EFL_START_TEST(tmpstr_simple_len)
      {
         snprintf(buf, max_str_len, "Tmp string %d", (cnt_tmp_strings - i - 1 + 1));
 
-        ck_assert(strcmp(buf, tmp_strings[cnt_tmp_strings - i - 1]));
+        fail_if(strcmp(buf, tmp_strings[cnt_tmp_strings - i - 1]));
 
         eina_tmpstr_del(tmp_strings[cnt_tmp_strings - i - 1]);
         tmp_strings[cnt_tmp_strings - i - 1] = 0;
@@ -99,7 +99,7 @@ EFL_START_TEST(tmpstr_manage)
    char *buf = malloc(7);
    strcpy(buf, "tmpstr");
    Eina_Tmpstr *tstr1 = eina_tmpstr_manage_new(buf);
-   ck_assert(strcmp(buf, tstr1));
+   fail_if(strcmp(buf, tstr1));
    eina_tmpstr_del(tstr1);
 
 }
@@ -111,7 +111,7 @@ EFL_START_TEST(tmpstr_manage_len)
    char *buf = malloc(10);
    strcpy(buf, "tmpstr");
    Eina_Tmpstr *tstr1 = eina_tmpstr_manage_new_length(buf, 7);
-   ck_assert(strcmp(buf, tstr1));
+   fail_if(strcmp(buf, tstr1));
    eina_tmpstr_del(tstr1);
 
 }

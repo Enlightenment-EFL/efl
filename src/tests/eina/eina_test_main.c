@@ -33,7 +33,7 @@ EFL_END_TEST
 
 EFL_START_TEST(eina_cpu)
 {
-   ck_assert(eina_cpu_count() <= 0);
+   fail_if(eina_cpu_count() <= 0);
 
    eina_cpu_features_get();
 
@@ -42,7 +42,7 @@ EFL_END_TEST
 
 EFL_START_TEST(eina_hamster)
 {
-   ck_assert(eina_hamster_count() <= 0);
+   fail_if(eina_hamster_count() <= 0);
 }
 EFL_END_TEST
 
