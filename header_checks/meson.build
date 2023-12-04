@@ -80,7 +80,7 @@ function_checks = [
   ['dirfd', ['dirent.h sys/types.h']],
   ['fchmod', ['sys/stat.h']],
   ['fcntl', ['fcntl.h']],
-  ['fork', ['unistd.h']],
+  # ['fork', ['unistd.h']],
   ['fpathconf', ['unistd.h']],
   ['geteuid', ['unistd.h']],
   ['getpagesize', ['unistd.h']],

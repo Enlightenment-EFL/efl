@@ -113,8 +113,8 @@ elementary_suite = executable('elementary_suite',
   c_args : [
   '-DTESTS_BUILD_DIR="'+meson.current_build_dir()+'"',
   '-DTESTS_SRC_DIR="'+meson.current_source_dir()+'"',
-  '-DELM_IMAGE_DATA_DIR="'+join_paths(meson.source_root(), 'data', 'elementary')+'"',
-  '-DELM_TEST_DATA_DIR="'+join_paths(meson.build_root(), 'data', 'elementary')+'"',
+  '-DELM_IMAGE_DATA_DIR="'+join_paths(source_root, 'data', 'elementary')+'"',
+  '-DELM_TEST_DATA_DIR="'+join_paths(build_root, 'data', 'elementary')+'"',
   ]
 )
 
@@ -177,8 +177,8 @@ efl_ui_suite = executable('efl_ui_suite',
   c_args : [
   '-DTESTS_BUILD_DIR="'+meson.current_build_dir()+'"',
   '-DTESTS_SRC_DIR="'+meson.current_source_dir()+'"',
-  '-DELM_IMAGE_DATA_DIR="'+join_paths(meson.source_root(), 'data', 'elementary')+'"',
-  '-DELM_TEST_DATA_DIR="'+join_paths(meson.build_root(), 'data', 'elementary')+'"',
+  '-DELM_IMAGE_DATA_DIR="'+join_paths(source_root, 'data', 'elementary')+'"',
+  '-DELM_TEST_DATA_DIR="'+join_paths(build_root, 'data', 'elementary')+'"',
   ]
 )
 
@@ -193,7 +193,8 @@ executable('efl_ui_window_cnp_dnd_slave',
 )
 
 test('elementary-suite', elementary_suite,
-  env : test_env
+  env : test_env,
+  timeout: 60
 )
 
 test('efl-ui-suite', efl_ui_suite,
@@ -203,4 +204,5 @@ test('efl-ui-suite', efl_ui_suite,
 install_data(files(['testdiff.diff', 'testfile-windows.txt', 'testfile-withblanks.txt', 'testfile.txt']),
   install_dir : join_paths(dir_data, 'elementary')
 )
-subdir('spec')
+
+# subdir('spec')

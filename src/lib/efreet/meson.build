@@ -78,18 +78,18 @@ deprecated_efreet_trash_lib = library('efreet_trash',
     install: true,
     version : meson.project_version()
 )
-pkgconfig.generate(efreet_lib,
-        name : 'efreet-mime',
-        description : 'Deprecated, please just use efreet',
-        subdirs : package_version_name,
-        version : version_major + '.' + version_minor + '.' + version_micro,
-        libraries : efreet_pub_deps,
-)
+# pkgconfig.generate(efreet_lib,
+#         name : 'efreet-mime',
+#         description : 'Deprecated, please just use efreet',
+#         subdirs : package_version_name,
+#         version : version_major + '.' + version_minor + '.' + version_micro,
+#         libraries : efreet_pub_deps,
+# )
 
-pkgconfig.generate(efreet_lib,
-        name : 'efreet-trash',
-        description : 'Deprecated, please just use efreet',
-        subdirs : package_version_name,
-        version : version_major + '.' + version_minor + '.' + version_micro,
-        libraries : efreet_pub_deps,
-)
+# pkgconfig.generate(efreet_lib,
+#         name : 'efreet-trash',
+#         description : 'Deprecated, please just use efreet',
+#         subdirs : package_version_name,
+#         version : version_major + '.' + version_minor + '.' + version_micro,
+#         libraries : efreet_pub_deps,
+# )

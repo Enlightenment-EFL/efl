@@ -4,6 +4,14 @@ project('efl', ['c','cpp'],
   meson_version : '>=0.50'
 )
 
+if meson.version().version_compare('>=0.56')
+  source_root = meson.project_source_root()
+  build_root = meson.project_build_root()
+else
+  source_root = meson.source_root()
+  build_root = meson.build_root()
+endif
+
 if host_machine.system() == 'darwin'
   add_languages('objc')
 endif
@@ -141,7 +149,7 @@ config_h.set_quoted('PACKAGE_STRING', meson.project_name() + ' ' + meson.project
 config_h.set_quoted('PACKAGE_NAME', meson.project_name())
 config_h.set_quoted('PACKAGE_BIN_DIR', dir_bin)
 config_h.set_quoted('PACKAGE_LIB_DIR', dir_lib)
-config_h.set_quoted('PACKAGE_SRC_DIR', meson.source_root())
+config_h.set_quoted('PACKAGE_SRC_DIR', source_root)
 config_h.set_quoted('PACKAGE_BUILD_DIR', meson.current_build_dir())
 config_h.set_quoted('PACKAGE_SYSCONF_DIR', dir_sysconf)
 config_h.set_quoted('BINDIR', dir_bin)
@@ -487,15 +495,15 @@ foreach package : subprojects
         requires : package[9],
         variables : package_pc_variables
       )
-      if package_name == 'ethumb_client'
-        pkgconfig.generate(tmp_lib,
-          name : package_name,
-          subdirs : [package_version_name] + tmp_package_subdirs,
-          version : version_major + '.' + version_minor + '.' + version_micro,
-          libraries : tmp_pub_deps,
-          requires : package[9],
-        )
-      endif
+      # if package_name == 'ethumb_client'
+      #   pkgconfig.generate(tmp_lib,
+      #     name : package_name,
+      #     subdirs : [package_version_name] + tmp_package_subdirs,
+      #     version : version_major + '.' + version_minor + '.' + version_micro,
+      #     libraries : tmp_pub_deps,
+      #     requires : package[9],
+      #   )
+      # endif
     endif
   else
     message(package_name+' disabled!')

@@ -243,7 +243,7 @@ if (get_option('dotnet'))
 
   lib_csproj_conf_data.set('NETSTANDARD_VERSION', dotnet_standard_version)
   lib_csproj_conf_data.set('BINDING_SRC', meson.current_source_dir())
-  lib_csproj_conf_data.set('CA_RULESET', join_paths(meson.build_root(), '@0@'.format(ca_ruleset)))
+  lib_csproj_conf_data.set('CA_RULESET', join_paths(build_root, '@0@'.format(ca_ruleset)))
   lib_csproj_conf_data.set('EFL_VERSION', meson.project_version())
 
   if get_option('mono-beta')
@@ -299,7 +299,7 @@ else
       cs_args : extra_cs_args + ['-doc:' + efl_mono_xml_doc, '-warnaserror+'],
   )
 
-  meson.add_install_script(join_paths(meson.source_root(), 'meson', 'meson_csharp_docs.sh'),
+  meson.add_install_script(join_paths(source_root, 'meson', 'meson_csharp_docs.sh'),
                            efl_mono_xml_doc,
                            efl_mono_install_dir)
 endif

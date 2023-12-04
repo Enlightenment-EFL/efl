@@ -235,9 +235,8 @@ elif get_option('buildtype') == 'release'
      want_cow_magic=false
 endif
 
-if with_max_log_level != -1
-   config_h.set('EINA_LOG_LEVEL_MAXIMUM', with_max_log_level)
-endif
+# config_h.set('EINA_LOG_LEVEL_MAXIMUM', 3)
+config_h.set('EINA_LOG_LEVEL', 1)
 
 if stringshare_usage
    config_h.set('EINA_STRINGSHARE_USAGE', 1)
