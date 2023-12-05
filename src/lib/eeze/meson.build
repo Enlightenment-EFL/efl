@@ -73,7 +73,11 @@ foreach option : options_to_check
     endif
     prog = find_program(_option, required: false)
     if prog.found()
-      set_variable(option+'_bin', prog.path())
+      if meson.version().version_compare('>=0.55')
+        set_variable(option+'_bin', prog.full_path())  
+      else 
+        set_variable(option+'_bin', prog.path())
+      endif
     else
       set_variable(option+'_bin', '')
     endif

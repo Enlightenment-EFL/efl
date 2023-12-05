@@ -255,7 +255,11 @@ elm_prefs_cc = executable('elm_prefs_cc',
 
 if meson.is_cross_build()
   _elm_prefs_cc = find_program('elm_prefs_cc', native: true)
-  elm_prefs_cc_path = _elm_prefs_cc.path()
+  if meson.version().version_compare('>=0.55')
+    elm_prefs_cc_path = _elm_prefs_cc.full_path()  
+  else 
+    elm_prefs_cc_path = _elm_prefs_cc.path()
+  endif
   elm_prefs_cc_exe = [_elm_prefs_cc]
 else
   elm_prefs_cc_exe = [env, asan_option, 'EFL_RUN_IN_TREE=1', elm_prefs_cc.full_path()]
