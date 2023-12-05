@@ -20,15 +20,21 @@ wl_stable_protocol_sys = [
   join_paths('xdg-shell', 'xdg-shell.xml'),
 ]
 
+if meson.version().version_compare('>=0.58')
+  wl_pkg_data_dir = _wayland_protocols.get_variable('pkgdatadir')  
+else 
+  wl_pkg_data_dir = _wayland_protocols.get_pkgconfig_variable('pkgdatadir')
+endif
+
 foreach sys_protocol : wl_unstable_protocol_sys
 	wl_protocol_local += [
-		join_paths(_wayland_protocols.get_pkgconfig_variable('pkgdatadir'), 'unstable',
+		join_paths(wl_pkg_data_dir, 'unstable',
 			sys_protocol)]
 endforeach
 
 foreach sys_protocol : wl_stable_protocol_sys
   wl_protocol_local += [
-    join_paths(_wayland_protocols.get_pkgconfig_variable('pkgdatadir'), 'stable',
+    join_paths(wl_pkg_data_dir, 'stable',
       sys_protocol)]
 endforeach
 

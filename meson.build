@@ -306,9 +306,18 @@ if sys_osx and get_option('lua-interpreter') == 'luajit'
   # luajit on macro is broken, this means we need to generate our own
   # dependency with our arguments, a library later still needs to link to
   # luajit for the pagesize argument thingy
+  if meson.version().version_compare('>=0.58')
+    lua_inc_dir  = lua.get_variable('includedir')
+    lua_lib_dir  = lua.get_variable('libdir')
+    lua_lib_name = lua.get_variable('libname')
+  else
+    lua_inc_dir  = lua.get_pkgconfig_variable('includedir')
+    lua_lib_dir  = lua.get_pkgconfig_variable('libdir')
+    lua_lib_name = lua.get_pkgconfig_variable('libname')
+  endif
   lua = declare_dependency(
-    include_directories: include_directories(lua.get_pkgconfig_variable('includedir')),
-    link_args: ['-L' + lua.get_pkgconfig_variable('libdir'), '-l' + lua.get_pkgconfig_variable('libname')]
+    include_directories: include_directories(lua_inc_dir),
+    link_args: ['-L' + lua_lib_dir, '-l' + lua_lib_name]
   )
 endif
 
