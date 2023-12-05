@@ -361,7 +361,11 @@ if unwind.found()
 endif
 
 #for the case that the iconv library is not part of libc but rather libiconv or smth. like that
-iconv = dependency('iconv', required: false)
+if meson.version().version_compare('>=0.60')
+  iconv = dependency('iconv', method: 'auto')  
+else 
+  iconv = dependency('iconv', required: false)
+endif
 if iconv.found() == false
   iconv = cc.find_library('iconv', required: false)
 endif
