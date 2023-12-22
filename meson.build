@@ -14,12 +14,14 @@ endif
 
 pkgconfig = import('pkgconfig')
 
-version_arr = meson.project_version().split('.')
+name = meson.project_name()
 
+version       = meson.project_version()
+version_arr   = version.split('.')
 version_major = version_arr[0]
 version_minor = version_arr[1]
 version_micro = version_arr[2]
-version_name = 'v-' + version_major + '.' + version_minor
+version_name  = 'v-' + version_major + '.' + version_minor
 
 cc = meson.get_compiler('c')
 host_os = host_machine.system()
@@ -131,15 +133,15 @@ env = find_program('env', native: true)
 
 config_h = configuration_data()
 config_h.set_quoted('MODULE_ARCH', version_name)
-config_h.set_quoted('PACKAGE', meson.project_name())
-config_h.set_quoted('PACKAGE_VERSION', meson.project_version())
-config_h.set_quoted('VERSION', meson.project_version())
+config_h.set_quoted('PACKAGE', name)
+config_h.set_quoted('PACKAGE_VERSION', version)
+config_h.set_quoted('VERSION', version)
 config_h.set_quoted('LOCALE_DIR', join_paths([dir_prefix, 'share/locale']))
 config_h.set_quoted('PACKAGE_URL', 'https://www.enlightenment.org')
-config_h.set_quoted('PACKAGE_TARNAME', meson.project_name())
+config_h.set_quoted('PACKAGE_TARNAME', name)
 config_h.set_quoted('PACKAGE_BUGREPORT', 'enlightenment-devel@lists.sourceforge.net')
-config_h.set_quoted('PACKAGE_STRING', meson.project_name() + ' ' + meson.project_version())
-config_h.set_quoted('PACKAGE_NAME', meson.project_name())
+config_h.set_quoted('PACKAGE_STRING', name + ' ' + version)
+config_h.set_quoted('PACKAGE_NAME', name)
 config_h.set_quoted('PACKAGE_BIN_DIR', dir_bin)
 config_h.set_quoted('PACKAGE_LIB_DIR', dir_lib)
 config_h.set_quoted('PACKAGE_SRC_DIR', source_root)
@@ -517,14 +519,14 @@ if (get_option('efl-one'))
   efl_one_lib = shared_library('efl-one',
     link_whole : efl_one_parts,
     install : true,
-    version : meson.project_version(),
+    version : version,
   )
 
   efl_one = declare_dependency(
     link_with: efl_one_lib,
     include_directories : efl_one_include_dirs,
     dependencies : [thread_dep, intl] + efl_one_eo_deps,
-    version: meson.project_version()
+    version: version
   )
 
   pkgconfig.generate(
