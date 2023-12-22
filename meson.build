@@ -361,9 +361,6 @@ subprojects = [
   ['exactness'        ,[]                    , false,  false,  true, false,  false,     false, false, ['eina, evas, eet'], []],
 ]
 
-# We generate Efl_Config.h and config.h later, they will be available here
-config_dir += include_directories('.')
-
 #we have to do that first, eina modules are required by eina
 #the other modules require theire package
 subdir(join_paths(local_module, 'eina'))
@@ -613,7 +610,7 @@ if get_option('build-examples')
   endforeach
 endif
 
-subdir(join_paths(local_scripts))
+subdir(local_scripts)
 
 meson.add_install_script('meson/meson_modules.sh', module_files)
 
