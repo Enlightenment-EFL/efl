@@ -62,14 +62,14 @@ dir_include   = join_paths(dir_prefix, get_option('includedir'))
 dir_lib       = join_paths(dir_prefix, get_option('libdir'))
 
 #local paths
-local_lib       = join_paths('src', 'lib')
-local_bindings  = join_paths('src', 'bindings')
-local_bin       = join_paths('src', 'bin')
-local_module    = join_paths('src', 'modules')
-local_tests     = join_paths('src', 'tests')
-local_benchmark = join_paths('src', 'benchmarks')
-local_examples  = join_paths('src', 'examples')
-local_scripts   = join_paths('src', 'scripts')
+local_lib       = 'src/lib'
+local_bindings  = 'src/bindings'
+local_bin       = 'src/bin'
+local_module    = 'src/modules'
+local_tests     = 'src/tests'
+local_benchmark = 'src/benchmarks'
+local_examples  = 'src/examples'
+local_scripts   = 'src/scripts'
 
 dev_cflags = []
 dev_cflags_try = [
@@ -255,7 +255,7 @@ subdir('header_checks')
 subdir('po')
 
 if get_option('wl')
-  subdir(join_paths('src', 'wayland_protocol'))
+  subdir('src/wayland_protocol')
 endif
 
 ecore_evas_wayland_engine_include_dir = []
@@ -418,7 +418,7 @@ foreach package : subprojects
 
     foreach static_lib : package[10]
       if get_variable(static_lib, tmp_empty) == tmp_empty
-        subdir(join_paths('src', 'static_libs', static_lib))
+        subdir(join_paths('src/static_libs', static_lib))
       endif
     endforeach
 
@@ -575,13 +575,13 @@ foreach package : subprojects
 endforeach
 
 #build this later, as the debug services are depending on ecore
-subdir(join_paths('src', 'bin', 'efl'))
+subdir('src/bin/efl')
 
-subdir(join_paths('src', 'generic', 'evas'))
+subdir('src/generic/evas')
 subdir('cmakeconfig')
-subdir(join_paths('src', 'bindings'))
-subdir(join_paths('src', 'edje_external'))
-subdir(join_paths('data'))
+subdir('src/bindings')
+subdir('src/edje_external')
+subdir('data')
 
 if get_option('build-tests')
   check = dependency('check')
@@ -597,7 +597,7 @@ if get_option('build-tests')
     test_env.set('ASAN_OPTIONS', 'detect_leaks=0:detect_odr_violation=0')
   endif
 
-  subdir(join_paths('src', 'tests'))
+  subdir('src/tests')
   foreach test : test_dirs
     package_c_args = [
       '-DPACKAGE_DATA_DIR="'+ join_paths(dir_data, test)+'"',
@@ -657,7 +657,7 @@ configure_file(
 )
 
 configure_file(
-  input: join_paths('src','lib', 'efl', 'Efl_Config.h.in'),
+  input: 'src/lib/efl/Efl_Config.h.in',
   output: 'Efl_Config.h',
   install_dir : join_paths(dir_include,'eina-'+version_major),
   configuration: efl_config_h
@@ -670,8 +670,8 @@ configure_file(
   install_dir : join_paths(dir_include,'elementary-'+version_major)
 )
 
-subdir(join_paths('systemd-services'))
-subdir(join_paths('dbus-services'))
+subdir('systemd-services')
+subdir('dbus-services')
 
 #output the three new efl-* .pc files
 efl_20_pc_files = {
