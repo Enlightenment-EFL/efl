@@ -1,4 +1,4 @@
-if (get_option('embedded-lz4'))
+if get_option('embedded-lz4')
   lz4_src = [
   'lz4.c',
   'lz4hc.c',
@@ -15,5 +15,5 @@ if (get_option('embedded-lz4'))
     link_with: lz4_lib
   )
 else
-  lz4 = dependency('liblz4')
+  lz4 = dependency('liblz4', required: true)
 endif
