@@ -12,10 +12,6 @@ else
   build_root = meson.build_root()
 endif
 
-if host_machine.system() == 'darwin'
-  add_languages('objc')
-endif
-
 pkgconfig = import('pkgconfig')
 
 version_arr = meson.project_version().split('.')
@@ -28,6 +24,12 @@ version_name = 'v-' + version_major + '.' + version_minor
 cc = meson.get_compiler('c')
 host_os = host_machine.system()
 
+sys_linux   = ['linux'].contains(host_os)
+sys_bsd     = ['bsd', 'freebsd', 'dragonfly', 'netbsd', 'openbsd'].contains(host_os)
+sys_windows = ['windows', 'cygwin'].contains(host_os)
+sys_osx     = ['darwin'].contains(host_os)
+sys_sun     = ['sunos'].contains(host_os)
+
 if host_os == 'linux'
   if cc.has_header_symbol('features.h', '__UCLIBC__')
     host_os = 'linux-uclibc'
@@ -38,24 +40,15 @@ if host_os == 'linux'
   endif
 endif
 
-#prepare a special linker args flag for binaries on macos
-bin_linker_args = []
-if host_machine.system() == 'darwin'
-  bin_linker_args = ['-pagezero_size', '10000', '-image_base', '100000000']
+if sys_osx
+  add_languages('objc')
 endif
 
-windows = ['windows', 'cygwin']
-#bsd for meson 0.46 and 0.47
-bsd = ['bsd', 'freebsd', 'dragonfly', 'netbsd', 'openbsd']
-linux = ['linux']
-osx = ['darwin']
-sun = ['sunos']
-
-sys_linux = linux.contains(host_machine.system())
-sys_bsd = bsd.contains(host_machine.system())
-sys_windows = windows.contains(host_machine.system())
-sys_osx = osx.contains(host_machine.system())
-sys_sun = sun.contains(host_machine.system())
+#prepare a special linker args flag for binaries on macos
+bin_linker_args = []
+if sys_osx
+  bin_linker_args = ['-pagezero_size', '10000', '-image_base', '100000000']
+endif
 
 module_files = []
 evas_loader_map = []
@@ -69,14 +62,14 @@ dir_include   = join_paths(dir_prefix, get_option('includedir'))
 dir_lib       = join_paths(dir_prefix, get_option('libdir'))
 
 #local paths
-local_lib = join_paths('src', 'lib')
-local_bindings = join_paths('src', 'bindings')
-local_bin = join_paths('src', 'bin')
-local_module = join_paths('src', 'modules')
-local_tests = join_paths('src', 'tests')
+local_lib       = join_paths('src', 'lib')
+local_bindings  = join_paths('src', 'bindings')
+local_bin       = join_paths('src', 'bin')
+local_module    = join_paths('src', 'modules')
+local_tests     = join_paths('src', 'tests')
 local_benchmark = join_paths('src', 'benchmarks')
-local_examples = join_paths('src', 'examples')
-local_scripts = join_paths('src', 'scripts')
+local_examples  = join_paths('src', 'examples')
+local_scripts   = join_paths('src', 'scripts')
 
 dev_cflags = []
 dev_cflags_try = [
@@ -224,7 +217,7 @@ elif sys_osx
   sys_mod_extension = 'so'
   config_h.set('environ', '(*_NSGetEnviron())')
 else
-  error('System ' + host_machine.system() + ' not known')
+  error('System ' + host_os + ' not known')
 endif
 
 if sys_linux or sys_bsd or sys_sun
