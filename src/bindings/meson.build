@@ -2,12 +2,12 @@
 bindings = get_option('bindings')
 bindings_order = ['lua', 'cxx', 'mono']
 
-if (get_option('dotnet') and not bindings.contains('mono'))
+if get_option('dotnet') and not bindings.contains('mono')
   message('dotnet support requires the C# bindings')
   bindings += ['mono']
 endif
 
-if (bindings.contains('cxx') == false and bindings.contains('mono'))
+if bindings.contains('cxx') == false and bindings.contains('mono')
   subdirs = ['eina_cxx', 'eolian_cxx']
   subdir(join_paths('cxx', 'eina_cxx'))
   inc_dir = []

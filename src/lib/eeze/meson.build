@@ -36,7 +36,7 @@ if get_option('v4l2')
   endif
 endif
 
-if (get_option('libmount'))
+if get_option('libmount')
   libmount = dependency('mount')
   eeze_ext_deps += [libmount]
  if libmount.version() == '2.19'

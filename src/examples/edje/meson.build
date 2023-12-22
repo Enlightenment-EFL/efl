@@ -47,7 +47,7 @@ edc_files = [
   'center_zoom.edc',
 ]
 
-if (get_option('physics'))
+if get_option('physics')
   edc_files += [
     'physics_3d.edc',
     'physics_actions.edc',

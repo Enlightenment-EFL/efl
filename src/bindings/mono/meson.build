@@ -71,7 +71,7 @@ manual_inheritance_files = [
 ]
 
 beta_option = []
-if (get_option('mono-beta'))
+if get_option('mono-beta')
    beta_option = '-b'
 endif
 
@@ -87,7 +87,7 @@ foreach lib : mono_sublibs
     dllimport = 'lib' + dllimport + '-' + version_major
   endif
 
-  if (package_name != 'eldbus')
+  if package_name != 'eldbus'
     foreach eo_file_subdir : eo_file_subdirs
       if eo_file_subdir != ''
         mono_pub_eo_files = get_variable(package_name + '_' + eo_file_subdir +'_eo_files') + get_variable(package_name + '_' + eo_file_subdir + '_eot_files')
@@ -143,7 +143,7 @@ endif
 efl_mono_install_dir = join_paths(dir_lib, 'efl-mono-'+version_major)
 efl_mono_xml_doc = join_paths(meson.current_build_dir(), 'efl_mono.xml')
 
-if (get_option('dotnet'))
+if get_option('dotnet')
   styles = ['CA1000', 'CA1030', 'CA1031', 'CA1032', 'CA1034', 'CA1036', 'CA1040',
             'CA1043', 'CA1044', 'CA1051', 'CA1052', 'CA1062', 'CA1063', 'CA1064',
             'CA1065', 'CA1303', 'CA1305', 'CA1307', 'CA1401', 'CA1507', 'CA1707',

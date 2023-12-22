@@ -2,7 +2,7 @@ efl_canvas_wl_deps = [ecore_wl2, ecore_input, ecore, ecore_evas, evas, emile, ei
 efl_canvas_wl_pub_deps = [eo, efl, evas]
 efl_canvas_wl_ext_deps = [dependency('wayland-server', version : '>= 1.11.0'), dependency('xkbcommon', version : '>= 0.6.0'), wayland_protocol]
 
-if (get_option('x11'))
+if get_option('x11')
   efl_canvas_wl_deps += [ecore_x]
   efl_canvas_wl_ext_deps += [dependency('xkbcommon-x11')]
 endif

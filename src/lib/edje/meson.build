@@ -10,7 +10,7 @@ edje_deps = [
 edje_pub_deps = [evas, eo, efl]
 edje_ext_deps = [m, lua, buildsystem_simple]
 
-if (get_option('physics'))
+if get_option('physics')
   edje_deps += ephysics
   edje_pub_deps += ephysics
 endif

@@ -157,17 +157,17 @@ evas_src_opt = [ ]
 
 evas_ext_none_static_deps += dependency('freetype2')
 
-if (get_option('fontconfig'))
+if get_option('fontconfig')
    config_h.set('HAVE_FONTCONFIG', '1')
    evas_ext_none_static_deps += dependency('fontconfig')
 endif
 
-if (get_option('fribidi'))
+if get_option('fribidi')
    config_h.set('HAVE_FRIBIDI', '1')
    evas_ext_none_static_deps += dependency('fribidi')
 endif
 
-if (get_option('pixman'))
+if get_option('pixman')
    pixman_support = ['HAVE_PIXMAN', 'PIXMAN_FONT', 'PIXMAN_RECT', 'PIXMAN_LINE', 'PIXMAN_POLY', 'PIXMAN_IMAGE', 'PIXMAN_IMAGE_SCALE_SAMPLE']
    foreach support : pixman_support
      config_h.set(support, '1')
@@ -175,7 +175,7 @@ if (get_option('pixman'))
    evas_ext_none_static_deps += dependency('pixman-1')
 endif
 
-if (get_option('hyphen'))
+if get_option('hyphen')
    config_h.set('HAVE_HYPHEN', '1')
    hyphen = dependency('hyphen', required : false)
    if hyphen.found() == false
@@ -274,7 +274,7 @@ foreach loader_inst : evas_vg_loaders_file
   loader = loader_inst[0]
   loader_deps = loader_inst[1]
 
-  if (get_option('evas-loaders-disabler').contains(loader) == false)
+  if get_option('evas-loaders-disabler').contains(loader) == false
     file = join_paths(source_root, 'src', 'modules', 'evas', 'vg_loaders', loader, 'evas_vg_load_'+loader+'.c')
     evas_static_list += [declare_dependency(
       sources: file,
@@ -285,7 +285,7 @@ foreach loader_inst : evas_vg_loaders_file
 endforeach
 
 foreach loader : evas_vg_savers_file
-  if (get_option('evas-loaders-disabler').contains(loader) == false)
+  if get_option('evas-loaders-disabler').contains(loader) == false
     file = join_paths(source_root, 'src', 'modules', 'evas', 'vg_savers', loader, 'evas_vg_save_'+loader+'.c')
     evas_static_list += [declare_dependency(
       sources: file,
