@@ -42,13 +42,10 @@ if host_os == 'linux'
   endif
 endif
 
-if sys_osx
-  add_languages('objc')
-endif
-
 #prepare a special linker args flag for binaries on macos
 bin_linker_args = []
 if sys_osx
+  add_languages('objc')
   bin_linker_args = ['-pagezero_size', '10000', '-image_base', '100000000']
 endif
 
@@ -126,24 +123,24 @@ endif
 env = find_program('env', native: true)
 
 config_h = configuration_data()
-config_h.set_quoted('MODULE_ARCH', version_name)
-config_h.set_quoted('PACKAGE', name)
-config_h.set_quoted('PACKAGE_VERSION', version)
-config_h.set_quoted('VERSION', version)
-config_h.set_quoted('LOCALE_DIR', join_paths([dir_prefix, 'share/locale']))
-config_h.set_quoted('PACKAGE_URL', 'https://www.enlightenment.org')
-config_h.set_quoted('PACKAGE_TARNAME', name)
-config_h.set_quoted('PACKAGE_BUGREPORT', 'enlightenment-devel@lists.sourceforge.net')
-config_h.set_quoted('PACKAGE_STRING', name + ' ' + version)
-config_h.set_quoted('PACKAGE_NAME', name)
-config_h.set_quoted('PACKAGE_BIN_DIR', dir_bin)
-config_h.set_quoted('PACKAGE_LIB_DIR', dir_lib)
-config_h.set_quoted('PACKAGE_SRC_DIR', source_root)
-config_h.set_quoted('PACKAGE_BUILD_DIR', meson.current_build_dir())
+config_h.set_quoted('MODULE_ARCH'        , version_name)
+config_h.set_quoted('PACKAGE'            , name)
+config_h.set_quoted('PACKAGE_VERSION'    , version)
+config_h.set_quoted('VERSION'            , version)
+config_h.set_quoted('LOCALE_DIR'         , join_paths([dir_prefix, 'share/locale']))
+config_h.set_quoted('PACKAGE_URL'        , 'https://www.enlightenment.org')
+config_h.set_quoted('PACKAGE_TARNAME'    , name)
+config_h.set_quoted('PACKAGE_BUGREPORT'  , 'enlightenment-devel@lists.sourceforge.net')
+config_h.set_quoted('PACKAGE_STRING'     , name + ' ' + version)
+config_h.set_quoted('PACKAGE_NAME'       , name)
+config_h.set_quoted('PACKAGE_BIN_DIR'    , dir_bin)
+config_h.set_quoted('PACKAGE_LIB_DIR'    , dir_lib)
+config_h.set_quoted('PACKAGE_SRC_DIR'    , source_root)
+config_h.set_quoted('PACKAGE_BUILD_DIR'  , meson.current_build_dir())
 config_h.set_quoted('PACKAGE_SYSCONF_DIR', dir_sysconf)
-config_h.set_quoted('BINDIR', dir_bin)
+config_h.set_quoted('BINDIR'             , dir_bin)
 config_h.set10('EFL_HAVE_THREADS', true)
-config_h.set10('SLOPPY_SPEC', true)
+config_h.set10('SLOPPY_SPEC'     , true)
 
 ## have to get compiler again for this to work
 code = '''#define _GNU_SOURCE 1
@@ -609,10 +606,6 @@ if get_option('build-examples')
     subdir(join_paths(local_examples, example))
   endforeach
 endif
-
-subdir(local_scripts)
-
-meson.add_install_script('meson/meson_modules.sh', module_files)
 
 foreach evas_loader_map_inst : evas_loader_map
   evas_loader_original = evas_loader_map_inst[0]
