@@ -83,15 +83,9 @@ dev_cflags_try = [
   '-Wno-missing-field-initializers',
 ]
 
-foreach cf: dev_cflags_try
-  if cc.has_argument(cf)
-    dev_cflags += cf
-  endif
-endforeach
-
+dev_cflags = cc.get_supported_arguments(dev_cflags_try)
 add_project_arguments(dev_cflags, language: 'c')
 add_project_arguments(dev_cflags, language: 'cpp')
-
 
 langs = ['c', 'objc', 'cpp']
 add_project_arguments('-DHAVE_CONFIG_H=1', language: langs)
