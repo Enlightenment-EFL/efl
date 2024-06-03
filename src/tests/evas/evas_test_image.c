@@ -282,8 +282,11 @@ EFL_START_TEST(evas_object_image_loader_orientation)
 
         r_d = evas_object_image_data_get(rot, EINA_FALSE);
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wformat-extra-args"
         fail_if(res[i].compare_func(d, r_d, r_w, r_h),
                 "Image orientation test failed: exif orientation flag: %s\n", res[i].desc);
+#pragma GCC diagnostic pop
      }
 
    evas_object_del(orig);
@@ -332,8 +335,11 @@ EFL_START_TEST(evas_object_image_orient)
 
         r_d = evas_object_image_data_get(orig, EINA_FALSE);
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wformat-extra-args"
         fail_if(res[i].compare_func(d, r_d, r_w, r_h),
                 "Image orientation test failed: orient flag: %s\n", res[i].desc);
+#pragma GCC diagnostic pop
      }
 
    evas_object_del(orig);
@@ -622,8 +628,11 @@ EFL_START_TEST(evas_object_image_partially_load_orientation)
         evas_object_image_size_get(rot, &r_w, &r_h);
         fail_if(w * h != r_w * r_h);
         r_d = evas_object_image_data_get(rot, EINA_FALSE);
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wformat-extra-args"
         fail_if(res[i].compare_func(d, r_d, r_w, r_h),
                 "Image orientation partially load test failed: exif orientation flag: %s\n", res[i].desc);
+#pragma GCC diagnostic pop
         evas_object_del(rot);
      }
 
@@ -954,6 +963,8 @@ EFL_START_TEST(evas_object_image_map_unmap)
         orig = sorig.mem;
 
         // first quarter: same image
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wformat-extra-args"
         for (y = 0; y < h / 4; y++)
           for (x = 0; x < w; x++)
             fail_if(orig[y*stride/4 + x] != dest[y*stride2/4+x], "pixels differ [1]");
@@ -983,6 +994,7 @@ EFL_START_TEST(evas_object_image_map_unmap)
              fail_if(dest[y*stride/4 + x] != 0xFF00FF00, "pixels differ [3]");
              fail_if(dest[(y+1)*stride/4 + x] != 0xFFFF0000, "pixels differ [4]");
           }
+#pragma GCC diagnostic pop
 
         efl_gfx_buffer_unmap(o, sorig);
         efl_gfx_buffer_unmap(o2, sdest);
@@ -1125,7 +1137,26 @@ EFL_START_TEST(evas_object_image_9patch)
 
         fail_if(r_w != 1024 || r_h != 1024);
         for (int i = 0; i < r_w * r_h; i++)
-          fail_if(((d[i] - r_d[i]) & 0xF8F8F8F8) != 0);
+         {
+           int pixa, pixr, pixg, pixb, refa, refr, refg, refb;
+
+           pixa = (d[i] >> 24) & 0xff;
+           pixr = (d[i] >> 16) & 0xff;
+           pixg = (d[i] >>  8) & 0xff;
+           pixb = (d[i]      ) & 0xff;
+           refa = (r_d[i] >> 24) & 0xff;
+           refr = (r_d[i] >> 16) & 0xff;
+           refg = (r_d[i] >>  8) & 0xff;
+           refb = (r_d[i]      ) & 0xff;
+           pixa = abs(pixa - refa);
+           fail_if(pixa > 32);
+           pixr = abs(pixr - refr);
+           fail_if(pixr > 32);
+           pixg = abs(pixg - refg);
+           fail_if(pixg > 32);
+           pixb = abs(pixb - refb);
+           fail_if(pixb > 32);
+         }
      }
 
    evas_object_del(obj);

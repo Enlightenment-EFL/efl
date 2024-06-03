@@ -68,6 +68,8 @@ static const struct ext_loader_s loaders[] =
 
    MATCHING(".jxl", "jxl"),
 
+   MATCHING(".qoi", "qoi"),
+
    MATCHING(".avif", "avif"),
    MATCHING(".avifs", "avif"),
 
@@ -195,8 +197,8 @@ static const struct ext_loader_s loaders[] =
 static const char *loaders_name[] =
 { /* in order of most likely needed */
   "png", "jpeg", "eet", "xpm", "tiff", "gif", "svg", "webp", "pmaps",
-  "bmp", "tga", "wbmp", "ico", "psd", "jp2k", "dds", "jxl", "avif", "heif",
-  "generic"
+  "bmp", "tga", "wbmp", "ico", "psd", "jp2k", "dds", "jxl", "qoi", "avif",
+  "heif", "generic"
 };
 
 struct evas_image_foreach_loader_data
@@ -413,11 +415,7 @@ _timestamp_build(Image_Timestamp *tstamp, struct stat *st)
    tstamp->size = st->st_size;
    tstamp->ino = st->st_ino;
 #ifdef _STAT_VER_LINUX
-# if (defined __USE_MISC && defined st_mtime)
    tstamp->mtime_nsec = (unsigned long int)st->st_mtim.tv_nsec;
-# else
-   tstamp->mtime_nsec = (unsigned long int)st->st_mtimensec;
-# endif
 #endif
 }
 

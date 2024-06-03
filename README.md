@@ -32,8 +32,8 @@ For more documentation please see:
 
 EFL is primarily developed on Linux (GNU/Linux) and should work on
 most distributions as long as dependencies are provided. It has been
-compiled and run also on Windows (using MSYS2 + mingw-w64 - please see
-[Phabricator windows docs](https://phab.enlightenment.org/w/windows)),
+compiled and run also on Windows (using MSYS2 + mingw-w64) - please see
+[windows docs](https://www.enlightenment.org/docs/distros/windows-start.md),
 Mac OS X, FreeBSD and NetBSD.
 
 ## Components
@@ -347,7 +347,7 @@ Required by default:
 * openjpeg2
 * gstreamer (Ensure all codecs you want are installed.)
 * zlib
-* luajit (lua 5.1 or 5.2 support optional)
+* lua (lua 5.1, luajit or lua 5.2 support optional)
 * libtiff
 * openssl
 * curl

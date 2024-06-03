@@ -337,7 +337,7 @@ color_tree {
       "/fg/normal/text-preedit";
       "/fg/normal/text-info";
       "/fg/normal/text-type";
-      "/fg/nmormal/fileselector/pathsep";
+      "/fg/normal/fileselector/pathsep";
       "/fg/selected/button/bar";
       "/fg/normal/button-anchor";
       "/fg/selected/thumb/bar";
@@ -406,6 +406,7 @@ color_tree {
       "/fg/normal/fileman/filesize/2";
       "/fg/selected/fileman/filesize/2";
       "/fg/normal/fileperm/execute";
+      "/fg/normal/filegraph/bar";
    }
    ":selected-alt-trans" {
       "/bg/normal/access";
@@ -475,6 +476,7 @@ color_tree {
       "/fg/normal/fileman/mount/off";
       "/fg/normal/progress/busy/2";
       "/fg/normal/gadgets/packagekit/pkg/low-priority";
+      "/fg/normal/filegraph/bartop";
    }
    ":light-high" {
       "/fg/normal/naviframe/top/overlap";
@@ -1292,7 +1294,7 @@ color_classes {
 //   color_class { name: "/fg/disabled/flipselector/up";
 //      color:  96  96  96 255; }
 ///////////////////////////////////////////////////////////////////////////////
-//   color_class { name: "/fg/nmormal/fileselector/pathsep";
+//   color_class { name: "/fg/normal/fileselector/pathsep";
 //      color:  51 153 255 255; }
 ///////////////////////////////////////////////////////////////////////////////
 //   color_class { name: "/bg/normal/button";

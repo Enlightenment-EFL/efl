@@ -1,5 +1,5 @@
 project('efl', ['c','cpp'],
-  version: '1.26.99',
+  version: '1.27.99',
   default_options : ['buildtype=plain', 'warning_level=1', 'cpp_std=c++11'],
   meson_version : '>=0.50'
 )
@@ -118,6 +118,7 @@ if sys_windows
     error('Version of targetted Windows incorrect')
   endif
   add_project_arguments('-D__USE_MINGW_ANSI_STDIO', language: langs)
+  add_global_arguments('-define:WIN32', language: 'cs')
 endif
 
 if sys_sun
@@ -617,9 +618,11 @@ foreach evas_loader_map_inst : evas_loader_map
   meson.add_install_script('meson/evas_loader_conf.sh', evas_loader_original, evas_loader_link_types)
 endforeach
 
-doxygen = find_program('doxygen', required : false)
-
-if doxygen.found()
+doxygen = find_program('doxygen', required : get_option('docs'))
+if get_option('docs')
+  if not doxygen.found()
+    error('Need doxygen for docs')
+  endif
   subdir('doc')
 endif
 

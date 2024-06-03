@@ -93,6 +93,11 @@ EFL_START_TEST(eina_value_test_simple)
    fail_unless(l == 0xb33f);
    eina_value_flush(value);
 
+   /*
+    * On Windows, long is always a 4 bytes type, so this check
+    * will never work on Windows.
+    */
+#ifndef _WIN32
    fail_unless(eina_value_setup(value, EINA_VALUE_TYPE_INT64));
    fail_unless(eina_value_set(value, 0x0011223344556677));
    fail_unless(eina_value_get(value, &i64));
@@ -103,6 +108,7 @@ EFL_START_TEST(eina_value_test_simple)
    fail_unless(l == (long)0x0011223344556677);
    fail_unless(i64 == 0x0011223344556677);
    eina_value_flush(value);
+#endif
 
    /* unsigned: */
 
@@ -150,6 +156,11 @@ EFL_START_TEST(eina_value_test_simple)
    fail_unless(ul == 3000000001UL);
    eina_value_flush(value);
 
+   /*
+    * On Windows, long is always a 4 bytes type, so this check
+    * will never work on Windows.
+    */
+#ifndef _WIN32
    fail_unless(eina_value_setup(value, EINA_VALUE_TYPE_UINT64));
    fail_unless(eina_value_set(value, 0x1122334455667788));
    fail_unless(eina_value_get(value, &u64));
@@ -160,6 +171,7 @@ EFL_START_TEST(eina_value_test_simple)
    fail_unless(ul == (unsigned long)0x1122334455667788);
    fail_unless(u64 == 0x1122334455667788);
    eina_value_flush(value);
+#endif
 
    /* floating point */
    fail_unless(eina_value_setup(value, EINA_VALUE_TYPE_FLOAT));
@@ -2345,13 +2357,22 @@ EFL_START_TEST(eina_value_test_hash)
    fail_unless(str != NULL);
 
    snprintf(buf, sizeof(buf), "first: %d", (int) '!');
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wformat-extra-args"
    fail_unless(strstr(str, buf) != NULL, "Couldn't find '%s' in '%s'", buf, str);
+#pragma GCC diagnostic pop
 
    snprintf(buf, sizeof(buf), "second: %d", (int) '-');
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wformat-extra-args"
    fail_unless(strstr(str, buf) != NULL, "Couldn't find '%s' in '%s'", buf, str);
+#pragma GCC diagnostic pop
 
    snprintf(buf, sizeof(buf), "third: %d", (int) 's');
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wformat-extra-args"
    fail_unless(strstr(str, buf) != NULL, "Couldn't find '%s' in '%s'", buf, str);
+#pragma GCC diagnostic pop
 
    free(str);
 
@@ -2368,19 +2389,34 @@ EFL_START_TEST(eina_value_test_hash)
    fail_unless(str != NULL);
 
    eina_strlcpy(buf, "a: Enlightenment.org", sizeof(buf));
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wformat-extra-args"
    fail_unless(strstr(str, buf) != NULL, "Couldn't find '%s' in '%s'", buf, str);
+#pragma GCC diagnostic pop
 
    eina_strlcpy(buf, "b: X11", sizeof(buf));
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wformat-extra-args"
    fail_unless(strstr(str, buf) != NULL, "Couldn't find '%s' in '%s'", buf, str);
+#pragma GCC diagnostic pop
 
    eina_strlcpy(buf, "c: Pants", sizeof(buf));
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wformat-extra-args"
    fail_unless(strstr(str, buf) != NULL, "Couldn't find '%s' in '%s'", buf, str);
+#pragma GCC diagnostic pop
 
    eina_strlcpy(buf, "d: on!!!", sizeof(buf));
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wformat-extra-args"
    fail_unless(strstr(str, buf) != NULL, "Couldn't find '%s' in '%s'", buf, str);
+#pragma GCC diagnostic pop
 
    eina_strlcpy(buf, "e: k-s", sizeof(buf));
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wformat-extra-args"
    fail_unless(strstr(str, buf) != NULL, "Couldn't find '%s' in '%s'", buf, str);
+#pragma GCC diagnostic pop
 
    free(str);
 
